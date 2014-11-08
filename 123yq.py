@@ -7,17 +7,18 @@
 
 import os
 import re
-import urllib.request
+import requests
 import json
 from bs4 import BeautifulSoup
 
 # NOVELS = ["鹂语记 - 七和香", "重生明珠 - 七和香", "富贵锦绣 - 飞翼",
 #           "丫鬟嫣然 - 秋李子", "雪满庭 - 颜竹佳"]
-URLS = ["http://www.123yq.com/read/20/20943/",
-        "http://www.123yq.com/read/5/5720/",
-        "http://www.123yq.com/read/22/22404/",
-        "http://www.123yq.com/read/22/22169/",
-        "http://www.123yq.com/read/25/25435/"]
+# URLS = ["http://www.123yq.com/read/20/20943/",
+#         "http://www.123yq.com/read/5/5720/",
+#         "http://www.123yq.com/read/22/22404/",
+#         "http://www.123yq.com/read/22/22169/",
+#         "http://www.123yq.com/read/25/25435/"]
+URLS = ["http://www.123yq.com/read/20/20943/"]
 PROXY = {'http': '127.0.0.1:8087'}
 HEADERS = {
     'User-Agent': "Mozilla/5.0 (X11; Linux x86_64) \
@@ -50,33 +51,23 @@ def get_novels_from_chromium(bookmark_file=DEFAULT_BOOKMARK_FILE):
     return finished_list, finished_url_list
 
 
-def set_proxy(proxy=None):
-    if proxy is not None:
-        proxyhandler = urllib.request.ProxyHandler(proxy)
-    else:
-        proxyhandler = urllib.request.ProxyHandler()
-    opener = urllib.request.build_opener(proxyhandler)
-    urllib.request.install_opener(opener)
-
-
 class FetchNovel(object):
-    def __init__(self, url, headers=None, encoding='utf-8'):
+    def __init__(self, url, headers=None, encoding='utf-8', proxies=None):
         self.url = url
         if headers is None:
             self.headers = {}
         else:
             self.headers = headers
         self.encoding = encoding
+        self.proxies = proxies
         self.index = self.get_index()
         self.name = self.get_name()
         self.chapter_url_list = self.get_chapter_urls()
         self.download_dir = os.path.join(os.getcwd(), self.name)
 
     def get_index(self):
-        req = urllib.request.Request(self.url, headers=self.headers)
-        with urllib.request.urlopen(req) as response:
-            index = response.read()
-        index = BeautifulSoup(index, from_encoding=self.encoding)
+        req = requests.get(self.url, headers=self.headers, proxies=self.proxies)
+        index = BeautifulSoup(req.content, from_encoding=self.encoding)
         return index
 
     def get_name(self):
@@ -99,10 +90,8 @@ class FetchNovel(object):
             filepath = os.path.join(self.download_dir, filename)
             if os.path.exists(filepath):
                 continue
-            req = urllib.request.Request(line['href'], headers=self.headers)
-            with urllib.request.urlopen(req) as response:
-                chapter = response.read()
-            chapter = BeautifulSoup(chapter, from_encoding=self.encoding)
+            req = requests.get(line['href'], headers=self.headers, proxies=self.proxies)
+            chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
             content = chapter.find_all(id='TXT')[0]
             text = str(content)
             text = text.replace('\r', '')
@@ -113,10 +102,9 @@ class FetchNovel(object):
 
 
 def main():
-    set_proxy(PROXY)
     # for url in get_novels_from_chromium()[1]
     for url in URLS:
-        novel = FetchNovel(url, HEADERS, ENCODING)
+        novel = FetchNovel(url, headers=HEADERS, encoding=ENCODING, proxies=PROXY)
         print("Fetching novel: %s" % novel.name)
         novel.download()
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
