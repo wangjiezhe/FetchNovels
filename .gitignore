@@ -2,3 +2,4 @@
 *.swp
 *.bak
 .idea
+__pycache__

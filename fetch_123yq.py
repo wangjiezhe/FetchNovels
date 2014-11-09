@@ -28,6 +28,8 @@ DEFAULT_BOOKMARK_FILE = os.path.expanduser(
     '~/.config/chromium/Default/Bookmarks')
 # 由于 chardet 无法正确区分 gb2312 和 gbk, 故直接使用 gb18030.
 ENCODING = 'GB18030'
+BOOKMARK_PATTERN = r'(.+?),(.+?)\((.+?)\).+'
+NAME_PATTERN = r'\1 - \3'
 
 
 def get_novels_from_chromium(bookmark_file=DEFAULT_BOOKMARK_FILE):
@@ -45,8 +47,8 @@ def get_novels_from_chromium(bookmark_file=DEFAULT_BOOKMARK_FILE):
     finished_url_list = []
     for item in novel_finished:
         if item['url'].find('123yq') != -1:
-            match = re.match(r'(.+?),(.+?)\((.+?)\).+', item['name'])
-            finished_list.append(match.expand(r'\1 - \3'))
+            match = re.match(BOOKMARK_PATTERN, item['name'])
+            finished_list.append(match.expand(NAME_PATTERN))
             finished_url_list.append(item['url'])
     return finished_list, finished_url_list
 
@@ -67,13 +69,19 @@ class FetchNovel(object):
 
     def get_index(self):
         req = requests.get(self.url, headers=self.headers, proxies=self.proxies)
-        index = BeautifulSoup(req.content, from_encoding=self.encoding)
-        return index
+        if req.ok:
+            index = BeautifulSoup(req.content, from_encoding=self.encoding)
+            return index
+        else:
+            try:
+                req.raise_for_status()
+            except requests.HTTPError as exc:
+                print(exc)
 
     def get_name(self):
         novel = self.index.find_all('head')[0].text.strip()
-        match = re.match(r'(.+?),(.+?)\((.+?)\).+', novel)
-        return match.expand(r'\1 - \3')
+        match = re.match(BOOKMARK_PATTERN, novel)
+        return match.expand(NAME_PATTERN)
 
     def get_chapter_urls(self):
         chapter_url_pattern = self.url + r'\d+?\.shtml'
@@ -90,15 +98,22 @@ class FetchNovel(object):
             filepath = os.path.join(self.download_dir, filename)
             if os.path.exists(filepath):
                 continue
-            req = requests.get(line['href'], headers=self.headers, proxies=self.proxies)
-            chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
-            content = chapter.find_all(id='TXT')[0]
-            text = str(content)
-            text = text.replace('\r', '')
-            text = text.replace('<br/>', '\n')
-            text = re.sub(r'<.+>', '', text)
-            with open(filepath, 'w') as fp:
-                fp.write(text)
+            chapter_url = line['href']
+            req = requests.get(chapter_url, headers=self.headers, proxies=self.proxies)
+            if req.ok:
+                chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
+                content = chapter.find_all(id='TXT')[0]
+                text = str(content)
+                text = text.replace('\r', '')
+                text = text.replace('<br/>', '\n')
+                text = re.sub(r'<.+>', '', text)
+                with open(filepath, 'w') as fp:
+                    fp.write(text)
+            else:
+                try:
+                    req.raise_for_status()
+                except requests.HTTPError as exc:
+                    print(exc)
 
 
 def main():
