@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
 #
-# 365xs.py
+# 69shu.py
 # Copyright (c) 2014 Wang Jiezhe <wangjiezhe@gmail.com>
 # Released under GPLv3 or later.
 
@@ -11,8 +11,9 @@ import requests
 import json
 from bs4 import BeautifulSoup
 
-# NOVELS = ["庶女悠然"]
-URLS = ["http://www.365xs.org/books/0/493/"]
+BASEURL = "http://www.69shu.com"
+# NOVELS = ["特种兵在都市"]
+URLS = ["http://www.69shu.com/2875/"]
 PROXY = {'http': '127.0.0.1:8087'}
 HEADERS = {
     'User-Agent': "Mozilla/5.0 (X11; Linux x86_64) \
@@ -22,8 +23,8 @@ DEFAULT_BOOKMARK_FILE = os.path.expanduser(
     '~/.config/chromium/Default/Bookmarks')
 # 由于 chardet 无法正确区分 gb2312 和 gbk, 故直接使用 gb18030.
 ENCODING = 'GB18030'
-BOOKMARK_PATTERN = r'(.+?)(最新章节)\((.+?)\),.+'
-NAME_PATTERN = r'\1 - \3'
+BOOKMARK_PATTERN = r'(.+?)(最新章节列表),.+'
+NAME_PATTERN = r'\1'
 
 
 def get_novels_from_chromium(bookmark_file=DEFAULT_BOOKMARK_FILE):
@@ -40,7 +41,7 @@ def get_novels_from_chromium(bookmark_file=DEFAULT_BOOKMARK_FILE):
     finished_list = []
     finished_url_list = []
     for item in novel_finished:
-        if item['url'].find('365xs') != -1:
+        if item['url'].find('69shu') != -1:
             match = re.match(BOOKMARK_PATTERN, item['name'])
             finished_list.append(match.expand(NAME_PATTERN))
             finished_url_list.append(item['url'])
@@ -74,11 +75,12 @@ class FetchNovel(object):
 
     def get_name(self):
         novel = self.index.title.text
+        author = self.index.find_all(href=re.compile(r'.+author.+'))[0].text
         match = re.match(BOOKMARK_PATTERN, novel)
-        return match.expand(NAME_PATTERN)
+        return match.expand(NAME_PATTERN) + ' - ' + author
 
     def get_chapter_urls(self):
-        chapter_url_pattern = r'\d+?\.html'
+        chapter_url_pattern = r'/txt/\d+/\d+'
         chapter_urls = self.index.find_all(href=re.compile(chapter_url_pattern))
         chapter_url_list = list(set(chapter_urls))
         chapter_url_list.sort(key=chapter_urls.index)
@@ -92,14 +94,15 @@ class FetchNovel(object):
             filepath = os.path.join(self.download_dir, filename)
             if os.path.exists(filepath):
                 continue
-            chapter_url = self.url + line['href']
+            chapter_url = BASEURL + line['href']
             req = requests.get(chapter_url, headers=self.headers, proxies=self.proxies)
             if req.ok:
                 chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
-                content = chapter.find_all(id='content')[0]
+                content = chapter.find_all(class_='yd_text2')[0]
                 text = str(content)
+                text = text.replace('\r\n', '')
                 text = text.replace('<br/>', '\n')
-                text = re.sub(r'<.+>', '', text)
+                text = re.sub(r'<.+>', '', text).lstrip('\n')
                 with open(filepath, 'w') as fp:
                     fp.write(text)
             else:

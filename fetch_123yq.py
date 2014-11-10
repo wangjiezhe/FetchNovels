@@ -79,7 +79,7 @@ class FetchNovel(object):
                 print(exc)
 
     def get_name(self):
-        novel = self.index.find_all('head')[0].text.strip()
+        novel = self.index.title.text
         match = re.match(BOOKMARK_PATTERN, novel)
         return match.expand(NAME_PATTERN)
 
