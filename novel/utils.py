@@ -152,17 +152,6 @@ class FetchNovel(object):
         chapter_url_list.sort(key=chapter_urls.index)
         return chapter_url_list
 
-    def download_all(self):
-        if not os.path.isdir(self.download_dir):
-            os.makedirs(self.download_dir)
-        for line in self.chapter_url_list:
-            filename = line.text + '.txt'
-            filepath = os.path.join(self.download_dir, filename)
-            if os.path.exists(filepath):
-                continue
-            self.chapter_url = line['href']
-            self.download_chapter(filepath)
-
     def download_chapter(self, filepath):
         req = requests.get(self.chapter_url, headers=self.headers, proxies=self.proxies)
         if req.ok:
@@ -177,3 +166,20 @@ class FetchNovel(object):
                 fp.write(text)
         else:
             req.raise_for_status()
+
+    def download_all(self):
+        if not os.path.isdir(self.download_dir):
+            os.makedirs(self.download_dir)
+        for line in self.chapter_url_list:
+            filename = line.text + '.txt'
+            filepath = os.path.join(self.download_dir, filename)
+            if os.path.exists(filepath):
+                continue
+            self.chapter_url = line['href']
+            self.download_chapter(filepath)
+
+    def download_test(self):
+        target = self.chapter_url_list[-1]
+        filename = target.text + '.txt'
+        self.chapter_url = target['href']
+        self.download_chapter(filename)
