@@ -183,3 +183,4 @@ class FetchNovel(object):
         filename = target.text + '.txt'
         self.chapter_url = target['href']
         self.download_chapter(filename)
+
