@@ -94,7 +94,7 @@ class FetchNovel(object):
     @property
     def chapter_url_list(self):
         if not self._chapter_url_list:
-            self._chapter_url_list = self.get_chapter_urls()
+            self._chapter_url_list = self.get_chapter_url_list()
         return self._chapter_url_list
 
     @property
@@ -146,7 +146,7 @@ class FetchNovel(object):
         else:
             req.raise_for_status()
 
-    def get_chapter_urls(self):
+    def get_chapter_url_list(self):
         chapter_urls = self.index.find_all(href=re.compile(self.chapter_url_pattern))
         chapter_url_list = list(set(chapter_urls))
         chapter_url_list.sort(key=chapter_urls.index)

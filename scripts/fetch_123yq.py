@@ -64,7 +64,7 @@ class FetchNovel(object):
         self.proxies = proxies
         self.index = self.get_index()
         self.name = self.get_name()
-        self.chapter_url_list = self.get_chapter_urls()
+        self.chapter_url_list = self.get_chapter_url_list()
         self.download_dir = os.path.join(os.getcwd(), self.name)
 
     def get_index(self):
@@ -83,7 +83,7 @@ class FetchNovel(object):
         match = re.match(BOOKMARK_PATTERN, novel)
         return match.expand(NAME_PATTERN)
 
-    def get_chapter_urls(self):
+    def get_chapter_url_list(self):
         chapter_url_pattern = self.url + r'\d+?\.shtml'
         chapter_urls = self.index.find_all(href=re.compile(chapter_url_pattern))
         chapter_url_list = list(set(chapter_urls))
