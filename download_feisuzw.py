@@ -26,6 +26,10 @@ def get_chapter_url_from_href(url, href):
     return urljoin(url, href)
 
 
+def refine(text):
+    return text.replace('www.feisuzw.com 飞速中文网', '')
+
+
 def get_name_from_index(index):
     novel = index.title.text
     match = re.match(BOOKMARK_PATTERN, novel)
@@ -46,8 +50,9 @@ def main():
         novel.get_chapter_url_pattern = get_chapter_url_pattern
         novel.search_type = SEARCH_TYPE
         novel.search_text = SEARCH_TEXT
+        novel.better_refine = refine
         print("Downloading novel: %s" % novel.name)
-        novel.download()
+        novel.download_all()
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     input("Press <Enter> to quit!")
 

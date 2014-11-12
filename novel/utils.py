@@ -60,18 +60,6 @@ def refine_text(text):
     return text
 
 
-def get_chapter_url_pattern(url):
-    return ''
-
-
-def get_chapter_url_from_href(url, href):
-    return ''
-
-
-def get_name_from_index(index):
-    return ''
-
-
 class FetchNovel(object):
     def __init__(self, url, headers=None, encoding='utf-8', proxies=None):
         self.url = url
@@ -80,20 +68,22 @@ class FetchNovel(object):
         self.proxies = proxies or {}
         self.index = self.get_index()
         self.refine_text = refine_text
+        self.better_refine = None
         self._name = ''
         self._chapter_url = ''
         self._chapter_url_list = []
         self._search_type = ''
         self._search_text = ''
-        self.get_name_from_index = get_name_from_index
-        self.get_chapter_url_pattern = get_chapter_url_pattern
-        self.get_chapter_url_from_href = get_chapter_url_from_href
+        self.get_name_from_index = None
+        self.get_chapter_url_pattern = None
+        self.get_chapter_url_from_href = None
 
     @property
     def name(self):
         if not self._name:
-            self._name = self.get_name_from_index(self.index)
-            if not self._name:
+            if callable(self.get_name_from_index):
+                self._name = self.get_name_from_index(self.index)
+            else:
                 raise FuncNotSetError("get_name_from_index")
         return self._name
 
@@ -109,8 +99,8 @@ class FetchNovel(object):
 
     @property
     def chapter_url_pattern(self):
-        pattern = self.get_chapter_url_pattern(self.url)
-        if pattern:
+        if callable(self.get_chapter_url_pattern):
+            pattern = self.get_chapter_url_pattern(self.url)
             return pattern
         else:
             raise FuncNotSetError("get_chapter_url_pattern")
@@ -121,8 +111,9 @@ class FetchNovel(object):
 
     @chapter_url.setter
     def chapter_url(self, href):
-        self._chapter_url = self.get_chapter_url_from_href(self.url, href)
-        if not self._chapter_url:
+        if callable(self.get_chapter_url_pattern):
+            self._chapter_url = self.get_chapter_url_from_href(self.url, href)
+        else:
             raise FuncNotSetError("get_chapter_url_from_href")
 
     @property
@@ -161,7 +152,7 @@ class FetchNovel(object):
         chapter_url_list.sort(key=chapter_urls.index)
         return chapter_url_list
 
-    def download(self):
+    def download_all(self):
         if not os.path.isdir(self.download_dir):
             os.makedirs(self.download_dir)
         for line in self.chapter_url_list:
@@ -170,14 +161,19 @@ class FetchNovel(object):
             if os.path.exists(filepath):
                 continue
             self.chapter_url = line['href']
-            req = requests.get(self.chapter_url, headers=self.headers, proxies=self.proxies)
-            if req.ok:
-                chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
-                search_cmd = "chapter.find_all(%s=\"%s\")[0]" \
-                             % (self.search_type, self.search_text)
-                content = eval(search_cmd)
-                text = self.refine_text(str(content))
-                with open(filepath, 'w') as fp:
-                    fp.write(text)
-            else:
-                req.raise_for_status()
+            self.download_chapter(filepath)
+
+    def download_chapter(self, filepath):
+        req = requests.get(self.chapter_url, headers=self.headers, proxies=self.proxies)
+        if req.ok:
+            chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
+            search_cmd = "chapter.find_all(%s=\"%s\")[0]" \
+                         % (self.search_type, self.search_text)
+            content = eval(search_cmd)
+            text = self.refine_text(str(content))
+            if callable(self.better_refine):
+                text = self.better_refine(text)
+            with open(filepath, 'w') as fp:
+                fp.write(text)
+        else:
+            req.raise_for_status()

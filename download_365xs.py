@@ -42,7 +42,7 @@ def main():
         novel.search_type = SEARCH_TYPE
         novel.search_text = SEARCH_TEXT
         print("Downloading novel: %s" % novel.name)
-        novel.download()
+        novel.download_all()
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     input("Press <Enter> to quit!")
 
