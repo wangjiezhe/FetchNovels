@@ -56,6 +56,7 @@ def refine_text(text):
     text = text.replace('<br/>', '\n')
     text = re.sub(r'<.+>', '', text)
     text = text.strip('\n')
+    text = text.strip(' ')
     return text
 
 
