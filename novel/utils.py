@@ -13,7 +13,7 @@ from urllib.parse import urlparse, urlunparse
 from bs4 import BeautifulSoup
 from .error import ValueNotSetError, FuncNotSetError
 
-PROXIES = {'http': '127.0.0.1:8087'}
+GOAGENT = {'http': '127.0.0.1:8087'}
 HEADERS = {
     'User-Agent': "Mozilla/5.0 (X11; Linux x86_64) \
 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36"

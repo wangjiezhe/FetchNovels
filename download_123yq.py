@@ -35,7 +35,7 @@ def get_name_from_index(index):
 def main():
     for url in URLS:
         novel = utils.FetchNovel(url, headers=utils.HEADERS,
-                                 encoding=ENCODING, proxies=utils.PROXIES)
+                                 encoding=ENCODING, proxies=utils.GOAGENT)
         novel.get_name_from_index = get_name_from_index
         novel.get_chapter_url_from_href = get_chapter_url_from_href
         novel.get_chapter_url_pattern = get_chapter_url_pattern
