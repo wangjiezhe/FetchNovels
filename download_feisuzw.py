@@ -27,7 +27,7 @@ def get_chapter_url_from_href(url, href):
 
 
 def refine(text):
-    return text.replace('www.feisuzw.com 飞速中文网', '')
+    return re.sub(r'www.feisuzw.com\s+飞速中文网', '', text, flags=re.I)
 
 
 def get_name_from_index(index):

@@ -28,7 +28,8 @@ def get_chapter_url_from_href(url, href):
 def get_name_from_index(index):
     novel = index.title.text
     match = re.match(BOOKMARK_PATTERN, novel)
-    return match.expand(NAME_PATTERN)
+    name = match.expand(NAME_PATTERN)
+    return name
 
 
 def main():
