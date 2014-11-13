@@ -5,6 +5,7 @@
 # Copyright (c) 2014 Wang Jiezhe <wangjiezhe@gmail.com>
 # Released under GPLv3 or later.
 
+
 class Error(Exception):
     def __init__(self, message):
         self.message = message
@@ -19,6 +20,7 @@ class ValueNotSetError(Error):
 
     def __str__(self):
         return "Value %s not set." % self.message
+
 
 class FuncNotSetError(Error):
     def __init__(self, message):

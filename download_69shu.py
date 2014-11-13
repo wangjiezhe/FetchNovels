@@ -10,39 +10,35 @@ from novel import utils
 from urllib.parse import urljoin
 
 SITE_NAME = '69shu'
-ENCODING = 'GB18030'
 URLS = ["http://www.69shu.com/2875/"]
-BOOKMARK_PATTERN = r'(.+?)(最新章节列表),.+'
-NAME_PATTERN = r'\1'
-SEARCH_TYPE = 'class_'
-SEARCH_TEXT = 'yd_text2'
 
 
-def get_chapter_url_pattern(url):
-    return r'^/txt/\d+/\d+$'
+class MyNovel(utils.FetchNovel):
+    def __init__(self, url):
+        super().__init__(url, headers=utils.HEADERS, proxies=utils.GOAGENT)
+        self.bookmark_pattern = r'(.+?)(最新章节列表),.+'
+        self.title_pattern = r'\1'
+        self.search_type = 'class_'
+        self.search_text = 'yd_text2'
 
+    @staticmethod
+    def get_chapter_url_pattern():
+        return r'^/txt/\d+/\d+$'
 
-def get_chapter_url_from_href(url, href):
-    return urljoin(utils.get_base_url(url), href)
+    def get_chapter_url_from_href(self, href):
+        return urljoin(utils.get_base_url(self.url), href)
 
+    def get_author_from_index(self):
+        author = self.index.find_all(href=re.compile(r'.+author.+'))[0].text
+        return author
 
-def get_name_from_index(index):
-    novel = index.title.text
-    match = re.match(BOOKMARK_PATTERN, novel)
-    name = match.expand(NAME_PATTERN)
-    author = index.find_all(href=re.compile(r'.+author.+'))[0].text
-    return name + ' - ' + author
+    def better_refine(self, text):
+        return re.sub(r'\n[^\n]+《' + self.title + r'》$', '', text)
 
 
 def main():
     for url in URLS:
-        novel = utils.FetchNovel(url, headers=utils.HEADERS,
-                                 encoding=ENCODING, proxies=utils.GOAGENT)
-        novel.get_name_from_index = get_name_from_index
-        novel.get_chapter_url_from_href = get_chapter_url_from_href
-        novel.get_chapter_url_pattern = get_chapter_url_pattern
-        novel.search_type = SEARCH_TYPE
-        novel.search_text = SEARCH_TEXT
+        novel = MyNovel(url)
         print("Downloading novel: %s" % novel.name)
         novel.download_all()
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")

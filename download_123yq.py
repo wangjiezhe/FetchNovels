@@ -9,38 +9,35 @@ import re
 from novel import utils
 
 SITE_NAME = '123yq'
-ENCODING = 'GB18030'
-BOOKMARK_PATTERN = r'(.+?),(.+?)\((.+?)\).+'
-NAME_PATTERN = r'\1 - \3'
 URLS = ["http://www.123yq.com/read/20/20943/"]
-SEARCH_TYPE = 'id'
-SEARCH_TEXT = 'TXT'
 
 
-def get_chapter_url_pattern(url):
-    return url + r'\d+?\.shtml'
+class MyNovel(utils.FetchNovel):
+    def __init__(self, url):
+        super().__init__(url, headers=utils.HEADERS, proxies=utils.GOAGENT)
+        self.bookmark_pattern = r'(.+?),(.+?)\((.+?)\).+'
+        self.title_pattern = r'\1'
+        self.author_pattern = r'\3'
+        self.search_type = 'id'
+        self.search_text = 'TXT'
 
+    def get_chapter_url_pattern(self):
+        return self.url + r'\d+?\.shtml'
 
-def get_chapter_url_from_href(url, href):
-    return href
+    @staticmethod
+    def get_chapter_url_from_href(href):
+        return href
 
-
-def get_name_from_index(index):
-    novel = index.title.text
-    match = re.match(BOOKMARK_PATTERN, novel)
-    name = match.expand(NAME_PATTERN)
-    return name
+    def get_author_from_index(self):
+        novel = self.index.title.text
+        match = re.match(self.bookmark_pattern, novel)
+        author = match.expand(self.author_pattern)
+        return author
 
 
 def main():
     for url in URLS:
-        novel = utils.FetchNovel(url, headers=utils.HEADERS,
-                                 encoding=ENCODING, proxies=utils.GOAGENT)
-        novel.get_name_from_index = get_name_from_index
-        novel.get_chapter_url_from_href = get_chapter_url_from_href
-        novel.get_chapter_url_pattern = get_chapter_url_pattern
-        novel.search_type = SEARCH_TYPE
-        novel.search_text = SEARCH_TEXT
+        novel = MyNovel(url)
         print("Downloading novel: %s" % novel.name)
         novel.download_all()
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")

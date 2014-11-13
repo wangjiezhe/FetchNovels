@@ -10,7 +10,6 @@ from novel import utils
 from urllib.parse import urljoin
 
 SITE_NAME = 'feisuzw'
-ENCODING = 'GB18030'
 URLS = ["http://www.feisuzw.com/Html/1765/"]
 BOOKMARK_PATTERN = r'(.+?)( - 飞速中文网 - ).+'
 NAME_PATTERN = r'\1'
@@ -18,39 +17,36 @@ SEARCH_TYPE = 'id'
 SEARCH_TEXT = 'content'
 
 
-def get_chapter_url_pattern(url):
-    return r'^\d+\.html$'
+class MyNovel(utils.FetchNovel):
+    def __init__(self, url):
+        super().__init__(url, headers=utils.HEADERS)
+        self.bookmark_pattern = r'(.+?)( - 飞速中文网 - ).+'
+        self.title_pattern = r'\1'
+        self.search_type = 'id'
+        self.search_text = 'content'
 
+    @staticmethod
+    def get_chapter_url_pattern():
+        return r'^\d+\.html$'
 
-def get_chapter_url_from_href(url, href):
-    return urljoin(url, href)
+    def get_chapter_url_from_href(self, href):
+        return urljoin(self.url, href)
 
+    @staticmethod
+    def better_refine(text):
+        return re.sub(r'www.feisuzw.com\s+飞速中文网', '', text, flags=re.I)
 
-def refine(text):
-    return re.sub(r'www.feisuzw.com\s+飞速中文网', '', text, flags=re.I)
-
-
-def get_name_from_index(index):
-    novel = index.title.text
-    match = re.match(BOOKMARK_PATTERN, novel)
-    name = match.expand(NAME_PATTERN)
-    for item in index.find_all('span'):
-        m = re.match(r'^(文 / )(.+)$', item.text)
-        if m is not None:
-            author = m.expand(r'\2')
-    return name + ' - ' + author
+    def get_author_from_index(self):
+        for item in self.index.find_all('span'):
+            m = re.match(r'^(文 / )(.+)$', item.text)
+            if m is not None:
+                author = m.expand(r'\2')
+                return author
 
 
 def main():
     for url in URLS:
-        novel = utils.FetchNovel(url, headers=utils.HEADERS,
-                                 encoding=ENCODING)
-        novel.get_name_from_index = get_name_from_index
-        novel.get_chapter_url_from_href = get_chapter_url_from_href
-        novel.get_chapter_url_pattern = get_chapter_url_pattern
-        novel.search_type = SEARCH_TYPE
-        novel.search_text = SEARCH_TEXT
-        novel.better_refine = refine
+        novel = MyNovel(url)
         print("Downloading novel: %s" % novel.name)
         novel.download_all()
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
