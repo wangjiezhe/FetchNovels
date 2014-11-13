@@ -26,4 +26,3 @@ class FuncNotSetError(Error):
 
     def __str__(self):
         return "Function %s not set." % self.message
-

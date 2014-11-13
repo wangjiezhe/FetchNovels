@@ -27,7 +27,7 @@ def get_novels_from_chromium(site_name, bookmark_pattern, name_pattern,
     with open(bookmark_file, 'r') as fp:
         bookmarks = json.load(fp)
     for item in bookmarks['roots']['bookmark_bar']['children']:
-        if item['name'] == 'novel':
+        if item['name'] == 'Novel':
             novels = item['children']
             break
     for item in novels:
@@ -50,16 +50,6 @@ def get_base_url(url):
     return base_url
 
 
-def refine_text(text):
-    text = text.replace('\r\n', '')
-    text = text.replace('\r', '')
-    text = text.replace('<br/>', '\n')
-    text = re.sub(r'<.+>', '', text)
-    text = text.strip('\n')
-    text = text.strip(' ')
-    return text
-
-
 class FetchNovel(object):
     def __init__(self, url, headers=None, encoding='utf-8', proxies=None):
         self.url = url
@@ -67,7 +57,6 @@ class FetchNovel(object):
         self.encoding = encoding
         self.proxies = proxies or {}
         self.index = self.get_index()
-        self.refine_text = refine_text
         self.better_refine = None
         self._name = ''
         self._chapter_url = ''
@@ -138,6 +127,16 @@ class FetchNovel(object):
     def search_text(self, text):
         self._search_text = text
 
+    @staticmethod
+    def refine_text(text):
+        text = text.replace('\r\n', '')
+        text = text.replace('\r', '')
+        text = text.replace('<br/>', '\n')
+        text = re.sub(r'<.+>', '', text)
+        text = text.strip('\n')
+        text = text.strip(' ')
+        return text
+
     def get_index(self):
         req = requests.get(self.url, headers=self.headers, proxies=self.proxies)
         if req.ok:
@@ -183,4 +182,3 @@ class FetchNovel(object):
         filename = target.text + '.txt'
         self.chapter_url = target['href']
         self.download_chapter(filename)
-
