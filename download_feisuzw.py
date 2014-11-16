@@ -19,7 +19,7 @@ SEARCH_TEXT = 'content'
 
 class MyNovel(utils.FetchNovel):
     def __init__(self, url):
-        super().__init__(url, headers=utils.HEADERS)
+        super().__init__(url, headers=utils.HEADERS, index_suf='Index.html')
         self.bookmark_pattern = r'(.+?)( - 飞速中文网 - ).+'
         self.title_pattern = r'\1'
         self.search_type = 'id'

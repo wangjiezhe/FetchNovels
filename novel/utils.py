@@ -10,7 +10,7 @@ import re
 import requests
 import json
 import chardet
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, urljoin
 from bs4 import BeautifulSoup
 from .error import ValueNotSetError, FuncNotSetError
 
@@ -52,10 +52,11 @@ def get_base_url(url):
 
 
 class FetchNovel(object):
-    def __init__(self, url, headers=None, proxies=None):
+    def __init__(self, url, headers=None, proxies=None, index_suf=None):
         self.url = url
         self.headers = headers or {}
         self.proxies = proxies or {}
+        self._index_suf = index_suf or ''
         self.encoding = None
         self.index = self.get_index()
         self._name = ''
@@ -72,6 +73,10 @@ class FetchNovel(object):
         # self.get_chapter_url_pattern = None
         # self.get_chapter_url_from_href = None
         # self.better_refine = None
+
+    @property
+    def index_url(self):
+        return urljoin(self.url, self._index_suf)
 
     @property
     def title(self):
@@ -190,7 +195,7 @@ class FetchNovel(object):
         return text
 
     def get_index(self):
-        req = requests.get(self.url, headers=self.headers, proxies=self.proxies)
+        req = requests.get(self.index_url, headers=self.headers, proxies=self.proxies)
         if req.ok:
             detected_encoding = chardet.detect(req.content).get('encoding')
             if detected_encoding in ["GB2312", "GBK", "GB18030"]:
