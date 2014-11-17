@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
 #
-# download_feisuzw.py
+# download_dzxsw.py
 # Copyright (c) 2014 Wang Jiezhe <wangjiezhe@gmail.com>
 # Released under GPLv3 or later.
 
@@ -9,35 +9,31 @@ import re
 from novel import utils
 from urllib.parse import urljoin
 
-SITE_NAME = 'feisuzw'
-URLS = ["http://www.feisuzw.com/Html/1765/"]
+SITE_NAME = 'dzxsw'
+URLS = ["http://www.dzxsw.net/book/22971/"]
 
 
 class MyNovel(utils.FetchNovel):
     def __init__(self, url):
-        super().__init__(url, headers=utils.HEADERS, index_suf='Index.html')
-        self.bookmark_pattern = r'(.+?)( - 飞速中文网 - ).+'
+        super().__init__(url, headers=utils.HEADERS, proxies=utils.GOAGENT, index_suf='index.html')
+        self.bookmark_pattern = r'(.+?)(最新章节),(.+?),.+'
         self.title_pattern = r'\1'
+        self.author_pattern = r'\3'
         self.search_type = 'id'
         self.search_text = 'content'
 
     @staticmethod
     def get_chapter_url_pattern():
-        return r'^\d+\.html$'
+        return r'^/book/\d+/\d+\.html$'
 
     def get_chapter_url_from_href(self, href):
-        return urljoin(self.url, href)
-
-    @staticmethod
-    def better_refine(text):
-        return re.sub(r'www.feisuzw.com\s+飞速中文网', '', text, flags=re.I)
+        return urljoin(utils.get_base_url(self.url), href)
 
     def get_author_from_index(self):
-        for item in self.index.find_all('span'):
-            m = re.match(r'^(文 / )(.+)$', item.text)
-            if m is not None:
-                author = m.expand(r'\2')
-                return author
+        novel = self.index.title.text
+        match = re.match(self.bookmark_pattern, novel)
+        author = match.expand(self.author_pattern)
+        return author
 
 
 def main():
