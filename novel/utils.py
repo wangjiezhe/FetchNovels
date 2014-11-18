@@ -56,9 +56,8 @@ class FetchNovel(object):
         self.url = url
         self.headers = headers or {}
         self.proxies = proxies or {}
-        self._index_suf = index_suf or ''
+        self.index_suf = index_suf or ''
         self.encoding = None
-        self.index_url = urljoin(self.url, self._index_suf)
         self.index = self.get_index()
         self._name = ''
         self._title = ''
@@ -74,6 +73,10 @@ class FetchNovel(object):
         # self.get_chapter_url_pattern = None
         # self.get_chapter_url_from_href = None
         # self.better_refine = None
+
+    @property
+    def index_url(self):
+        return urljoin(self.url, self.index_suf)
 
     @property
     def title(self):
@@ -203,6 +206,13 @@ class FetchNovel(object):
             return index
         else:
             req.raise_for_status()
+
+    def reload(self):
+        self._name = ''
+        self._title = ''
+        self._author = ''
+        self._chapter_url_list = []
+        self.index = self.get_index()
 
     def get_title_from_index(self):
         novel = self.index.title.text
