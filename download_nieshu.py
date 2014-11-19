@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
 #
-# download_123yq.py
+# download_nieshu.py
 # Copyright (c) 2014 Wang Jiezhe <wangjiezhe@gmail.com>
 # Released under GPLv3 or later.
 
 import re
 from novel import utils
+from urllib.parse import urljoin
 
-SITE_NAME = '123yq'
-URLS = ["http://www.123yq.com/read/20/20943/",
-        "http://www.123yq.com/read/27/27194/"]
+SITE_NAME = 'nieshu'
+URLS = ["http://www.nieshu.com/Book/38/38322/"]
 
 
 class MyNovel(utils.FetchNovel):
     def __init__(self, url):
-        super().__init__(url, headers=utils.HEADERS, proxies=utils.GOAGENT)
-        self.bookmark_pattern = r'(.+?),(.+?)\((.+?)\).+'
+        super().__init__(url, headers=utils.HEADERS, index_suf='Index.shtml')
+        self.bookmark_pattern = r'(.+?)(最新章节列表),(.+?),.+'
         self.title_pattern = r'\1'
         self.author_pattern = r'\3'
         self.search_type = 'id'
-        self.search_text = 'TXT'
-
-    def get_chapter_url_pattern(self):
-        return self.url + r'\d+?\.shtml'
+        self.search_text = 'content'
 
     @staticmethod
-    def get_chapter_url_from_href(href):
-        return href
+    def get_chapter_url_pattern():
+        return r'^\d+\.shtml$'
+
+    def get_chapter_url_from_href(self, href):
+        return urljoin(self.url, href)
 
     def get_author_from_index(self):
         novel = self.index.title.text
