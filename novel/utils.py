@@ -192,6 +192,8 @@ class FetchNovel(object):
         text = text.strip('\n')
         text = text.strip(' ')
         text = text.strip('\t')
+        text = re.sub(r'\n\s+\n', '\n\n', text)
+        text = re.sub(r'\n+', '\n', text)
         return text
 
     def get_index(self):
