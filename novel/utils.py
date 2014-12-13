@@ -10,6 +10,7 @@ import re
 import requests
 import json
 import chardet
+import time
 from urllib.parse import urlparse, urlunparse, urljoin
 from bs4 import BeautifulSoup
 from .error import ValueNotSetError, FuncNotSetError
@@ -241,7 +242,13 @@ class FetchNovel(object):
                 text = self.better_refine(text)
             return text
         else:
-            req.raise_for_status()
+            if req.status_code == 502:
+                print('HTPError: 502 Server Error: Bad Gateway')
+                print('Retrying...')
+                time.sleep(1)
+                return self.get_chapter()
+            else:
+                req.raise_for_status()
 
     def download_chapter(self, filepath):
         text = self.get_chapter()
@@ -254,7 +261,7 @@ class FetchNovel(object):
         for line in self.chapter_url_list:
             filename = line.text + '.txt'
             filepath = os.path.join(self.download_dir, filename)
-            if os.path.exists(filepath):
+            if os.path.exists(filepath) and os.path.getsize(filepath) > 0:
                 continue
             self.chapter_url = line['href']
             self.download_chapter(filepath)
