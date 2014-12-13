@@ -35,6 +35,10 @@ class MyNovel(utils.FetchNovel):
         text = text.strip()
         return text
 
+    @staticmethod
+    def get_chapter_name(text):
+        return re.sub(r'/.+$', '', text)
+
     def get_author_from_index(self):
         for item in self.index.find_all('p'):
             m = re.match(r'^(作者: )(.+)$', item.text)
