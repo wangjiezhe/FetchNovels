@@ -188,6 +188,8 @@ class FetchNovel(object):
         text = text.replace('\r\n', '')
         text = text.replace('\r', '')
         text = text.replace('<br/>', '\n')
+        text = text.replace('<p>', '')
+        text = text.replace('</p>', '\n')
         text = re.sub(r'<.+>', '', text)
         text = text.strip('\n')
         text = text.strip(' ')
