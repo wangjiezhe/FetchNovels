@@ -64,6 +64,7 @@ class FetchNovel(object):
         self._title = ''
         self._author = ''
         self._chapter_url = ''
+        self._chapter_name = ''
         self._chapter_url_list = []
         self._search_type = ''
         self._search_text = ''
@@ -74,6 +75,7 @@ class FetchNovel(object):
         # self.get_chapter_url_pattern = None
         # self.get_chapter_url_from_href = None
         # self.better_refine = None
+        # self.get_chapter_name = None
 
     @property
     def index_url(self):
@@ -128,6 +130,17 @@ class FetchNovel(object):
             self._chapter_url = self.get_chapter_url_from_href(href)
         else:
             raise FuncNotSetError("get_chapter_url_from_href")
+
+    @property
+    def chapter_name(self):
+        return self._chapter_name
+
+    @chapter_name.setter
+    def chapter_name(self, text):
+        if hasattr(self, 'get_chapter_name') and callable(self.get_chapter_name):
+            return self.get_chapter_name(text)
+        else:
+            return text
 
     @property
     def search_type(self):
@@ -255,25 +268,23 @@ class FetchNovel(object):
         with open(filepath, 'w') as fp:
             fp.write(text)
 
-    @staticmethod
-    def get_chapter_name(text):
-        return text
-
     def download_all(self):
         if not os.path.isdir(self.download_dir):
             os.makedirs(self.download_dir)
         for line in self.chapter_url_list:
-            filename = self.get_chapter_name(line.text) + '.txt'
+            self.chapter_url = line['href']
+            self.chapter_name = line.text
+            filename = self.chapter_name + '.txt'
             filepath = os.path.join(self.download_dir, filename)
             if os.path.exists(filepath) and os.path.getsize(filepath) > 0:
                 continue
-            self.chapter_url = line['href']
             self.download_chapter(filepath)
 
     def download_test(self):
         target = self.chapter_url_list[-1]
-        filename = self.get_chapter_name(target.text) + '.txt'
         self.chapter_url = target['href']
+        self.chapter_name = target.text
+        filename = self.chapter_name + '.txt'
         self.download_chapter(filename)
 
     def get_chapter_test(self):
