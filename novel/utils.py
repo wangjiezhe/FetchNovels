@@ -139,9 +139,9 @@ class FetchNovel(object):
     @chapter_name.setter
     def chapter_name(self, text):
         if hasattr(self, 'get_chapter_name') and callable(self.get_chapter_name):
-            return self.get_chapter_name(text)
+            self._chapter_name =  self.get_chapter_name(text)
         else:
-            return text
+            self._chapter_name = text
 
     @property
     def search_type(self):
@@ -279,7 +279,8 @@ class FetchNovel(object):
             filepath = os.path.join(self.download_dir, filename)
             if os.path.exists(filepath) and os.path.getsize(filepath) > 0:
                 continue
-            self.download_chapter(filepath)
+            else:
+                self.download_chapter(filepath)
 
     def download_test(self):
         target = self.chapter_url_list[-1]
