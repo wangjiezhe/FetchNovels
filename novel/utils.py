@@ -11,6 +11,7 @@ import requests
 import json
 import chardet
 import time
+import ast
 from urllib.parse import urlparse, urlunparse, urljoin
 from bs4 import BeautifulSoup
 from .error import ValueNotSetError, FuncNotSetError
@@ -249,7 +250,7 @@ class FetchNovel(object):
         if req.ok:
             chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
             search_cmd = "chapter.find_all(%s=\"%s\")[0]" % (self.search_type, self.search_text)
-            content = eval(search_cmd)
+            content = ast.literal_eval(search_cmd)
             text = self.refine_text(str(content))
             if hasattr(self, 'better_refine') and callable(self.better_refine):
                 text = self.better_refine(text)
