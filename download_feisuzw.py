@@ -43,7 +43,7 @@ class MyNovel(utils.FetchNovel):
 def main():
     for url in URLS:
         novel = MyNovel(url)
-        print("Downloading novel: %s" % novel.name)
+        print("Downloading novel: {}".format(novel.name))
         novel.download_all()
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     input("Press <Enter> to quit!")

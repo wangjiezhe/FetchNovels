@@ -19,7 +19,7 @@ class ValueNotSetError(Error):
         super().__init__(message)
 
     def __str__(self):
-        return "Value %s not set." % self.message
+        return "Value {self.message} not set.".format(self=self)
 
 
 class FuncNotSetError(Error):
@@ -27,4 +27,4 @@ class FuncNotSetError(Error):
         super().__init__(message)
 
     def __str__(self):
-        return "Function %s not set." % self.message
+        return "Function {self.message} not set.".format(self=self)
