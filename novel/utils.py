@@ -249,8 +249,7 @@ class FetchNovel(object):
         req = requests.get(self.chapter_url, headers=self.headers, proxies=self.proxies)
         if req.ok:
             chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
-            search_cmd = "chapter.find_all({self.search_type}=\"{self.search_text}\")[0]".format(self=self)
-            content = ast.literal_eval(search_cmd)
+            content = chapter.find_all(attrs={self.search_type: self.search_text})
             text = self.refine_text(str(content))
             if hasattr(self, 'better_refine') and callable(self.better_refine):
                 text = self.better_refine(text)
