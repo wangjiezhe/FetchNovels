@@ -27,6 +27,8 @@ DEFAULT_BOOKMARK_FILE = os.path.expanduser(
 
 def get_novels_from_chromium(site_name, bookmark_pattern, name_pattern,
                              bookmark_file=DEFAULT_BOOKMARK_FILE):
+    novels = []
+    novel_finished = []
     with open(bookmark_file, 'r') as fp:
         bookmarks = json.load(fp)
     for item in bookmarks['roots']['bookmark_bar']['children']:
