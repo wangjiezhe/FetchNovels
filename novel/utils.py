@@ -11,9 +11,9 @@ import requests
 import json
 import chardet
 import time
-import ast
 from urllib.parse import urlparse, urlunparse, urljoin
 from bs4 import BeautifulSoup
+from functools import partial
 from .error import ValueNotSetError, FuncNotSetError
 
 GOAGENT = {'http': '127.0.0.1:8087'}
@@ -59,6 +59,7 @@ class FetchNovel(object):
         self.headers = headers or {}
         self.proxies = proxies or {}
         self.index_suf = index_suf or ''
+        self.get = partial(requests.get, headers=self.headers, proxies=self.proxies)
         self.encoding = None
         self.index = self.get_index()
         self._name = ''
@@ -139,7 +140,7 @@ class FetchNovel(object):
     @chapter_name.setter
     def chapter_name(self, text):
         if hasattr(self, 'get_chapter_name') and callable(self.get_chapter_name):
-            self._chapter_name =  self.get_chapter_name(text)
+            self._chapter_name = self.get_chapter_name(text)
         else:
             self._chapter_name = text
 
@@ -213,14 +214,18 @@ class FetchNovel(object):
         text = re.sub(r'\n+', '\n', text)
         return text
 
+    @staticmethod
+    def detect(buf):
+        encoding = chardet.detect(buf).get('encoding')
+        if encoding in ["GB2312", "GBK", "GB18030"]:
+            return "GB18030"
+        else:
+            return encoding
+
     def get_index(self):
-        req = requests.get(self.index_url, headers=self.headers, proxies=self.proxies)
+        req = self.get(self.index_url)
         if req.ok:
-            detected_encoding = chardet.detect(req.content).get('encoding')
-            if detected_encoding in ["GB2312", "GBK", "GB18030"]:
-                self.encoding = "GB18030"
-            else:
-                self.encoding = detected_encoding
+            self.encoding = self.detect(req.content)
             index = BeautifulSoup(req.content, from_encoding=self.encoding)
             return index
         else:
@@ -246,7 +251,7 @@ class FetchNovel(object):
         return chapter_url_list
 
     def get_chapter(self):
-        req = requests.get(self.chapter_url, headers=self.headers, proxies=self.proxies)
+        req = self.get(self.chapter_url)
         if req.ok:
             chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
             content = chapter.find_all(attrs={self.search_type: self.search_text})
