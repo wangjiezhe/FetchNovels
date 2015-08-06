@@ -228,7 +228,7 @@ class FetchNovel(object):
         req = self.get(self.index_url)
         if req.ok:
             self.encoding = self.detect(req.content)
-            index = BeautifulSoup(req.content, from_encoding=self.encoding)
+            index = BeautifulSoup(req.content, from_encoding=self.encoding, features="lxml")
             return index
         else:
             req.raise_for_status()
@@ -255,7 +255,7 @@ class FetchNovel(object):
     def get_chapter(self):
         req = self.get(self.chapter_url)
         if req.ok:
-            chapter = BeautifulSoup(req.content, from_encoding=self.encoding)
+            chapter = BeautifulSoup(req.content, from_encoding=self.encoding, features="lxml")
             content = chapter.find_all(attrs={self.search_type: self.search_text})
             text = self.refine_text(str(content))
             if hasattr(self, 'better_refine') and callable(self.better_refine):
