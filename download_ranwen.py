@@ -14,7 +14,7 @@ URLS = ["http://www.ranwen.net/files/article/15/15008/"]
 
 class MyNovel(utils.FetchNovel):
     def __init__(self, url):
-        super().__init__(url, headers=utils.HEADERS, proxies=utils.GOAGENT)
+        super().__init__(url, headers=utils.HEADERS)
         self.bookmark_pattern = r'(.+?)(最新章节列表).+'
         self.title_pattern = r'\1'
         self.search_type = 'id'

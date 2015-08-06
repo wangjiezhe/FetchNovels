@@ -10,12 +10,13 @@ from novel import utils
 
 SITE_NAME = '123yq'
 URLS = ["http://www.123yq.com/read/20/20943/",
-        "http://www.123yq.com/read/27/27194/"]
+        "http://www.123yq.com/read/27/27194/",
+        "http://www.123yq.com/read/24/24854/"]
 
 
 class MyNovel(utils.FetchNovel):
     def __init__(self, url):
-        super().__init__(url, headers=utils.HEADERS, proxies=utils.GOAGENT)
+        super().__init__(url, headers=utils.HEADERS)
         self.bookmark_pattern = r'(.+?),(.+?)\((.+?)\).+'
         self.title_pattern = r'\1'
         self.author_pattern = r'\3'

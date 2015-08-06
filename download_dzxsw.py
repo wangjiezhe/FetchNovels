@@ -15,7 +15,7 @@ URLS = ["http://www.dzxsw.net/book/22971/"]
 
 class MyNovel(utils.FetchNovel):
     def __init__(self, url):
-        super().__init__(url, headers=utils.HEADERS, proxies=utils.GOAGENT, index_suf='index.html')
+        super().__init__(url, headers=utils.HEADERS, index_suf='index.html')
         self.bookmark_pattern = r'(.+?)(最新章节),(.+?),.+'
         self.title_pattern = r'\1'
         self.author_pattern = r'\3'
