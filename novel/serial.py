@@ -7,7 +7,7 @@ import sys
 from time import sleep
 from pyquery import PyQuery as pq
 
-from novel.decorators import retry
+from .decorators import retry
 from .utils import Tool
 from .error import *
 
@@ -18,6 +18,7 @@ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36'}
 
 
 class Novel(object):
+
     def __init__(self, url, intro_url,
                  intro_sel, cont_sel,
                  headers=None, proxies=None, encoding=None):
@@ -96,6 +97,7 @@ class Novel(object):
 
 
 class Page(object):
+
     def __init__(self, url, title, selector,
                  headers=None, proxies=None, encoding=None):
         self.url = url
@@ -133,6 +135,7 @@ class Page(object):
 
 
 class IntroPage(object):
+
     def __init__(self, url, selector,
                  headers=None, proxies=None, encoding=None):
         self.url = url

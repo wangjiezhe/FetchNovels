@@ -5,6 +5,7 @@ import re
 
 
 class Tool(object):
+
     def __init__(self):
         self._remove_addr = re.compile(r'<a.*?>.*?</a>')
         self._remove_div = re.compile(r'<div.*?>.*?</div>')
