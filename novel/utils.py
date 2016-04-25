@@ -11,16 +11,23 @@ class Tool(object):
         self._remove_div = re.compile(r'<div.*?>.*?</div>')
         self._replace_br = re.compile(r'<br\s*/\s*>|</\s*br>')
         self._replace_xa = re.compile(r'\xa0')
+        self._replace_u3000 = re.compile(r'\u3000')
         self._remove_r = re.compile(r'&#13;|\r')
         self._remove_ot = re.compile(r'<.*?>')
+        self._remove_ex = re.compile(r'GetFont\(\);')
 
     def replace(self, text):
         text = re.sub(self._remove_addr, '', text)
         text = re.sub(self._remove_div, '', text)
         text = re.sub(self._replace_br, '\n', text)
         text = re.sub(self._replace_xa, ' ', text)
+        text = re.sub(self._replace_u3000, '  ', text)
         text = re.sub(self._remove_r, '', text)
         text = re.sub(self._remove_ot, '', text)
+        text = re.sub(self._remove_ex, '', text)
+
+        text = re.sub(r'\n\s+\n', '\n\n', text)
+
         return text.strip()
 
 
@@ -34,4 +41,5 @@ def fix_order(i):
 
 
 def base_to_url(base_url, tid):
+    tid = str(tid)
     return base_url % (tid[:-3] if tid[:-3] != '' else 0, tid)

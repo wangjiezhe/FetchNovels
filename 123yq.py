@@ -23,14 +23,14 @@ class Yq123(Novel):
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: pq(e).attr['name'] == 'keywords').attr['content']
+            lambda i, e: pq(e).attr('name') == 'keywords').attr('content')
         return re.match(r'(.*?),(.*?),', st).groups()
 
     @property
     def chapter_list(self):
         clist = self.doc('dd').map(
             lambda i, e: (fix_order(i),
-                          pq(e)('a').attr['href'],
+                          pq(e)('a').attr('href'),
                           pq(e).text())
         ).filter(
             lambda i, e: e[1] is not None
