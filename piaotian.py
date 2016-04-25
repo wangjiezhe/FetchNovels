@@ -4,7 +4,6 @@
 import sys
 import re
 from urllib.parse import urljoin
-
 from pyquery import PyQuery as pq
 
 from novel import serial
