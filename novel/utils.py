@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+from urllib.parse import urlparse, urlunparse
 
 
 class Tool(object):
@@ -9,6 +10,7 @@ class Tool(object):
     def __init__(self):
         self._remove_addr = re.compile(r'<a.*?>.*?</a>')
         self._remove_div = re.compile(r'<div.*?>.*?</div>')
+        self._remove_script = re.compile(r'<script>.*?</script>')
         self._replace_br = re.compile(r'<br\s*/\s*>|</\s*br>')
         self._replace_xa = re.compile(r'\xa0')
         self._replace_u3000 = re.compile(r'\u3000')
@@ -19,6 +21,7 @@ class Tool(object):
     def replace(self, text):
         text = re.sub(self._remove_addr, '', text)
         text = re.sub(self._remove_div, '', text)
+        text = re.sub(self._remove_script, '', text)
         text = re.sub(self._replace_br, '\n', text)
         text = re.sub(self._replace_xa, ' ', text)
         text = re.sub(self._replace_u3000, '  ', text)
@@ -43,3 +46,9 @@ def fix_order(i):
 def base_to_url(base_url, tid):
     tid = str(tid)
     return base_url % (tid[:-3] if tid[:-3] != '' else 0, tid)
+
+
+def get_base_url(url):
+    result = urlparse(url)
+    base_url = urlunparse((result.scheme, result.netloc, '', '', '', ''))
+    return base_url

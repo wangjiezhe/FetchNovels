@@ -6,8 +6,7 @@ import re
 from urllib.parse import urljoin
 from pyquery import PyQuery as pq
 
-from novel import serial
-from novel.utils import base_to_url
+from novel import serial, utils
 
 BASE_URL = 'http://www.piaotian.net/html/%s/%s/'
 INTRO_URL = 'http://www.piaotian.net/bookinfo/%s/%s.html'
@@ -28,7 +27,8 @@ class PiaotianPage(serial.Page):
 class Piaotian(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(base_to_url(BASE_URL, tid), base_to_url(INTRO_URL, tid),
+        super().__init__(utils.base_to_url(BASE_URL, tid),
+                         utils.base_to_url(INTRO_URL, tid),
                          None, None,
                          serial.HEADERS, proxies, ENCODING,
                          page=PiaotianPage)

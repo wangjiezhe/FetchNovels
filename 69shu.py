@@ -8,28 +8,32 @@ from pyquery import PyQuery as pq
 
 from novel import serial, utils
 
-BASE_URL = 'http://www.365xs.org/books/%s/%s/'
-INTRO_URL = 'http://www.365xs.org/book/%s/index.html'
+BASE_URL = 'http://www.69shu.com/%s/'
+INTRO_URL = 'http://www.69shu.com/modules/article/jianjie.php?id=%s'
 ENCODING = 'GB18030'
 
 
-class Xs365(serial.Novel):
+class Shu69(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), INTRO_URL % tid,
-                         '.intro', '#content',
+        super().__init__(BASE_URL % tid, INTRO_URL % tid,
+                         '.jianjie', '.yd_text2',
                          serial.HEADERS, proxies, ENCODING)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: pq(e).attr('name') == 'author').attr('content')
-        return re.match(r'(.*)版权属于作者(.*)', st).groups()
+            lambda i, e: pq(e).attr('name') == 'keywords'
+        ).attr('content')
+        name = re.match(r'(.*?),.*', st).group(1)
+        author = self.doc('.mu_beizhu').eq(0)('a').eq(1).text()
+        return name, author
 
     @property
     def chapter_list(self):
-        clist = self.doc('.chapterlist')('li').map(
+        clist = self.doc('.mulu_list').eq(1)('li').map(
             lambda i, e: (i,
-                          urljoin(self.url, pq(e)('a').attr('href')),
+                          urljoin(utils.get_base_url(self.url),
+                                  pq(e)('a').attr('href')),
                           pq(e).text())
         ).filter(
             lambda i, e: e[1] is not None
@@ -44,7 +48,7 @@ def main():
         print('No specific tid!')
         sys.exit(1)
     for tid in tids:
-        yq = Xs365(tid, serial.GOAGENT)
+        yq = Shu69(tid, serial.GOAGENT)
         yq.dump()
 
 
