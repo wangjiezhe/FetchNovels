@@ -20,14 +20,15 @@ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36'}
 class Page(object):
 
     def __init__(self, url, title, selector,
-                 headers=None, proxies=None, encoding=None):
+                 headers=None, proxies=None, encoding=None,
+                 tool=Tool):
         self.url = url
         self.title = title
         self.selector = selector
         self.headers = headers or {}
         self.proxies = proxies or {}
         self.encoding = encoding
-        self.tool = Tool()
+        self.tool = tool
 
         self.doc = pq(url=self.url, headers=self.headers, proxies=self.proxies,
                       encoding=self.encoding)
@@ -36,7 +37,7 @@ class Page(object):
         if self.selector is None:
             return ''
         content = self.doc(self.selector).html()
-        content = self.tool.replace(content)
+        content = self.tool().replace(content)
         return content
 
     def dump(self, path=None, folder=None, num=None):
@@ -58,14 +59,16 @@ class Page(object):
 
 
 class IntroPage(object):
+
     def __init__(self, url, selector,
-                 headers=None, proxies=None, encoding=None):
+                 headers=None, proxies=None, encoding=None,
+                 tool=Tool):
         self.url = url
         self.headers = headers or {}
         self.proxies = proxies or {}
         self.encoding = encoding
         self.selector = selector
-        self.tool = Tool()
+        self.tool = tool
 
         self.doc = pq(url=self.url, headers=self.headers, proxies=self.proxies,
                       encoding=self.encoding)
@@ -74,11 +77,12 @@ class IntroPage(object):
         if self.selector is None:
             return ''
         intro = self.doc(self.selector).html()
-        intro = self.tool.replace(intro)
+        intro = self.tool().replace(intro)
         return intro
 
 
 class Novel(object):
+
     def __init__(self, url, intro_url,
                  intro_sel, cont_sel,
                  headers=None, proxies=None, encoding=None,
@@ -92,7 +96,7 @@ class Novel(object):
         self.encoding = encoding
         self.page = page
         self.intro_page = intro_page
-        self.tool = tool()
+        self.tool = tool
 
         self.doc = pq(url=self.url, headers=self.headers, proxies=self.proxies,
                       encoding=self.encoding)
@@ -108,7 +112,8 @@ class Novel(object):
     @retry(HTTPError)
     def get_intro(self):
         intro_page = self.intro_page(self.intro_url, self.intro_sel,
-                                     self.headers, self.proxies, self.encoding)
+                                     self.headers, self.proxies, self.encoding,
+                                     self.tool)
         intro = intro_page.get_content()
         return intro
 
@@ -126,7 +131,8 @@ class Novel(object):
     @retry(HTTPError)
     def dump_chapter(self, url, title, num):
         page = self.page(url, title, self.cont_sel,
-                         self.headers, self.proxies, self.encoding)
+                         self.headers, self.proxies, self.encoding,
+                         self.tool)
         page.dump(folder=self.download_dir, num=num)
 
     def dump(self):
@@ -151,5 +157,6 @@ class Novel(object):
     @retry(HTTPError)
     def get_chapter(self, url, title):
         page = self.page(url, title, self.cont_sel,
-                         self.headers, self.proxies, self.encoding)
+                         self.headers, self.proxies, self.encoding,
+                         self.tool)
         return page.get_content()

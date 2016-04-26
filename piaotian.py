@@ -20,7 +20,7 @@ class PiaotianPage(serial.Page):
         pat = re.compile(r'.*<!-- 标题上AD结束 -->(.*)<!-- 翻页上AD开始 -->.*',
                          re.S)
         content = re.match(pat, content).group(1)
-        content = self.tool.replace(content)
+        content = self.tool().replace(content)
         return content
 
 
