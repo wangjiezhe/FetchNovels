@@ -4,7 +4,7 @@
 import sys
 import re
 from urllib.parse import urljoin
-from pyquery import PyQuery as pq
+from pyquery import PyQuery as Pq
 
 from novel import serial, utils
 
@@ -35,23 +35,23 @@ class Piaotian(serial.Novel):
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: pq(e).attr('name') == 'keywords'
+            lambda i, e: Pq(e).attr('name') == 'keywords'
         ).attr('content')
         name = re.match(r'(.*?),.*', st).group(1)
         author = self.doc('meta').filter(
-            lambda i, e: pq(e).attr('name') == 'author'
+            lambda i, e: Pq(e).attr('name') == 'author'
         ).attr('content')
         return name, author
 
     @property
     def chapter_list(self):
         clist = self.doc('li').filter(
-            lambda i, e: (pq(e)('a').attr('href') and
-                          re.match(r'\d+\.html', pq(e)('a').attr('href')))
+            lambda i, e: (Pq(e)('a').attr('href') and
+                          re.match(r'\d+\.html', Pq(e)('a').attr('href')))
         ).map(
             lambda i, e: (i,
-                          urljoin(self.url, pq(e)('a').attr('href')),
-                          pq(e).text())
+                          urljoin(self.url, Pq(e)('a').attr('href')),
+                          Pq(e).text())
         ).filter(
             lambda i, e: e[1] is not None
         )

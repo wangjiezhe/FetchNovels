@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from pyquery import PyQuery as pq
+from pyquery import PyQuery as Pq
 
 from urllib.error import HTTPError
 from lxml.etree import XMLSyntaxError
@@ -34,7 +34,7 @@ class Page(object):
 
     @retry((HTTPError, XMLSyntaxError))
     def get_doc(self):
-        return pq(url=self.url, headers=self.headers,
+        return Pq(url=self.url, headers=self.headers,
                   proxies=self.proxies, encoding=self.encoding)
 
     def get_content(self):
@@ -78,7 +78,7 @@ class IntroPage(object):
 
     @retry((HTTPError, XMLSyntaxError))
     def get_doc(self):
-        return pq(url=self.url, headers=self.headers,
+        return Pq(url=self.url, headers=self.headers,
                   proxies=self.proxies, encoding=self.encoding)
 
     def get_content(self):
@@ -111,7 +111,7 @@ class Novel(object):
 
     @retry((HTTPError, XMLSyntaxError))
     def get_doc(self):
-        return pq(url=self.url, headers=self.headers,
+        return Pq(url=self.url, headers=self.headers,
                   proxies=self.proxies, encoding=self.encoding)
 
     def get_title_and_author(self):

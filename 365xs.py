@@ -4,7 +4,7 @@
 import sys
 import re
 from urllib.parse import urljoin
-from pyquery import PyQuery as pq
+from pyquery import PyQuery as Pq
 
 from novel import serial, utils
 
@@ -22,15 +22,15 @@ class Xs365(serial.Novel):
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: pq(e).attr('name') == 'author').attr('content')
+            lambda i, e: Pq(e).attr('name') == 'author').attr('content')
         return re.match(r'(.*)版权属于作者(.*)', st).groups()
 
     @property
     def chapter_list(self):
         clist = self.doc('.chapterlist')('li').map(
             lambda i, e: (i,
-                          urljoin(self.url, pq(e)('a').attr('href')),
-                          pq(e).text())
+                          urljoin(self.url, Pq(e)('a').attr('href')),
+                          Pq(e).text())
         ).filter(
             lambda i, e: e[1] is not None
         )
