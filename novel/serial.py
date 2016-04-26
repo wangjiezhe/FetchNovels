@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
-
-from time import sleep
 from pyquery import PyQuery as pq
+
+from urllib.error import HTTPError
+from lxml.etree import XMLSyntaxError
 
 from .decorators import retry
 from .utils import Tool
-from .error import *
+from .error import PropertyNotSetError, MethodNotSetError
 
 GOAGENT = {'http': '127.0.0.1:8087'}
 HEADERS = {
@@ -30,8 +30,12 @@ class Page(object):
         self.encoding = encoding
         self.tool = tool
 
-        self.doc = pq(url=self.url, headers=self.headers, proxies=self.proxies,
-                      encoding=self.encoding)
+        self.doc = self.get_doc()
+
+    @retry((HTTPError, XMLSyntaxError))
+    def get_doc(self):
+        return pq(url=self.url, headers=self.headers,
+                  proxies=self.proxies, encoding=self.encoding)
 
     def get_content(self):
         if self.selector is None:
@@ -70,8 +74,12 @@ class IntroPage(object):
         self.selector = selector
         self.tool = tool
 
-        self.doc = pq(url=self.url, headers=self.headers, proxies=self.proxies,
-                      encoding=self.encoding)
+        self.doc = self.get_doc()
+
+    @retry((HTTPError, XMLSyntaxError))
+    def get_doc(self):
+        return pq(url=self.url, headers=self.headers,
+                  proxies=self.proxies, encoding=self.encoding)
 
     def get_content(self):
         if self.selector is None:
@@ -98,9 +106,13 @@ class Novel(object):
         self.intro_page = intro_page
         self.tool = tool
 
-        self.doc = pq(url=self.url, headers=self.headers, proxies=self.proxies,
-                      encoding=self.encoding)
+        self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
+
+    @retry((HTTPError, XMLSyntaxError))
+    def get_doc(self):
+        return pq(url=self.url, headers=self.headers,
+                  proxies=self.proxies, encoding=self.encoding)
 
     def get_title_and_author(self):
         raise MethodNotSetError(sys._getframe().f_code.co_name)
