@@ -24,18 +24,6 @@ class PiaotianPage(serial.Page):
         return content
 
 
-class PiaotianTool(utils.Tool):
-
-    def __init__(self):
-        super().__init__()
-        self._remove_ex = re.compile(r'GetFont\(\);')
-
-    def replace(self, text):
-        text = super().replace(text)
-        text = re.sub(self._remove_ex, '', text)
-        return text
-
-
 class Piaotian(serial.Novel):
 
     def __init__(self, tid, proxies=None):
@@ -43,7 +31,7 @@ class Piaotian(serial.Novel):
                          utils.base_to_url(INTRO_URL, tid),
                          None, None,
                          serial.HEADERS, proxies, ENCODING,
-                         page=PiaotianPage, tool=PiaotianTool)
+                         page=PiaotianPage)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

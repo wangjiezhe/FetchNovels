@@ -8,9 +8,9 @@ from urllib.parse import urlparse, urlunparse
 class Tool(object):
 
     def __init__(self):
-        self._remove_addr = re.compile(r'<a.*?>.*?</a>')
+        self._remove_a = re.compile(r'<a.*?>.*?</a>')
         self._remove_div = re.compile(r'<div.*?>.*?</div>')
-        self._remove_script = re.compile(r'<script>.*?</script>')
+        self._remove_script = re.compile(r'<script.*?>.*?</script>')
         self._replace_br = re.compile(r'<br\s*/\s*>|</\s*br>')
         self._replace_xa = re.compile(r'\xa0')
         self._replace_u3000 = re.compile(r'\u3000')
@@ -18,7 +18,7 @@ class Tool(object):
         self._remove_ot = re.compile(r'<.*?>')
 
     def replace(self, text):
-        text = re.sub(self._remove_addr, '', text)
+        text = re.sub(self._remove_a, '', text)
         text = re.sub(self._remove_div, '', text)
         text = re.sub(self._remove_script, '', text)
         text = re.sub(self._replace_br, '\n', text)
