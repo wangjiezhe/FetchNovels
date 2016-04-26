@@ -46,7 +46,8 @@ class Piaotian(serial.Novel):
     @property
     def chapter_list(self):
         clist = self.doc('li').filter(
-            lambda i, e: re.match(r'\d+\.html', pq(e)('a').attr('href'))
+            lambda i, e: (pq(e)('a').attr('href') and
+                          re.match(r'\d+\.html', pq(e)('a').attr('href')))
         ).map(
             lambda i, e: (i,
                           urljoin(self.url, pq(e)('a').attr('href')),
