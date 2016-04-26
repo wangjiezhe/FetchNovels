@@ -115,11 +115,11 @@ class Novel(object):
                   proxies=self.proxies, encoding=self.encoding)
 
     def get_title_and_author(self):
-        raise MethodNotSetError(sys._getframe().f_code.co_name)
+        raise MethodNotSetError('get_title_and_author')
 
     @property
     def chapter_list(self):
-        raise PropertyNotSetError(sys._getframe().f_code.co_name)
+        raise PropertyNotSetError('chapter_list')
 
     @retry(HTTPError)
     def get_intro(self):
