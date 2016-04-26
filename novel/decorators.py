@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import traceback
 from time import sleep
 from functools import wraps
 
@@ -13,7 +14,8 @@ def retry(ExceptionToTrack, tries=5, delay=5):
             for _ in range(tries):
                 try:
                     return func(*args, **kwargs)
-                except ExceptionToTrack as e:
+                except ExceptionToTrack:
+                    traceback.print_exc()
                     print("Wait %d seconds to retry ..." % m_delay)
                     sleep(m_delay)
                     m_delay *= 2
