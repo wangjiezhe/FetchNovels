@@ -67,8 +67,6 @@ class Piaotian(serial.Novel):
             lambda i, e: (i,
                           urljoin(self.url, Pq(e)('a').attr('href')),
                           Pq(e).text())
-        ).filter(
-            lambda i, e: e[1] is not None
         )
         return clist
 
