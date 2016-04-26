@@ -16,7 +16,6 @@ class Tool(object):
         self._replace_u3000 = re.compile(r'\u3000')
         self._remove_r = re.compile(r'&#13;|\r')
         self._remove_ot = re.compile(r'<.*?>')
-        self._remove_ex = re.compile(r'GetFont\(\);')
 
     def replace(self, text):
         text = re.sub(self._remove_addr, '', text)
@@ -27,7 +26,6 @@ class Tool(object):
         text = re.sub(self._replace_u3000, '  ', text)
         text = re.sub(self._remove_r, '', text)
         text = re.sub(self._remove_ot, '', text)
-        text = re.sub(self._remove_ex, '', text)
 
         text = re.sub(r'\n\s+\n', '\n\n', text)
 
