@@ -123,11 +123,18 @@ class Novel(object):
 
     @retry(HTTPError)
     def get_intro(self):
-        intro_page = self.intro_page(self.intro_url, self.intro_sel,
-                                     self.headers, self.proxies, self.encoding,
-                                     self.tool)
-        intro = intro_page.get_content()
-        return intro
+        if self.intro_url is None:
+            if self.intro_sel is None:
+                return ''
+            intro = self.doc(self.intro_sel).html()
+            intro = self.tool().replace(intro)
+            return intro
+        else:
+            intro_page = self.intro_page(self.intro_url, self.intro_sel,
+                                         self.headers, self.proxies, self.encoding,
+                                         self.tool)
+            intro = intro_page.get_content()
+            return intro
 
     @property
     def download_dir(self):
