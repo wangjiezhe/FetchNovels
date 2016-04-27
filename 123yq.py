@@ -26,12 +26,12 @@ class Yq123(serial.Novel):
 
     @property
     def chapter_list(self):
-        clist = self.doc('dd').map(
+        clist = self.doc('dd').filter(
+            lambda i, e: Pq(e)('a').attr('href') is not None
+        ).map(
             lambda i, e: (utils.fix_order(i),
                           Pq(e)('a').attr('href'),
                           Pq(e).text())
-        ).filter(
-            lambda i, e: e[1] is not None
         )
         clist.sort(key=lambda s: int(s[0]))
         return clist
