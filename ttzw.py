@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import re
 from urllib.parse import urljoin
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils
+from novel import serial
 
 BASE_URL = 'http://www.ttzw.com/book/%s/'
 
