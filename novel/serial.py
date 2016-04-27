@@ -41,7 +41,7 @@ class Page(object):
         if self.selector is None:
             return ''
         content = self.doc(self.selector).html()
-        content = self.tool().replace(content)
+        content = self.tool().refine(content)
         return content
 
     def dump(self, path=None, folder=None, num=None):
@@ -85,7 +85,7 @@ class IntroPage(object):
         if self.selector is None:
             return ''
         intro = self.doc(self.selector).html()
-        intro = self.tool().replace(intro)
+        intro = self.tool().refine(intro)
         return intro
 
 
@@ -127,7 +127,7 @@ class Novel(object):
             if self.intro_sel is None:
                 return ''
             intro = self.doc(self.intro_sel).html()
-            intro = self.tool().replace(intro)
+            intro = self.tool().refine(intro)
             return intro
         else:
             intro_page = self.intro_page(self.intro_url, self.intro_sel,

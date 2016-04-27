@@ -20,7 +20,7 @@ class PiaotianPage(serial.Page):
         pat = re.compile(r'.*<!-- 标题上AD结束 -->(.*)<!-- 翻页上AD开始 -->.*',
                          re.S)
         content = re.match(pat, content).group(1)
-        content = self.tool().replace(content)
+        content = self.tool().refine(content)
         return content
 
 
@@ -28,15 +28,10 @@ class PiaotianTool(utils.Tool):
 
     def __init__(self):
         super().__init__()
-        self._remove_exs = (
-            re.compile(r'&lt;tr&gt;&lt;td&gt;'),
-            re.compile(r'&lt;div id="content"&gt;\xa0\xa0\xa0\xa0'))
-
-    def replace(self, text):
-        for pat in self._remove_exs:
-            text = re.sub(pat, '', text)
-        text = super().replace(text)
-        return text
+        self.remove_extras.extend(
+            [re.compile(r'&lt;tr&gt;&lt;td&gt;'),
+             re.compile(r'&lt;div id="content"&gt;\xa0\xa0\xa0\xa0')]
+        )
 
 
 class Piaotian(serial.Novel):

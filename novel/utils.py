@@ -12,22 +12,31 @@ class Tool(object):
         self._remove_div = re.compile(r'<div.*?>.*?</div>')
         self._remove_script = re.compile(r'<script.*?>.*?</script>')
         self._replace_br = re.compile(r'<br\s*/\s*>|</\s*br>')
-        self._replace_xa = re.compile(r'\xa0')
+        self._replace_p = re.compile(r'</?p>')
+        self._replace_xa0 = re.compile(r'\xa0')
         self._replace_u3000 = re.compile(r'\u3000')
         self._remove_ufeff = re.compile(r'\ufeff')
         self._remove_r = re.compile(r'&#13;|\r')
         self._remove_ot = re.compile(r'<.*?>')
+        self.remove_extras = []
 
     def replace(self, text):
         text = re.sub(self._remove_a, '', text)
         text = re.sub(self._remove_div, '', text)
         text = re.sub(self._remove_script, '', text)
         text = re.sub(self._replace_br, '\n', text)
-        text = re.sub(self._replace_xa, ' ', text)
+        text = re.sub(self._replace_p, '\n', text)
+        text = re.sub(self._replace_xa0, ' ', text)
         text = re.sub(self._replace_u3000, '  ', text)
         text = re.sub(self._remove_ufeff, '', text)
         text = re.sub(self._remove_r, '', text)
         text = re.sub(self._remove_ot, '', text)
+        for pat in self.remove_extras:
+            text = re.sub(pat, '', text)
+        return text
+
+    def refine(self, text):
+        text = self.replace(text)
 
         text = re.sub(r'\n\s+\n', '\n\n', text)
 
