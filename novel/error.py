@@ -11,28 +11,29 @@ class Error(Exception):
         return repr(self.message)
 
 
-class ValueNotSetError(Error):
+class NotSetError(Error):
+
+    def __init__(self, value, message):
+        super().__init__(message)
+        self.value = value
+
+    def __repr__(self):
+        return "{self.value} {self.message} not set.".format(self=self)
+
+
+class ValueNotSetError(NotSetError):
 
     def __init__(self, message):
-        super().__init__(message)
-
-    def __str__(self):
-        return "Value %s not set." % self.message
+        super().__init__("Value", message)
 
 
-class MethodNotSetError(Error):
+class MethodNotSetError(NotSetError):
 
     def __init__(self, message):
-        super().__init__(message)
-
-    def __str__(self):
-        return "Method %s not set." % self.message
+        super().__init__("Method", message)
 
 
-class PropertyNotSetError(Error):
+class PropertyNotSetError(NotSetError):
 
     def __init__(self, message):
-        super().__init__(message)
-
-    def __str__(self):
-        return "Property %s not set." % self.message
+        super().__init__("Property", message)
