@@ -27,7 +27,7 @@ class Yq123(serial.Novel):
     @property
     def chapter_list(self):
         clist = self.doc('dd').filter(
-            lambda i, e: Pq(e)('a').attr('href') is not None
+            lambda i, e: Pq(e)('a').attr('href')
         ).map(
             lambda i, e: (utils.fix_order(i),
                           Pq(e)('a').attr('href'),

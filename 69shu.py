@@ -31,7 +31,7 @@ class Shu69(serial.Novel):
     @property
     def chapter_list(self):
         clist = self.doc('.mulu_list').eq(1)('li').filter(
-            lambda i, e: Pq(e)('a').attr('href') is not None
+            lambda i, e: Pq(e)('a').attr('href')
         ).map(
             lambda i, e: (i,
                           urljoin(utils.get_base_url(self.url),
