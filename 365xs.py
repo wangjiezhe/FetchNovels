@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import re
+import sys
 from urllib.parse import urljoin
+
 from pyquery import PyQuery as Pq
 
 from novel import serial, utils
@@ -18,7 +19,9 @@ class Xs365(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), INTRO_URL % tid,
                          '.intro', '#content',
-                         serial.HEADERS, proxies, ENCODING)
+                         serial.HEADERS, proxies, ENCODING,
+                         chap_sel='.chapterlist li',
+                         chap_type=serial.ChapterType.last)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

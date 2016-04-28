@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import re
-from urllib.parse import urljoin
+import sys
+
 from pyquery import PyQuery as Pq
 
 from novel import serial, utils
@@ -18,23 +18,14 @@ class Ttshuba(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), INTRO_URL % tid,
                          '.intro', '.zhangjieTXT',
-                         serial.HEADERS, proxies, ENCODING)
+                         serial.HEADERS, proxies, ENCODING,
+                         chap_sel='dd',
+                         chap_type=serial.ChapterType.last)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
             lambda i, e: Pq(e).attr('name') == 'keywords').attr('content')
         return re.match(r'(.*)最新章节,(.*?),.*', st).groups()
-
-    @property
-    def chapter_list(self):
-        clist = self.doc('dd').filter(
-            lambda i, e: Pq(e)('a').attr('href')
-        ).map(
-            lambda i, e: (i,
-                          urljoin(self.url, Pq(e)('a').attr('href')),
-                          Pq(e).text())
-        )
-        return clist
 
 
 def main():

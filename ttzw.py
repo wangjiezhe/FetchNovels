@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from urllib.parse import urljoin
+
 from pyquery import PyQuery as Pq
 
 from novel import serial
@@ -15,7 +15,9 @@ class Ttzw(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(BASE_URL % tid, None,
                          '#intro', '#content',
-                         serial.HEADERS, proxies)
+                         serial.HEADERS, proxies,
+                         chap_sel='dd',
+                         chap_type=serial.ChapterType.last)
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
@@ -27,17 +29,6 @@ class Ttzw(serial.Novel):
         ).attr('content')
 
         return name, author
-
-    @property
-    def chapter_list(self):
-        clist = self.doc('dd').filter(
-            lambda i, e: Pq(e)('a').attr('href')
-        ).map(
-            lambda i, e: (i,
-                          urljoin(self.url, Pq(e)('a').attr('href')),
-                          Pq(e).text())
-        )
-        return clist
 
 
 def main():

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import re
-from urllib.parse import urljoin
+import sys
+
 from pyquery import PyQuery as Pq
 
 from novel import serial, utils
@@ -30,7 +30,9 @@ class Feizw(serial.Novel):
         super().__init__(BASE_URL % tid, INTRO_URL % tid,
                          '.intro', '#content',
                          serial.HEADERS, proxies,
-                         tool=FeizwTool)
+                         tool=FeizwTool,
+                         chap_sel='.chapterlist li',
+                         chap_type=serial.ChapterType.last)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
@@ -41,17 +43,6 @@ class Feizw(serial.Novel):
         author = re.match(r'文 / (\S*)', st).group(1)
 
         return name, author
-
-    @property
-    def chapter_list(self):
-        clist = self.doc('.chapterlist li').filter(
-            lambda i, e: Pq(e)('a').attr('href')
-        ).map(
-            lambda i, e: (i,
-                          urljoin(self.url, Pq(e)('a').attr('href')),
-                          Pq(e).text())
-        )
-        return clist
 
 
 def main():

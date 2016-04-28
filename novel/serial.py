@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import os
+from enum import Enum
+from urllib.error import HTTPError
+from urllib.parse import urljoin
+
+from lxml.etree import XMLSyntaxError
 from pyquery import PyQuery as Pq
 
-from urllib.error import HTTPError
-from lxml.etree import XMLSyntaxError
-
 from .decorators import retry
-from .utils import Tool
-from .error import PropertyNotSetError, MethodNotSetError
+from .error import PropertyNotSetError, MethodNotSetError, ValueNotSetError
+from .utils import Tool, get_base_url, fix_order
 
 GOAGENT = {'http': '127.0.0.1:8087'}
 HEADERS = {
@@ -89,12 +91,20 @@ class IntroPage(object):
         return intro
 
 
+class ChapterType(Enum):
+    whole = 1
+    path = 2
+    last = 3
+    last_rev = 4
+
+
 class Novel(object):
 
     def __init__(self, url, intro_url,
                  intro_sel, cont_sel,
                  headers=None, proxies=None, encoding=None,
-                 page=Page, intro_page=IntroPage, tool=Tool):
+                 page=Page, intro_page=IntroPage, tool=Tool,
+                 chap_sel=None, chap_type=None):
         self.url = url
         self.intro_url = intro_url
         self.intro_sel = intro_sel
@@ -105,6 +115,8 @@ class Novel(object):
         self.page = page
         self.intro_page = intro_page
         self.tool = tool
+        self.chap_sel = chap_sel
+        self.chap_type = chap_type
 
         self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
@@ -119,7 +131,43 @@ class Novel(object):
 
     @property
     def chapter_list(self):
+        if self.chap_sel and self.chap_type:
+            return self.chapter_list_with_sel(self.chap_sel, self.chap_type)
         raise PropertyNotSetError('chapter_list')
+
+    def chapter_list_with_sel(self, selector, chap_type):
+        clist = self.doc(selector).filter(
+            lambda i, e: Pq(e)('a').attr('href')
+        )
+        if chap_type == ChapterType.whole:
+            clist = clist.map(
+                lambda i, e: (i,
+                              Pq(e)('a').attr('href'),
+                              Pq(e).text())
+            )
+        elif chap_type == ChapterType.path:
+            clist = clist.map(
+                lambda i, e: (i,
+                              urljoin(get_base_url(self.url),
+                                      Pq(e)('a').attr('href')),
+                              Pq(e).text())
+            )
+        elif chap_type == ChapterType.last:
+            clist = clist.map(
+                lambda i, e: (i,
+                              urljoin(self.url, Pq(e)('a').attr('href')),
+                              Pq(e).text())
+            )
+        elif chap_type == ChapterType.last_rev:
+            clist = clist.map(
+                lambda i, e: (fix_order(i),
+                              urljoin(self.url, Pq(e)('a').attr('href')),
+                              Pq(e).text())
+            )
+            clist.sort(key=lambda s: int(s[0]))
+        else:
+            raise ValueNotSetError("chap_type")
+        return clist
 
     @retry(HTTPError)
     def get_intro(self):

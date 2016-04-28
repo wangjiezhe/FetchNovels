@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+
 from pyquery import PyQuery as Pq
 
 from novel import serial, utils
@@ -15,7 +16,9 @@ class Ranwen(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          None, '#content',
-                         serial.HEADERS, proxies, ENCODING)
+                         serial.HEADERS, proxies, ENCODING,
+                         chap_sel='dd',
+                         chap_type=serial.ChapterType.whole)
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
@@ -27,17 +30,6 @@ class Ranwen(serial.Novel):
         ).attr('content')
 
         return name, author
-
-    @property
-    def chapter_list(self):
-        clist = self.doc('dd').filter(
-            lambda i, e: Pq(e)('a').attr('href')
-        ).map(
-            lambda i, e: (i,
-                          Pq(e)('a').attr('href'),
-                          Pq(e).text())
-        )
-        return clist
 
 
 def main():

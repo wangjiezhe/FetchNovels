@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import re
+import sys
 from urllib.parse import urljoin
+
 from pyquery import PyQuery as Pq
 
 from novel import serial, utils

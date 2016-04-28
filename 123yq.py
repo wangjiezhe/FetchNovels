@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import re
+import sys
+
 from pyquery import PyQuery as Pq
 
 from novel import serial, utils
@@ -17,24 +18,14 @@ class Yq123(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), INTRO_URL % tid,
                          '.intro', '#TXT',
-                         serial.HEADERS, proxies, ENCODING)
+                         serial.HEADERS, proxies, ENCODING,
+                         chap_sel='dd',
+                         chap_type=serial.ChapterType.last_rev)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
             lambda i, e: Pq(e).attr('name') == 'keywords').attr('content')
         return re.match(r'(.*?),(.*?),', st).groups()
-
-    @property
-    def chapter_list(self):
-        clist = self.doc('dd').filter(
-            lambda i, e: Pq(e)('a').attr('href')
-        ).map(
-            lambda i, e: (utils.fix_order(i),
-                          Pq(e)('a').attr('href'),
-                          Pq(e).text())
-        )
-        clist.sort(key=lambda s: int(s[0]))
-        return clist
 
 
 def main():
