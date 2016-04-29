@@ -17,8 +17,8 @@ class FeizwTool(utils.Tool):
     def __init__(self):
         super().__init__()
         self.remove_extras.extend(
-            [re.compile(pat) for pat in
-             [r'[Ww]ww.feizw.co[Mm] 飞速中文网',
+            [re.compile(pat, re.I) for pat in
+             [r'www.feizw.com 飞速中文网',
               r'最快更新无错小说阅读，请访问www.feizw.com',
               r'手机请访问：http://m.feizw.com']]
         )

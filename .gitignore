@@ -4,3 +4,5 @@
 __pycache__/
 .ropeproject
 .idea
+*.txt
+*.swp

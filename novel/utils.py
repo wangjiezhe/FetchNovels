@@ -11,7 +11,7 @@ class Tool(object):
         self._remove_a = re.compile(r'<a.*?>.*?</a>')
         self._remove_div = re.compile(r'<div.*?>.*?</div>')
         self._remove_script = re.compile(r'<script.*?>.*?</script>')
-        self._replace_br = re.compile(r'<br\s*/\s*>|</\s*br>')
+        self._replace_br = re.compile(r'<br\s*/\s*>|</\s*br>', re.I)
         self._replace_p = re.compile(r'</?p>')
         self._replace_xa0 = re.compile(r'\xa0')
         self._replace_u3000 = re.compile(r'\u3000')
