@@ -3,7 +3,6 @@
 
 import re
 import sys
-from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
 
@@ -27,17 +26,6 @@ class Xs365(serial.Novel):
         st = self.doc('meta').filter(
             lambda i, e: Pq(e).attr('name') == 'author').attr('content')
         return re.match(r'(.*)版权属于作者(.*)', st).groups()
-
-    @property
-    def chapter_list(self):
-        clist = self.doc('.chapterlist li').filter(
-            lambda i, e: Pq(e)('a').attr('href')
-        ).map(
-            lambda i, e: (i,
-                          urljoin(self.url, Pq(e)('a').attr('href')),
-                          Pq(e).text())
-        )
-        return clist
 
 
 def main():
