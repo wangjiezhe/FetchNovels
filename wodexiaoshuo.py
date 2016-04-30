@@ -20,7 +20,8 @@ class WdxsTool(utils.Tool):
         self.remove_extras.extend(
             [re.compile(pat, re.I) for pat in
              [r'www\.(wodexiaoshuo|01bz)\.(com|net|wang)',
-              r'wodexiaoshuo\.com']]
+              r'wodexiaoshuo\.com',
+              r'www\.']]
         )
         self.remove_extras.extend(
             [re.compile(pat) for pat in
@@ -59,7 +60,7 @@ def main():
         print('No specific tid!')
         sys.exit(1)
     for tid in tids:
-        yq = Wdxs(tid)
+        yq = Wdxs(tid, proxies=serial.GOAGENT)
         yq.dump()
 
 
