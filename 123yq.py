@@ -13,6 +13,15 @@ INTRO_URL = 'http://www.123yq.org/xiaoshuo_%s.html'
 ENCODING = 'GB18030'
 
 
+class Yq123Tool(utils.Tool):
+
+    def __init__(self):
+        super().__init__()
+        self.replace_extras.append(
+            (re.compile(r'123言情'), '晋江')
+        )
+
+
 class Yq123(serial.Novel):
 
     def __init__(self, tid, proxies=None):
@@ -20,7 +29,8 @@ class Yq123(serial.Novel):
                          '.intro', '#TXT',
                          serial.HEADERS, proxies, ENCODING,
                          chap_sel='dd',
-                         chap_type=serial.ChapterType.last_rev)
+                         chap_type=serial.ChapterType.last_rev,
+                         tool=Yq123Tool)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

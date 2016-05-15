@@ -18,6 +18,7 @@ class Tool(object):
         self._replace_u3000 = re.compile(r'\u3000')
         self._remove_ufeff = re.compile(r'\ufeff')
         self._remove_r = re.compile(r'&#13;|\r')
+        self.replace_extras = []
         self.remove_extras = []
         self._remove_ot = re.compile(r'<.*?>')
 
@@ -31,6 +32,8 @@ class Tool(object):
         text = re.sub(self._replace_u3000, '  ', text)
         text = re.sub(self._remove_ufeff, '', text)
         text = re.sub(self._remove_r, '', text)
+        for s, d in self.replace_extras:
+            text = re.sub(s, d, text)
         for pat in self.remove_extras:
             text = re.sub(pat, '', text)
         text = re.sub(self._remove_ot, '', text)
