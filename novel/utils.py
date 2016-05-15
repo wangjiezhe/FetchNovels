@@ -9,9 +9,11 @@ class Tool(object):
 
     def __init__(self):
         self._remove_a = re.compile(r'<a.*?>.*?</a>', re.I)
-        self._remove_div = re.compile(r'<div.*?>.*?</div>', re.I|re.S)
+        self._remove_div = re.compile(r'<div.*?>.*?</div>',
+                                      re.I | re.S)
         self._remove_span = re.compile(r'<span.*?>.*?</span>', re.I)
-        self._remove_script = re.compile(r'<script.*?>.*?</script>', re.I|re.S)
+        self._remove_script = re.compile(r'<script.*?>.*?</script>',
+                                         re.I | re.S)
         self._replace_br = re.compile(r'<br\s*/\s*>|</\s*br>', re.I)
         self._replace_p = re.compile(r'</?p>', re.I)
         self._replace_xa0 = re.compile(r'\xa0')

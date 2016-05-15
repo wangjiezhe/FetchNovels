@@ -47,8 +47,8 @@ class Wdxs(serial.Novel):
         ).attr('content')
         name = re.match(r'(.*?),.*', st).group(1)
         author = self.doc('a').filter(
-            lambda i,e: re.match(r'^/author/\?\d+\.html$',
-                                 Pq(e)('a').attr('href') or '')
+            lambda i, e: re.match(r'^/author/\?\d+\.html$',
+                                  Pq(e)('a').attr('href') or '')
         ).attr('title')
         return name, author
 
