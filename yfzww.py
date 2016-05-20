@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import re
+import sys
+
+from pyquery import PyQuery as Pq
+
+from novel import serial, utils
+
+BASE_URL = 'http://www.yfzww.com/Book/%s'
+
+
+class YfzwwTool(utils.Tool):
+
+    def __init__(self):
+        super().__init__()
+        self.remove_extras.append(
+            re.compile(r'【一凡中文网.*', re.S)
+        )
+
+
+class Yfzww(serial.Novel):
+
+    def __init__(self, tid, proxies=None):
+        super().__init__(BASE_URL % tid, None,
+                         None, '#content',
+                         serial.HEADERS, proxies,
+                         tool=YfzwwTool,
+                         chap_sel='#chapters li',
+                         chap_type=serial.ChapterType.path)
+
+    def get_title_and_author(self):
+        name = self.doc('meta').filter(
+            lambda i, e: Pq(e).attr('property') == 'og:novel:book_name'
+        ).attr('content')
+
+        author = self.doc('meta').filter(
+            lambda i, e: Pq(e).attr('property') == 'og:novel:author'
+        ).attr('content')
+
+        return name, author
+
+    def get_intro(self):
+        intro = self.doc('meta').filter(
+            lambda i, e: Pq(e).attr('property') == 'og:description'
+        ).attr('content')
+        return intro
+
+
+def main():
+    tids = sys.argv[1:]
+    print(tids)
+    if len(tids) == 0:
+        print('No specific tid!')
+        sys.exit(1)
+    for tid in tids:
+        yq = Yfzww(tid)
+        yq.dump()
+
+
+if __name__ == '__main__':
+    main()
