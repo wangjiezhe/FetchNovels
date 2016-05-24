@@ -106,8 +106,7 @@ def base_to_url(base_url, tid):
     :param tid: A number or string of numbers
     :return: the correct url
     """
-    tid = str(tid)
-    return base_url % (tid[:-3] if tid[:-3] != '' else 0, tid)
+    return base_url % (int(tid) // 1000, tid)
 
 
 def get_base_url(url):
