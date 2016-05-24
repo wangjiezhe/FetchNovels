@@ -67,7 +67,7 @@ class Piaotian(serial.Novel):
 
 
 def main():
-    serial.in_main(Piaotian, const.GOAGENT)
+    utils.in_main(Piaotian, const.GOAGENT)
 
 
 if __name__ == '__main__':

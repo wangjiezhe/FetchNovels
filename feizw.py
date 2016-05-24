@@ -45,7 +45,7 @@ class Feizw(serial.Novel):
 
 
 def main():
-    serial.in_main(Feizw)
+    utils.in_main(Feizw)
 
 
 if __name__ == '__main__':

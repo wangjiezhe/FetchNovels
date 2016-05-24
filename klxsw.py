@@ -50,7 +50,7 @@ class Klxsw(serial.Novel):
 
 
 def main():
-    serial.in_main(Klxsw, const.GOAGENT)
+    utils.in_main(Klxsw, const.GOAGENT)
 
 
 if __name__ == '__main__':

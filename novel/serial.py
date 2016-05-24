@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
 from enum import Enum
 from urllib.error import HTTPError
 from urllib.parse import urljoin
@@ -223,14 +222,3 @@ class Novel(object):
                          self.headers, self.proxies, self.encoding,
                          self.tool)
         return page.get_content()
-
-
-def in_main(NovelClass, proxies=None):
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        nov = NovelClass(tid, proxies=proxies)
-        nov.dump()

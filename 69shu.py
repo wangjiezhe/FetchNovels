@@ -42,7 +42,7 @@ class Shu69(serial.Novel):
 
 
 def main():
-    serial.in_main(Shu69, const.HEADERS)
+    utils.in_main(Shu69, const.HEADERS)
 
 
 if __name__ == '__main__':

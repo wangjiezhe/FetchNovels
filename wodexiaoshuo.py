@@ -53,7 +53,7 @@ class Wdxs(serial.Novel):
 
 
 def main():
-    serial.in_main(Wdxs, const.GOAGENT)
+    utils.in_main(Wdxs, const.GOAGENT)
 
 
 if __name__ == '__main__':

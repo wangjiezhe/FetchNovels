@@ -39,7 +39,7 @@ class Uks5(serial.Novel):
 
 
 def main():
-    serial.in_main(Uks5, const.GOAGENT)
+    utils.in_main(Uks5, const.GOAGENT)
 
 
 if __name__ == '__main__':

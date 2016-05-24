@@ -28,7 +28,7 @@ class Ttshuba(serial.Novel):
 
 
 def main():
-    serial.in_main(Ttshuba, const.GOAGENT)
+    utils.in_main(Ttshuba, const.GOAGENT)
 
 
 if __name__ == '__main__':

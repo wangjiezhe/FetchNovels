@@ -30,7 +30,7 @@ class Ttzw(serial.Novel):
 
 
 def main():
-    serial.in_main(Ttzw, const.GOAGENT)
+    utils.in_main(Ttzw, const.GOAGENT)
 
 
 if __name__ == '__main__':

@@ -39,7 +39,7 @@ class Zhaishu8(serial.Novel):
 
 
 def main():
-    serial.in_main(Zhaishu8, const.GOAGENT)
+    utils.in_main(Zhaishu8, const.GOAGENT)
 
 
 if __name__ == '__main__':

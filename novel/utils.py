@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import sys
 from urllib.parse import urlparse, urlunparse
 
 
@@ -67,3 +68,14 @@ def get_base_url(url):
     result = urlparse(url)
     base_url = urlunparse((result.scheme, result.netloc, '', '', '', ''))
     return base_url
+
+
+def in_main(NovelClass, proxies=None):
+    tids = sys.argv[1:]
+    print(tids)
+    if len(tids) == 0:
+        print('No specific tid!')
+        sys.exit(1)
+    for tid in tids:
+        nov = NovelClass(tid, proxies=proxies)
+        nov.dump()

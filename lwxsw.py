@@ -32,7 +32,7 @@ class Lwxsw(serial.Novel):
 
 
 def main():
-    serial.in_main(Lwxsw, const.GOAGENT)
+    utils.in_main(Lwxsw, const.GOAGENT)
 
 
 if __name__ == '__main__':

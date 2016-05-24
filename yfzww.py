@@ -48,7 +48,7 @@ class Yfzww(serial.Novel):
 
 
 def main():
-    serial.in_main(Yfzww)
+    utils.in_main(Yfzww)
 
 
 if __name__ == '__main__':

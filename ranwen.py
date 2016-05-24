@@ -31,7 +31,7 @@ class Ranwen(serial.Novel):
 
 
 def main():
-    serial.in_main(Ranwen, const.GOAGENT)
+    utils.in_main(Ranwen, const.GOAGENT)
 
 
 if __name__ == '__main__':

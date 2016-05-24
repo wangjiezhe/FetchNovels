@@ -38,7 +38,7 @@ class Yq123(serial.Novel):
 
 
 def main():
-    serial.in_main(Yq123, const.GOAGENT)
+    utils.in_main(Yq123, const.GOAGENT)
 
 
 if __name__ == '__main__':

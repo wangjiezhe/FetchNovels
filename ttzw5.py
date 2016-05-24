@@ -33,7 +33,7 @@ class Ttzw5(serial.Novel):
 
 
 def main():
-    serial.in_main(Ttzw5)
+    utils.in_main(Ttzw5)
 
 
 if __name__ == '__main__':

@@ -36,7 +36,7 @@ class Sto(serial.Novel):
 
 
 def main():
-    serial.in_main(Sto, const.GOAGENT)
+    utils.in_main(Sto, const.GOAGENT)
 
 
 if __name__ == '__main__':

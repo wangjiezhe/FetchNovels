@@ -37,7 +37,7 @@ class Biquge(serial.Novel):
 
 
 def main():
-    serial.in_main(Biquge)
+    utils.in_main(Biquge)
 
 
 if __name__ == '__main__':

@@ -28,7 +28,7 @@ class Xs365(serial.Novel):
 
 
 def main():
-    serial.in_main(Xs365, const.GOAGENT)
+    utils.in_main(Xs365, const.GOAGENT)
 
 
 if __name__ == '__main__':
