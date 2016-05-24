@@ -7,7 +7,7 @@ from pyquery import PyQuery as Pq
 
 from novel import serial, utils, const
 
-BASE_URL = 'http://www.yfzww.com/Book/%s'
+BASE_URL = 'http://www.yfzww.com/Book/{}'
 
 
 class YfzwwTool(utils.Tool):
@@ -22,7 +22,7 @@ class YfzwwTool(utils.Tool):
 class Yfzww(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(BASE_URL % tid, None,
+        super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          None, '#content',
                          const.HEADERS, proxies,
                          tool=YfzwwTool,

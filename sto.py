@@ -5,17 +5,17 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, error, const
+from novel import serial, error, const, utils
 
-BASE_URL = 'http://www.sto.cc/%s-1/'
-PAGE_URL = 'http://www.sto.cc/%s-%s/'
+BASE_URL = 'http://www.sto.cc/{}-1/'
+PAGE_URL = 'http://www.sto.cc/{}-{}/'
 
 
 class Sto(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        self.tid = str(tid)
-        super().__init__(BASE_URL % self.tid, None,
+        self.tid = tid
+        super().__init__(utils.base_to_url(BASE_URL, self.tid), None,
                          None, '#BookContent',
                          const.HEADERS, proxies)
 
@@ -32,7 +32,7 @@ class Sto(serial.Novel):
             page_num = int(st.group(2))
         else:
             raise error.Error('Something strange may happened.')
-        return [(i+1, PAGE_URL % (self.tid, i+1), '第%d頁' % (i+1)) for i in range(page_num)]
+        return [(i+1, PAGE_URL.format(self.tid, i+1), '第{:d}頁'.format(i+1)) for i in range(page_num)]
 
 
 def main():

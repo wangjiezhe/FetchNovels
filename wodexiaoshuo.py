@@ -7,8 +7,8 @@ from pyquery import PyQuery as Pq
 
 from novel import serial, utils, const
 
-BASE_URL = 'http://www.wodexiaoshuo.com/%s/chapter.html'
-INTRO_URL = 'http://www.wodexiaoshuo.com/%s/'
+BASE_URL = 'http://www.wodexiaoshuo.com/{}/chapter.html'
+INTRO_URL = 'http://www.wodexiaoshuo.com/{}/'
 ENCODING = 'GB18030'
 
 
@@ -33,7 +33,8 @@ class Wdxs(serial.Novel):
 
     def __init__(self, tid, proxies=None):
         self.tid = str(tid)
-        super().__init__(BASE_URL % tid, INTRO_URL % tid,
+        super().__init__(utils.base_to_url(BASE_URL, tid),
+                         utils.base_to_url(INTRO_URL, tid),
                          '.j_box .words', '.box_box',
                          const.HEADERS, proxies, ENCODING,
                          tool=WdxsTool,

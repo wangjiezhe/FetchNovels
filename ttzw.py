@@ -3,15 +3,15 @@
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, const
+from novel import serial, const, utils
 
-BASE_URL = 'http://www.ttzw.com/book/%s/'
+BASE_URL = 'http://www.ttzw.com/book/{}/'
 
 
 class Ttzw(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(BASE_URL % tid, None,
+        super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          '#intro', '#content',
                          const.HEADERS, proxies,
                          chap_sel='dd',

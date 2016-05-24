@@ -8,8 +8,8 @@ from pyquery import PyQuery as Pq
 
 from novel import serial, utils, const
 
-BASE_URL = 'http://www.piaotian.net/html/%s/%s/'
-INTRO_URL = 'http://www.piaotian.net/bookinfo/%s/%s.html'
+BASE_URL = 'http://www.piaotian.net/html/{}/{}/'
+INTRO_URL = 'http://www.piaotian.net/bookinfo/{}/{}.html'
 ENCODING = 'GB18030'
 
 

@@ -3,9 +3,9 @@
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, const
+from novel import serial, const, utils
 
-BASE_URL = 'http://www.5uks.com/book/%s/'
+BASE_URL = 'http://www.5uks.com/book/{}/'
 
 
 class Uks5Page(serial.Page):
@@ -19,7 +19,7 @@ class Uks5Page(serial.Page):
 class Uks5(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(BASE_URL % tid, None,
+        super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          None, '.box_box',
                          const.HEADERS, proxies,
                          chap_sel='.list_box li',

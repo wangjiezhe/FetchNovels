@@ -44,10 +44,10 @@ class Page(object):
     def dump(self, path=None, folder=None, num=None):
         if path is None:
             if num is not None:
-                pre = '「%d」' % num
+                pre = '「{:d}」'.format(num)
             else:
                 pre = ''
-            name = '%s%s.txt' % (pre, self.title)
+            name = '{}{}.txt'.format(pre, self.title)
             if folder is None:
                 path = os.path.join(os.getcwd(), name)
             else:
@@ -181,12 +181,13 @@ class Novel(object):
 
     @property
     def download_dir(self):
-        return os.path.join(os.getcwd(), "《%s》%s" % (self.title, self.author))
+        return os.path.join(os.getcwd(),
+                            "《{self.title}》{self.author}".format(self=self))
 
     def dump_split(self):
         if not os.path.isdir(self.download_dir):
             os.makedirs(self.download_dir)
-        print('《%s》%s' % (self.title, self.author))
+        print('《{self.title}》{self.author}'.format(self=self))
         for i, url, title in self.chapter_list:
             self.dump_chapter(url, title, i + 1)
 
@@ -198,7 +199,7 @@ class Novel(object):
         page.dump(folder=self.download_dir, num=num)
 
     def dump(self):
-        name = '《%s》%s.txt' % (self.title, self.author)
+        name = '《{self.title}》{self.author}.txt'.format(self=self)
         print(name)
         path = os.path.join(os.getcwd(), name)
         with open(path, 'w') as fp:

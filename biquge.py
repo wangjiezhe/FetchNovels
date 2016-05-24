@@ -3,16 +3,16 @@
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, const
+from novel import serial, const, utils
 
-BASE_URL = 'http://www.biquge.la/book/%s/'
+BASE_URL = 'http://www.biquge.la/book/{}/'
 ENCODING = 'GB18030'
 
 
 class Biquge(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(BASE_URL % tid, None,
+        super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          None, '#content',
                          const.HEADERS, proxies, ENCODING,
                          chap_sel='dd',

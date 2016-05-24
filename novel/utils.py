@@ -4,9 +4,13 @@
 Some help functions
 """
 
+import collections
 import re
+import string
 import sys
 from urllib.parse import urlparse, urlunparse
+
+from .error import Error
 
 
 class Tool(object):
@@ -37,9 +41,6 @@ class Tool(object):
 
         Some default options are pre-defined.
         You can add custom options to replace_extras or remove_extras.
-
-        :param text: The original text
-        :return: The corrected text
         """
         text = re.sub(self._remove_a, '', text)
         text = re.sub(self._remove_div, '', text)
@@ -63,9 +64,6 @@ class Tool(object):
 
         Replace and remove needless strings, and then
         remove too many continuous newlines.
-
-        :param text: The original text
-        :return: The corrected text
         """
         text = self.replace(text)
 
@@ -81,9 +79,6 @@ def fix_order(i):
     Sometimes we get a list of order
     [0<2>, 1<1>, 2<0>, 3<5>, 4<4>, 5<3>, ...],
     and what we need is [2<0>, 1<1>, 0<2>, 5<3>, 4<4>, 3<5>, ...].
-
-    :param i: The original index
-    :return: The correct index
     """
     if i % 3 == 0:
         return i + 2
@@ -91,6 +86,44 @@ def fix_order(i):
         return i - 2
     else:
         return i
+
+
+def count(iterable):
+    """
+    Count the number of items that `iterable` yields
+
+    Equivalent to the expression
+
+    ::
+      len(iterable),
+
+    ... but it also works for iterables that do not support ``len()``.
+
+    ::
+
+      >>> import cardinality
+      >>> cardinality.count([1, 2, 3])
+      3
+      >>> cardinality.count(i for i in range(500))
+      500
+      >>> def gen():
+      ...     yield 'hello'
+      ...     yield 'world'
+      >>> cardinality.count(gen())
+      2
+
+    Get from https://github.com/wbolster/cardinality/blob/master/cardinality.py
+    """
+    if hasattr(iterable, '__len__'):
+        return len(iterable)
+
+    d = collections.deque(enumerate(iterable, 1), maxlen=1)
+    return d[0][0] if d else 0
+
+
+def get_field_count(format_string):
+    fmt = string.Formatter()
+    return count(t for t in fmt.parse(format_string) if t[1] is not None)
 
 
 def base_to_url(base_url, tid):
@@ -101,22 +134,25 @@ def base_to_url(base_url, tid):
     The second field is just filled with the tid,
     while the first field with the tid which has been
     stripped the last three number.
-
-    :param base_url: The url template
-    :param tid: A number or string of numbers
-    :return: the correct url
     """
-    return base_url % (int(tid) // 1000, tid)
+    field_count = get_field_count(base_url)
+    if field_count == 1:
+        return base_url.format(tid)
+    elif field_count == 2:
+        return base_url.format(int(tid) // 1000, tid)
+    else:
+        raise Error('Function base_to_url with {} replacement fields is not defined!'.format(field_count))
 
 
 def get_base_url(url):
     """
     Transform a full url into its base url
 
-    Eg: 'http://example.com/text/file?var=f' -> 'http://example.com'
+    For example:
 
-    :param url: A full url
-    :return: The base url
+    ::
+      >>> get_base_url('http://example.com/text/file?var=f')
+      'http://example.com'
     """
     result = urlparse(url)
     base_url = urlunparse((result.scheme, result.netloc, '', '', '', ''))
@@ -128,9 +164,6 @@ def in_main(NovelClass, proxies=None):
     A pre-defined main function
 
     Get tids for command line parameters, and save content in each files.
-
-    :param NovelClass: The class to get content
-    :param proxies: proxy to use
     """
     tids = sys.argv[1:]
     print(tids)

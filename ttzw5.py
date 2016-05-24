@@ -7,7 +7,7 @@ from pyquery import PyQuery as Pq
 
 from novel import serial, utils, const
 
-BASE_URL = 'http://www.ttzw5.com/book/%s/%s/'
+BASE_URL = 'http://www.ttzw5.com/book/{}/{}/'
 ENCODING = 'GB18030'
 
 

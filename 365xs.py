@@ -7,15 +7,16 @@ from pyquery import PyQuery as Pq
 
 from novel import serial, utils, const
 
-BASE_URL = 'http://www.365xs.org/books/%s/%s/'
-INTRO_URL = 'http://www.365xs.org/book/%s/index.html'
+BASE_URL = 'http://www.365xs.org/books/{}/{}/'
+INTRO_URL = 'http://www.365xs.org/book/{}/index.html'
 ENCODING = 'GB18030'
 
 
 class Xs365(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), INTRO_URL % tid,
+        super().__init__(utils.base_to_url(BASE_URL, tid),
+                         utils.base_to_url(INTRO_URL, tid),
                          '.intro', '#content',
                          const.HEADERS, proxies, ENCODING,
                          chap_sel='.chapterlist li',

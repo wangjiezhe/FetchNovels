@@ -7,8 +7,8 @@ from pyquery import PyQuery as Pq
 
 from novel import serial, utils, const
 
-BASE_URL = 'http://www.zhaishu8.com/xiaoshuo/%s/%s/'
-INTRO_URL = 'http://www.zhaishu8.com/book/%s/index.aspx'
+BASE_URL = 'http://www.zhaishu8.com/xiaoshuo/{}/{}/'
+INTRO_URL = 'http://www.zhaishu8.com/book/{}/index.aspx'
 ENCODING = 'GB18030'
 
 
@@ -25,7 +25,8 @@ class Zhaishu8Tool(utils.Tool):
 class Zhaishu8(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), INTRO_URL % tid,
+        super().__init__(utils.base_to_url(BASE_URL, tid),
+                         utils.base_to_url(INTRO_URL, tid),
                          '#b_info', '#texts',
                          const.HEADERS, proxies, ENCODING,
                          tool=Zhaishu8Tool,
