@@ -2,22 +2,21 @@
 # -*- coding: utf-8 -*-
 
 import re
-import sys
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils
+from novel import serial, utils, const
 
 BASE_URL = 'http://www.ttzw5.com/book/%s/%s/'
 ENCODING = 'GB18030'
 
 
-class Ttzw(serial.Novel):
+class Ttzw5(serial.Novel):
 
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          None, '#contents',
-                         serial.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, ENCODING,
                          chap_sel='li.zp_li',
                          chap_type=serial.ChapterType.last)
 
@@ -34,14 +33,7 @@ class Ttzw(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Ttzw(tid)
-        yq.dump()
+    serial.in_main(Ttzw5)
 
 
 if __name__ == '__main__':

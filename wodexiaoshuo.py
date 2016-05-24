@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import re
-import sys
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils
+from novel import serial, utils, const
 
 BASE_URL = 'http://www.wodexiaoshuo.com/%s/chapter.html'
 INTRO_URL = 'http://www.wodexiaoshuo.com/%s/'
@@ -36,7 +35,7 @@ class Wdxs(serial.Novel):
         self.tid = str(tid)
         super().__init__(BASE_URL % tid, INTRO_URL % tid,
                          '.j_box .words', '.box_box',
-                         serial.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, ENCODING,
                          tool=WdxsTool,
                          chap_sel='.box_box li',
                          chap_type=serial.ChapterType.path)
@@ -54,14 +53,7 @@ class Wdxs(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Wdxs(tid, proxies=serial.GOAGENT)
-        yq.dump()
+    serial.in_main(Wdxs, const.GOAGENT)
 
 
 if __name__ == '__main__':

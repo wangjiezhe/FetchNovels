@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import re
-import sys
 from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils
+from novel import serial, utils, const
 
 BASE_URL = 'http://www.piaotian.net/html/%s/%s/'
 INTRO_URL = 'http://www.piaotian.net/bookinfo/%s/%s.html'
@@ -41,7 +40,7 @@ class Piaotian(serial.Novel):
         super().__init__(utils.base_to_url(BASE_URL, tid),
                          utils.base_to_url(INTRO_URL, tid),
                          None, None,
-                         serial.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, ENCODING,
                          page=PiaotianPage, tool=PiaotianTool)
 
     def get_title_and_author(self):
@@ -68,14 +67,7 @@ class Piaotian(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Piaotian(tid, serial.GOAGENT)
-        yq.dump()
+    serial.in_main(Piaotian, const.GOAGENT)
 
 
 if __name__ == '__main__':

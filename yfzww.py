@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import re
-import sys
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils
+from novel import serial, utils, const
 
 BASE_URL = 'http://www.yfzww.com/Book/%s'
 
@@ -24,7 +24,7 @@ class Yfzww(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(BASE_URL % tid, None,
                          None, '#content',
-                         serial.HEADERS, proxies,
+                         const.HEADERS, proxies,
                          tool=YfzwwTool,
                          chap_sel='#chapters li',
                          chap_type=serial.ChapterType.path)
@@ -48,14 +48,7 @@ class Yfzww(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Yfzww(tid)
-        yq.dump()
+    serial.in_main(Yfzww)
 
 
 if __name__ == '__main__':

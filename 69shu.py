@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import re
-import sys
 from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils
+from novel import serial, utils, const
 
 BASE_URL = 'http://www.69shu.com/%s/'
 INTRO_URL = 'http://www.69shu.com/modules/article/jianjie.php?id=%s'
@@ -19,7 +18,7 @@ class Shu69(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(BASE_URL % tid, INTRO_URL % tid,
                          '.jianjie', '.yd_text2',
-                         serial.HEADERS, proxies, ENCODING)
+                         const.HEADERS, proxies, ENCODING)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
@@ -43,14 +42,7 @@ class Shu69(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Shu69(tid, serial.GOAGENT)
-        yq.dump()
+    serial.in_main(Shu69, const.HEADERS)
 
 
 if __name__ == '__main__':

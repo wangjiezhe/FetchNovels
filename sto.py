@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import re
-import sys
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, error
+from novel import serial, error, const
 
 BASE_URL = 'http://www.sto.cc/%s-1/'
 PAGE_URL = 'http://www.sto.cc/%s-%s/'
@@ -18,7 +17,7 @@ class Sto(serial.Novel):
         self.tid = str(tid)
         super().__init__(BASE_URL % self.tid, None,
                          None, '#BookContent',
-                         serial.HEADERS, proxies)
+                         const.HEADERS, proxies)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
@@ -37,14 +36,7 @@ class Sto(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Sto(tid, serial.GOAGENT)
-        yq.dump()
+    serial.in_main(Sto, const.GOAGENT)
 
 
 if __name__ == '__main__':

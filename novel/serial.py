@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 from enum import Enum
 from urllib.error import HTTPError
 from urllib.parse import urljoin
@@ -12,11 +13,6 @@ from pyquery import PyQuery as Pq
 from .decorators import retry
 from .error import PropertyNotSetError, MethodNotSetError, ValueNotSetError
 from .utils import Tool, get_base_url, fix_order
-
-GOAGENT = {'http': '127.0.0.1:8087'}
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) \
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36'}
 
 
 class Page(object):
@@ -227,3 +223,14 @@ class Novel(object):
                          self.headers, self.proxies, self.encoding,
                          self.tool)
         return page.get_content()
+
+
+def in_main(NovelClass, proxies=None):
+    tids = sys.argv[1:]
+    print(tids)
+    if len(tids) == 0:
+        print('No specific tid!')
+        sys.exit(1)
+    for tid in tids:
+        nov = NovelClass(tid, proxies=proxies)
+        nov.dump()

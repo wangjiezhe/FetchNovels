@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import re
-import sys
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils
+from novel import serial, utils, const
 
 BASE_URL = 'http://www.feizw.com/Html/%s/Index.html'
 INTRO_URL = 'http://www.feizw.com/Book/%s/Index.aspx'
@@ -29,7 +28,7 @@ class Feizw(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(BASE_URL % tid, INTRO_URL % tid,
                          '.intro', '#content',
-                         serial.HEADERS, proxies,
+                         const.HEADERS, proxies,
                          tool=FeizwTool,
                          chap_sel='.chapterlist li',
                          chap_type=serial.ChapterType.last)
@@ -46,14 +45,7 @@ class Feizw(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Feizw(tid)
-        yq.dump()
+    serial.in_main(Feizw)
 
 
 if __name__ == '__main__':

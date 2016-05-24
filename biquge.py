@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
-
 from pyquery import PyQuery as Pq
 
-from novel import serial
+from novel import serial, const
 
 BASE_URL = 'http://www.biquge.la/book/%s/'
 ENCODING = 'GB18030'
@@ -16,7 +14,7 @@ class Biquge(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(BASE_URL % tid, None,
                          None, '#content',
-                         serial.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, ENCODING,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last)
 
@@ -39,14 +37,7 @@ class Biquge(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Biquge(tid)
-        yq.dump()
+    serial.in_main(Biquge)
 
 
 if __name__ == '__main__':

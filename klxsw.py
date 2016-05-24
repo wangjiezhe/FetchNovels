@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils
+from novel import serial, utils, const
 
 BASE_URL = 'http://www.klxsw.com/files/article/html/%s/%s/'
 ENCODING = 'GB18030'
@@ -17,7 +16,7 @@ class Klxsw(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          None, '#r1c',
-                         serial.HEADERS, proxies, ENCODING)
+                         const.HEADERS, proxies, ENCODING)
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
@@ -51,14 +50,7 @@ class Klxsw(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Klxsw(tid, serial.GOAGENT)
-        yq.dump()
+    serial.in_main(Klxsw, const.GOAGENT)
 
 
 if __name__ == '__main__':

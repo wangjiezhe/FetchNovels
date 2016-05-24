@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
-
 from pyquery import PyQuery as Pq
 
-from novel import serial
+from novel import serial, const
 
 BASE_URL = 'http://www.ttzw.com/book/%s/'
 
@@ -15,7 +13,7 @@ class Ttzw(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(BASE_URL % tid, None,
                          '#intro', '#content',
-                         serial.HEADERS, proxies,
+                         const.HEADERS, proxies,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last)
 
@@ -32,14 +30,7 @@ class Ttzw(serial.Novel):
 
 
 def main():
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-    for tid in tids:
-        yq = Ttzw(tid, serial.GOAGENT)
-        yq.dump()
+    serial.in_main(Ttzw, const.GOAGENT)
 
 
 if __name__ == '__main__':
