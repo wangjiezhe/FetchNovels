@@ -28,10 +28,10 @@ class PiaotianTool(utils.Tool):
 
     def __init__(self):
         super().__init__()
-        self.remove_extras.extend(
-            [re.compile(r'&lt;tr&gt;&lt;td&gt;'),
-             re.compile(r'&lt;div id="content"&gt;\xa0\xa0\xa0\xa0')]
-        )
+        self.remove_extras.extend((
+            re.compile(r'&lt;tr&gt;&lt;td&gt;'),
+            re.compile(r'&lt;div id="content"&gt;\xa0\xa0\xa0\xa0')
+        ))
 
 
 class Piaotian(serial.Novel):

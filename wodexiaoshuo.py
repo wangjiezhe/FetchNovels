@@ -17,15 +17,15 @@ class WdxsTool(utils.Tool):
     def __init__(self):
         super().__init__()
         self.remove_extras.extend(
-            [re.compile(pat, re.I) for pat in
-             [r'www\.(wodexiaoshuo|01bz)\.(com|net|wang)',
+            (re.compile(pat, re.I) for pat in
+             (r'www\.(wodexiaoshuo|01bz)\.(com|net|wang)',
               r'wodexiaoshuo\.com',
-              r'www\.']]
+              r'www\.'))
         )
         self.remove_extras.extend(
-            [re.compile(pat) for pat in
-             [r'\t',
-              r'&amp;nbsp;']]
+            (re.compile(pat) for pat in
+             (r'\t',
+              r'&amp;nbsp;'))
         )
 
 

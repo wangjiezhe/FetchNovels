@@ -16,10 +16,10 @@ class Zhaishu8Tool(utils.Tool):
 
     def __init__(self):
         super().__init__()
-        self.remove_extras.extend(
-            [re.compile(r'<h2>.*?</h2>'),
-             re.compile(r'完结穿越小说推荐：')]
-        )
+        self.remove_extras.extend((
+            re.compile(r'<h2>.*?</h2>'),
+            re.compile(r'完结穿越小说推荐：')
+        ))
 
 
 class Zhaishu8(serial.Novel):
