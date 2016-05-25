@@ -98,15 +98,15 @@ class ChapterType(Enum):
 
 class Novel(BaseNovel):
 
-    def __init__(self, url, intro_url,
-                 intro_sel, cont_sel,
+    def __init__(self, url, cont_sel,
+                 intro_url=None, intro_sel=None,
                  headers=None, proxies=None, encoding=None,
                  page=Page, intro_page=IntroPage, tool=Tool,
                  chap_sel=None, chap_type=None):
         self.url = url
+        self.cont_sel = cont_sel
         self.intro_url = intro_url
         self.intro_sel = intro_sel
-        self.cont_sel = cont_sel
         self.headers = headers or {}
         self.proxies = proxies or {}
         self.encoding = encoding

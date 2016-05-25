@@ -33,9 +33,8 @@ class Wdxs(serial.Novel):
 
     def __init__(self, tid, proxies=None):
         self.tid = str(tid)
-        super().__init__(utils.base_to_url(BASE_URL, tid),
-                         utils.base_to_url(INTRO_URL, tid),
-                         '.j_box .words', '.box_box',
+        super().__init__(utils.base_to_url(BASE_URL, tid), '.box_box',
+                         utils.base_to_url(INTRO_URL, tid), '.j_box .words',
                          const.HEADERS, proxies, ENCODING,
                          tool=WdxsTool,
                          chap_sel='.box_box li',

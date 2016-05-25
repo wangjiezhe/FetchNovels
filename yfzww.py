@@ -22,9 +22,8 @@ class YfzwwTool(utils.Tool):
 class Yfzww(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         None, '#content',
-                         const.HEADERS, proxies,
+        super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
+                         headers=const.HEADERS, proxies=proxies,
                          tool=YfzwwTool,
                          chap_sel='#chapters li',
                          chap_type=serial.ChapterType.path)

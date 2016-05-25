@@ -11,9 +11,9 @@ BASE_URL = 'http://www.ttzw.com/book/{}/'
 class Ttzw(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         '#intro', '#content',
-                         const.HEADERS, proxies,
+        super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
+                         intro_sel='#intro',
+                         headers=const.HEADERS, proxies=proxies,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last)
 

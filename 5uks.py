@@ -19,9 +19,8 @@ class Uks5Page(serial.Page):
 class Uks5(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         None, '.box_box',
-                         const.HEADERS, proxies,
+        super().__init__(utils.base_to_url(BASE_URL, tid), '.box_box',
+                         headers=const.HEADERS, proxies=proxies,
                          chap_sel='.list_box li',
                          chap_type=serial.ChapterType.path,
                          page=Uks5Page)

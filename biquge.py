@@ -12,9 +12,9 @@ ENCODING = 'GB18030'
 class Biquge(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         None, '#content',
-                         const.HEADERS, proxies, ENCODING,
+        super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
+                         headers=const.HEADERS, proxies=proxies,
+                         encoding=ENCODING,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last)
 

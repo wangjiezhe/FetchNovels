@@ -15,9 +15,8 @@ class Sto(serial.Novel):
 
     def __init__(self, tid, proxies=None):
         self.tid = tid
-        super().__init__(utils.base_to_url(BASE_URL, self.tid), None,
-                         None, '#BookContent',
-                         const.HEADERS, proxies)
+        super().__init__(utils.base_to_url(BASE_URL, self.tid), '#BookContent',
+                         headers=const.HEADERS, proxies=proxies)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

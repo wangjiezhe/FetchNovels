@@ -37,9 +37,8 @@ class PiaotianTool(utils.Tool):
 class Piaotian(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid),
-                         utils.base_to_url(INTRO_URL, tid),
-                         None, None,
+        super().__init__(utils.base_to_url(BASE_URL, tid), None,
+                         utils.base_to_url(INTRO_URL, tid), None,
                          const.HEADERS, proxies, ENCODING,
                          page=PiaotianPage, tool=PiaotianTool)
 

@@ -14,9 +14,9 @@ ENCODING = 'GB18030'
 class Ttzw5(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         None, '#contents',
-                         const.HEADERS, proxies, ENCODING,
+        super().__init__(utils.base_to_url(BASE_URL, tid), '#contents',
+                         headers=const.HEADERS, proxies=proxies,
+                         encoding=ENCODING,
                          chap_sel='li.zp_li',
                          chap_type=serial.ChapterType.last)
 

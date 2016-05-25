@@ -15,9 +15,8 @@ ENCODING = 'GB18030'
 class Ttshuba(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid),
-                         utils.base_to_url(INTRO_URL, tid),
-                         '.intro', '.zhangjieTXT',
+        super().__init__(utils.base_to_url(BASE_URL, tid), '.zhangjieTXT',
+                         utils.base_to_url(INTRO_URL, tid), '.intro',
                          const.HEADERS, proxies, ENCODING,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last)

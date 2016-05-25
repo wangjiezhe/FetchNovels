@@ -14,9 +14,9 @@ ENCODING = 'GB18030'
 class Klxsw(serial.Novel):
 
     def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         None, '#r1c',
-                         const.HEADERS, proxies, ENCODING)
+        super().__init__(utils.base_to_url(BASE_URL, tid), '#r1c',
+                         headers=const.HEADERS, proxies=proxies,
+                         encoding=ENCODING)
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
