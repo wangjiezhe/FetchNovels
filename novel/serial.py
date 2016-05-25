@@ -3,6 +3,7 @@
 
 import os
 from enum import Enum
+from itertools import count
 from urllib.error import HTTPError
 from urllib.parse import urljoin
 
@@ -198,11 +199,13 @@ class Novel(object):
                          self.tool)
         page.dump(folder=self.download_dir, num=num)
 
-    def dump(self):
-        name = '《{self.title}》{self.author}.txt'.format(self=self)
-        print(name)
-        path = os.path.join(os.getcwd(), name)
-        with open(path, 'w') as fp:
+    def dump(self, overwrite=True):
+        if overwrite:
+            filename = '《{self.title}》{self.author}.txt'.format(self=self)
+        else:
+            filename = self.get_filename()
+        print(filename)
+        with open(filename, 'w') as fp:
             fp.write(self.title)
             fp.write('\n\n')
             fp.write(self.author)
@@ -223,3 +226,12 @@ class Novel(object):
                          self.headers, self.proxies, self.encoding,
                          self.tool)
         return page.get_content()
+
+    def get_filename(self):
+        filename = '《{self.title}》{self.author}.txt'.format(self=self)
+        if os.path.exists(filename):
+            for i in count(1):
+                filename = '《{self.title}》{self.author}({num:d}).txt'.format(self=self, num=i)
+                if not os.path.exists(filename):
+                    break
+        return filename

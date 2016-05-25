@@ -159,7 +159,7 @@ def get_base_url(url):
     return base_url
 
 
-def in_main(NovelClass, proxies=None):
+def in_main(NovelClass, proxies=None, overwrite=True):
     """
     A pre-defined main function
 
@@ -172,4 +172,4 @@ def in_main(NovelClass, proxies=None):
         sys.exit(1)
     for tid in tids:
         nov = NovelClass(tid, proxies=proxies)
-        nov.dump()
+        nov.dump(overwrite=overwrite)
