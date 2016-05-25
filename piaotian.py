@@ -24,6 +24,30 @@ class PiaotianPage(serial.Page):
         return content
 
 
+class PiaotianIntroPageTool(serial.Tool):
+
+    def __init__(self):
+        super().__init__()
+        self.remove_extras.append(
+            re.compile(r'.*</span>')
+        )
+
+
+class PiaotianIntroPage(serial.IntroPage):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.tool = PiaotianIntroPageTool
+
+    def get_content(self):
+        intro = self.doc('div').filter(
+            lambda i, e: 'float:left' in (Pq(e).attr('style') or '')
+        ).html()
+        intro = self.tool().refine(intro)
+        return intro
+
+
+
 class PiaotianTool(utils.Tool):
 
     def __init__(self):
@@ -40,7 +64,8 @@ class Piaotian(serial.Novel):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          utils.base_to_url(INTRO_URL, tid), None,
                          const.HEADERS, proxies, ENCODING,
-                         page=PiaotianPage, tool=PiaotianTool)
+                         page=PiaotianPage, intro_page=PiaotianIntroPage,
+                         tool=PiaotianTool)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
