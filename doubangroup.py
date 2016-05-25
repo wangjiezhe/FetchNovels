@@ -3,7 +3,8 @@
 
 import requests
 
-from novel import utils
+from novel.base import BaseNovel
+from novel.utils import base_to_url, in_main
 
 BASE_URL = 'https://api.douban.com/v2/group/topic/{}/'  # id
 COMMENTS_URL = BASE_URL + 'comments'
@@ -17,12 +18,16 @@ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36'
 }
 
 
-class DoubanGroup(object):
+class DoubanGroup(BaseNovel):
 
     def __init__(self, topic_id, proxies=None):
-        self.topic_url = utils.base_to_url(BASE_URL, topic_id)
-        self.comments_url = utils.base_to_url(COMMENTS_URL, topic_id)
-        self.req = requests.get(self.topic_url, headers=HEADERS).json()
+        self.headers = HEADERS
+        self.proxies = proxies
+        self.topic_url = base_to_url(BASE_URL, topic_id)
+        self.comments_url = base_to_url(COMMENTS_URL, topic_id)
+        self.req = requests.get(
+            self.topic_url, headers=self.headers, proxies=self.proxies
+        ).json()
 
     @property
     def title(self):
@@ -50,7 +55,8 @@ class DoubanGroup(object):
                 'count': PER_PAGE_COUNT
             }
             req = requests.get(
-                self.comments_url, headers=HEADERS, params=params
+                self.comments_url, headers=self.headers,
+                proxies=self.proxies, params=params
             ).json()
             for c in req['comments']:
                 if c['author']['id'] != self.author_id:
@@ -69,7 +75,7 @@ class DoubanGroup(object):
 
 
 def main():
-    utils.in_main(DoubanGroup)
+    in_main(DoubanGroup)
 
 if __name__ == '__main__':
     main()

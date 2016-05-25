@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from abc import abstractmethod
 from enum import Enum
 from itertools import count
 from urllib.error import HTTPError
@@ -10,8 +11,9 @@ from urllib.parse import urljoin
 from lxml.etree import XMLSyntaxError
 from pyquery import PyQuery as Pq
 
+from .base import BaseNovel
 from .decorators import retry
-from .error import PropertyNotSetError, MethodNotSetError, ValueNotSetError
+from .error import PropertyNotSetError, ValueNotSetError
 from .utils import Tool, get_base_url, fix_order
 
 
@@ -94,7 +96,7 @@ class ChapterType(Enum):
     last_rev = 4
 
 
-class Novel(object):
+class Novel(BaseNovel):
 
     def __init__(self, url, intro_url,
                  intro_sel, cont_sel,
@@ -122,8 +124,9 @@ class Novel(object):
         return Pq(url=self.url, headers=self.headers,
                   proxies=self.proxies, encoding=self.encoding)
 
+    @abstractmethod
     def get_title_and_author(self):
-        raise MethodNotSetError('get_title_and_author')
+        pass
 
     @property
     def chapter_list(self):

@@ -8,6 +8,7 @@ from urllib.error import HTTPError
 
 from pyquery import PyQuery as Pq
 
+from .base import BaseNovel
 from .decorators import retry
 from .error import MethodNotSetError, ValueNotSetError
 from .utils import Tool
@@ -18,7 +19,7 @@ class TitleType(Enum):
     meta = 2
 
 
-class Novel(object):
+class Novel(BaseNovel):
 
     def __init__(self, url, cont_sel,
                  title_sel=None, title_type=None,
