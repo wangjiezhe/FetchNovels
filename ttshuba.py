@@ -23,7 +23,8 @@ class Ttshuba(serial.Novel):
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('name') == 'keywords').attr('content')
+            lambda i, e: Pq(e).attr('name') == 'keywords'
+        ).attr('content')
         return re.match(r'(.*)最新章节,(.*?),.*', st).groups()
 
 
