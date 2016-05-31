@@ -70,6 +70,7 @@ class Tool(object):
         text = self.replace(text)
 
         text = re.sub(r'\n\s+\n', '\n\n', text)
+        text = re.sub(r'[ \t]+\n', '\n', text)
 
         return text.strip()
 
