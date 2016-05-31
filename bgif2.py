@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
+
 from novel import serial, utils, const
 
 BASE_URL = 'http://2bgif.com/chapters/{}'
@@ -16,9 +18,9 @@ class Bgif2(serial.Novel):
                          chap_type=serial.ChapterType.path)
 
     def get_title_and_author(self):
-        title = self.doc('.active').text()
-        author = self.doc('#author_resume').text()
-        return title, author
+        st = self.doc('title').text()
+        pat = re.compile(r'(\w+)\s+-\s+(\w+)\s+', re.U)
+        return re.match(pat, st).groups()
 
 
 def main():
