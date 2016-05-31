@@ -11,12 +11,35 @@ BASE_URL = 'http://www.sto.cc/{}-1/'
 PAGE_URL = 'http://www.sto.cc/{}-{}/'
 
 
+class StoTool(utils.Tool):
+
+    def __init__(self):
+        super().__init__()
+
+        word_list = (
+            's思s兔s網s文s檔s下s載s與s在s線s閱s讀s',
+            's本s作s品s由s思s兔s網s提s供s下s載s與s在s線s閱s讀s',
+            's本s作s品s由s思s兔s在s線s閱s讀s網s友s整s理s上s傳s',
+            's思s兔s在s線s閱s讀s',
+            's思s兔s文s檔s共s享s與s在s線s閱s讀s',
+        )
+        symbol_list = ('╩', '★', '\*', '⑥', '▼', 'の', '▃', '#', '◆', '_',
+                       ':-\)', '■', '◇', '\^_\^', '﹌', '⊕', '◢', '〓', 'Θ', '││',
+                       '↑', '┇', '∮', '⌒', '－', '○', '∴', )
+        pats = (s.join(w.split('s')) for w in word_list for s in symbol_list)
+
+        self.remove_extras.extend(
+            (re.compile(pat) for pat in pats)
+        )
+
+
 class Sto(serial.Novel):
 
     def __init__(self, tid, proxies=None):
         self.tid = tid
         super().__init__(utils.base_to_url(BASE_URL, self.tid), '#BookContent',
-                         headers=const.HEADERS, proxies=proxies)
+                         headers=const.HEADERS, proxies=proxies,
+                         tool=StoTool)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
