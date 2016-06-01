@@ -47,12 +47,12 @@ class PiaotianIntroPage(serial.IntroPage):
         return intro
 
 
-
 class PiaotianTool(utils.Tool):
 
     def __init__(self):
         super().__init__()
         self.remove_extras.extend((
+            re.compile(r'www\.piaotian\.com', re.I),
             re.compile(r'&lt;tr&gt;&lt;td&gt;'),
             re.compile(r'&lt;div id="content"&gt;\xa0\xa0\xa0\xa0')
         ))
