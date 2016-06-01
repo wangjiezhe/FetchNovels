@@ -53,6 +53,12 @@ class Sto(serial.Novel):
             raise error.Error('Something strange may happened.')
         return [(i+1, PAGE_URL.format(self.tid, i+1), '第{:d}頁'.format(i+1)) for i in range(page_num)]
 
+    def get_intro(self):
+        intro = self.doc('meta').filter(
+            lambda i, e: Pq(e).attr('name') == 'description'
+        ).attr('content')
+        return intro
+
 
 def main():
     utils.in_main(Sto, const.GOAGENT)
