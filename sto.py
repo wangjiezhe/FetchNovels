@@ -23,10 +23,20 @@ class StoTool(utils.Tool):
             's思s兔s在s線s閱s讀s',
             's思s兔s文s檔s共s享s與s在s線s閱s讀s',
         )
-        pats = ('(.|\^_\^|:-\)|││)'.join(w.split('s')) for w in word_list)
+        symbol_list = (
+            '\^_\^', ':-\)', '\^o\^', '-_-!',
+            '││', '//', '\$\$',
+        )
+        symbols = '|'.join(symbol_list).join(('(.|', ')'))
+        pats = (symbols.join(w.split('s')) for w in word_list)
+
+        symbol_extras = ('',)
 
         self.remove_extras.extend(
             (re.compile(pat) for pat in pats)
+        )
+        self.remove_extras.extend(
+            (re.compile(pat) for pat in symbol_extras)
         )
 
 
