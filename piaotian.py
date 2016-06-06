@@ -55,7 +55,8 @@ class PiaotianTool(utils.Tool):
             re.compile(r'飘天文学'),
             re.compile(r'www\.piaotian\.com', re.I),
             re.compile(r'&lt;tr&gt;&lt;td&gt;'),
-            re.compile(r'&lt;div id="content"&gt;\xa0\xa0\xa0\xa0')
+            re.compile(r'&lt;div id="content"&gt;\xa0\xa0\xa0\xa0'),
+            re.compile(r'&amp;nbsp')
         ))
 
 
