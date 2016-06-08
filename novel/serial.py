@@ -177,9 +177,10 @@ class Novel(BaseNovel):
             intro = self.tool().refine(intro)
             return intro
         else:
-            intro_page = self.intro_page(self.intro_url, self.intro_sel,
-                                         self.headers, self.proxies, self.encoding,
-                                         self.tool)
+            intro_page = self.intro_page(
+                self.intro_url, self.intro_sel,
+                self.headers or None, self.proxies or None, self.encoding,
+                self.tool)
             intro = intro_page.get_content()
             return intro
 
@@ -197,9 +198,10 @@ class Novel(BaseNovel):
 
     @retry(HTTPError)
     def dump_chapter(self, url, title, num):
-        page = self.page(url, title, self.cont_sel,
-                         self.headers, self.proxies, self.encoding,
-                         self.tool)
+        page = self.page(
+            url, title, self.cont_sel,
+            self.headers or None, self.proxies or None, self.encoding,
+            self.tool)
         page.dump(folder=self.download_dir, num=num)
 
     def dump(self, overwrite=True):
@@ -225,9 +227,10 @@ class Novel(BaseNovel):
 
     @retry(HTTPError)
     def get_chapter(self, url, title):
-        page = self.page(url, title, self.cont_sel,
-                         self.headers, self.proxies, self.encoding,
-                         self.tool)
+        page = self.page(
+            url, title, self.cont_sel,
+            self.headers or None, self.proxies or None, self.encoding,
+            self.tool)
         return page.get_content()
 
     def get_filename(self):
