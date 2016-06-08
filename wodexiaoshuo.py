@@ -9,7 +9,6 @@ from novel import serial, utils, const
 
 BASE_URL = 'http://www.wodexiaoshuo.com/{}/chapter.html'
 INTRO_URL = 'http://www.wodexiaoshuo.com/{}/'
-ENCODING = 'GB18030'
 
 
 class WdxsTool(utils.Tool):
@@ -35,7 +34,7 @@ class Wdxs(serial.Novel):
         self.tid = str(tid)
         super().__init__(utils.base_to_url(BASE_URL, tid), '.box_box',
                          utils.base_to_url(INTRO_URL, tid), '.j_box .words',
-                         const.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, const.GB,
                          tool=WdxsTool,
                          chap_sel='.box_box li',
                          chap_type=serial.ChapterType.path)

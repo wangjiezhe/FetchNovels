@@ -4,7 +4,6 @@
 from novel import serial, utils, const
 
 BASE_URL = 'http://www.haxtxt.com/files/article/html/{}/{}/'
-ENCODING = 'GB18030'
 
 
 class Haxtxt(serial.Novel):
@@ -12,7 +11,7 @@ class Haxtxt(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#BookText',
                          None, '.intro',
-                         const.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, const.GB,
                          chap_sel='.chapterlist dd',
                          chap_type=serial.ChapterType.last)
 

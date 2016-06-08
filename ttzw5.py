@@ -8,7 +8,6 @@ from pyquery import PyQuery as Pq
 from novel import serial, utils, const
 
 BASE_URL = 'http://www.ttzw5.com/book/{}/{}/'
-ENCODING = 'GB18030'
 
 
 class Ttzw5(serial.Novel):
@@ -16,7 +15,7 @@ class Ttzw5(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#contents',
                          headers=const.HEADERS, proxies=proxies,
-                         encoding=ENCODING,
+                         encoding=const.GB,
                          chap_sel='li.zp_li',
                          chap_type=serial.ChapterType.last)
 

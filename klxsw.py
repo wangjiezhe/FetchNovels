@@ -8,7 +8,6 @@ from pyquery import PyQuery as Pq
 from novel import serial, utils, const
 
 BASE_URL = 'http://www.klxsw.com/files/article/html/{}/{}/'
-ENCODING = 'GB18030'
 
 
 class Klxsw(serial.Novel):
@@ -16,7 +15,7 @@ class Klxsw(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#r1c',
                          headers=const.HEADERS, proxies=proxies,
-                         encoding=ENCODING)
+                         encoding=const.GB)
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

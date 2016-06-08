@@ -9,7 +9,6 @@ from novel import serial, utils, const
 
 BASE_URL = 'http://www.zhaishu8.com/xiaoshuo/{}/{}/'
 INTRO_URL = 'http://www.zhaishu8.com/book/{}/index.aspx'
-ENCODING = 'GB18030'
 
 
 class Zhaishu8Tool(utils.Tool):
@@ -27,7 +26,7 @@ class Zhaishu8(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#texts',
                          utils.base_to_url(INTRO_URL, tid), '#b_info',
-                         const.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, const.GB,
                          tool=Zhaishu8Tool,
                          chap_sel='#BookText li',
                          chap_type=serial.ChapterType.last)

@@ -9,7 +9,6 @@ from novel import serial, utils, const
 
 BASE_URL = 'http://www.365xs.org/books/{}/{}/'
 INTRO_URL = 'http://www.365xs.org/book/{}/index.html'
-ENCODING = 'GB18030'
 
 
 class Xs365(serial.Novel):
@@ -17,7 +16,7 @@ class Xs365(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, const.GB,
                          chap_sel='.chapterlist li',
                          chap_type=serial.ChapterType.last)
 

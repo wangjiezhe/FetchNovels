@@ -9,7 +9,6 @@ from novel import serial, utils, const
 
 BASE_URL = 'http://www.lwxs.com/shu/{}/{}/'
 INTRO_URL = 'http://www.lwxs.com/info-{}.html'
-ENCODING = 'GB18030'
 
 
 class Lwxs(serial.Novel):
@@ -17,7 +16,7 @@ class Lwxs(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.zhangjieTXT',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, const.GB,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last)
 

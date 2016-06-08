@@ -9,7 +9,6 @@ from novel import serial, utils, const
 
 BASE_URL = 'http://www.123yq.org/read/{}/{}/'
 INTRO_URL = 'http://www.123yq.org/xiaoshuo_{}.html'
-ENCODING = 'GB18030'
 
 
 class Yq123Tool(utils.Tool):
@@ -26,7 +25,7 @@ class Yq123(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#TXT',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, const.GB,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last_rev,
                          tool=Yq123Tool)

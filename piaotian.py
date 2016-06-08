@@ -10,7 +10,6 @@ from novel import serial, utils, const
 
 BASE_URL = 'http://www.piaotian.net/html/{}/{}/'
 INTRO_URL = 'http://www.piaotian.net/bookinfo/{}/{}.html'
-ENCODING = 'GB18030'
 
 
 class PiaotianPage(serial.Page):
@@ -65,7 +64,7 @@ class Piaotian(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          utils.base_to_url(INTRO_URL, tid), None,
-                         const.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, const.GB,
                          page=PiaotianPage, intro_page=PiaotianIntroPage,
                          tool=PiaotianTool)
 

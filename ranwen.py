@@ -6,7 +6,6 @@ from pyquery import PyQuery as Pq
 from novel import serial, utils, const
 
 BASE_URL = 'http://www.ranwen.org/files/article/{}/{}/'
-ENCODING = 'GB18030'
 
 
 class Ranwen(serial.Novel):
@@ -14,7 +13,7 @@ class Ranwen(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          headers=const.HEADERS, proxies=proxies,
-                         encoding=ENCODING,
+                         encoding=const.GB,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.whole)
 

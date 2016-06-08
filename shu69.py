@@ -10,7 +10,6 @@ from novel import serial, utils, const
 
 BASE_URL = 'http://www.69shu.com/{}/'
 INTRO_URL = 'http://www.69shu.com/modules/article/jianjie.php?id={}'
-ENCODING = 'GB18030'
 
 
 class Shu69(serial.Novel):
@@ -18,7 +17,7 @@ class Shu69(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.yd_text2',
                          utils.base_to_url(INTRO_URL, tid), '.jianjie',
-                         const.HEADERS, proxies, ENCODING)
+                         const.HEADERS, proxies, const.GB)
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

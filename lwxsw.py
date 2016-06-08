@@ -7,7 +7,6 @@ from novel import serial, utils, const
 
 BASE_URL = 'http://www.lwxsw.org/books/{}/{}/'
 INTRO_URL = 'http://www.lwxsw.org/book/{}/index.html'
-ENCODING = 'GB18030'
 
 
 class Lwxsw(serial.Novel):
@@ -15,7 +14,7 @@ class Lwxsw(serial.Novel):
     def __init__(self, tid, proxies=None):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies, ENCODING,
+                         const.HEADERS, proxies, const.GB,
                          chap_sel='.bookinfo_td td',
                          chap_type=serial.ChapterType.last)
 
