@@ -12,10 +12,9 @@ BASE_URL = 'http://www.klxsw.com/files/article/html/{}/{}/'
 
 class Klxsw(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
-        super().__init__(utils.base_to_url(BASE_URL, tid), '#r1c',
-                         headers=const.HEADERS, proxies=proxies,
-                         encoding=const.GB)
+    def __init__(self, tid):
+        super().__init__(utils.base_to_url(BASE_URL, tid), '#r1c')
+        self.encoding = const.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

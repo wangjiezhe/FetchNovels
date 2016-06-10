@@ -11,12 +11,12 @@ INTRO_URL = 'http://www.lwxsw.org/book/{}/index.html'
 
 class Lwxsw(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies, const.GB,
                          chap_sel='.bookinfo_td td',
                          chap_type=serial.ChapterType.last)
+        self.encoding = const.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

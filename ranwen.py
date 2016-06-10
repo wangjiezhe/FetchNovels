@@ -10,12 +10,11 @@ BASE_URL = 'http://www.ranwen.org/files/article/{}/{}/'
 
 class Ranwen(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
-                         headers=const.HEADERS, proxies=proxies,
-                         encoding=const.GB,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.whole)
+        self.encoding = const.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

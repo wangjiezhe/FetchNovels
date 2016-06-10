@@ -14,10 +14,10 @@ INTRO_URL = 'http://www.69shu.com/modules/article/jianjie.php?id={}'
 
 class Shu69(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.yd_text2',
-                         utils.base_to_url(INTRO_URL, tid), '.jianjie',
-                         const.HEADERS, proxies, const.GB)
+                         utils.base_to_url(INTRO_URL, tid), '.jianjie')
+        self.encoding = const.GB
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

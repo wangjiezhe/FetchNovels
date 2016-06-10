@@ -10,12 +10,11 @@ BASE_URL = 'http://www.biquge.la/book/{}/'
 
 class Biquge(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
-                         headers=const.HEADERS, proxies=proxies,
-                         encoding=const.GB,
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last)
+        self.encoding = const.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

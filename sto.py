@@ -42,11 +42,10 @@ class StoTool(utils.Tool):
 
 class Sto(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         self.tid = tid
-        super().__init__(utils.base_to_url(BASE_URL, self.tid), '#BookContent',
-                         headers=const.HEADERS, proxies=proxies,
-                         tool=StoTool)
+        super().__init__(utils.base_to_url(BASE_URL, self.tid), '#BookContent')
+        self.tool = StoTool
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

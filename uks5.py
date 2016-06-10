@@ -18,12 +18,11 @@ class Uks5Page(serial.Page):
 
 class Uks5(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.box_box',
-                         headers=const.HEADERS, proxies=proxies,
                          chap_sel='.list_box li',
-                         chap_type=serial.ChapterType.path,
-                         page=Uks5Page)
+                         chap_type=serial.ChapterType.path)
+        self.page = Uks5Page
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

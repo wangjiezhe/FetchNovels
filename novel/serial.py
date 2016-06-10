@@ -98,26 +98,29 @@ class ChapterType(Enum):
 
 class Novel(BaseNovel):
 
+    running = False
+
     def __init__(self, url, cont_sel,
                  intro_url=None, intro_sel=None,
-                 headers=None, proxies=None, encoding=None,
-                 page=Page, intro_page=IntroPage, tool=Tool,
                  chap_sel=None, chap_type=None):
-        self.url = url
+        super().__init__(url)
         self.cont_sel = cont_sel
         self.intro_url = intro_url
         self.intro_sel = intro_sel
-        self.headers = headers or {}
-        self.proxies = proxies or {}
-        self.encoding = encoding
-        self.page = page
-        self.intro_page = intro_page
-        self.tool = tool
+        self.page = Page
+        self.intro_page = IntroPage
         self.chap_sel = chap_sel
         self.chap_type = chap_type
 
+    def run(self):
+        self.refine = self.tool().refine
         self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
+        self.running = True
+
+    def confirm_run(self):
+        if not self.running:
+            self.run()
 
     @retry((HTTPError, XMLSyntaxError))
     def get_doc(self):
@@ -130,6 +133,7 @@ class Novel(BaseNovel):
 
     @property
     def chapter_list(self):
+        self.confirm_run()
         if self.chap_sel and self.chap_type:
             return self.chapter_list_with_sel(self.chap_sel, self.chap_type)
         raise PropertyNotSetError('chapter_list')
@@ -170,11 +174,12 @@ class Novel(BaseNovel):
 
     @retry(HTTPError)
     def get_intro(self):
+        self.confirm_run()
         if self.intro_url is None:
             if self.intro_sel is None:
                 return ''
             intro = self.doc(self.intro_sel).html()
-            intro = self.tool().refine(intro)
+            intro = self.refine(intro)
             return intro
         else:
             intro_page = self.intro_page(
@@ -190,6 +195,8 @@ class Novel(BaseNovel):
                             "《{self.title}》{self.author}".format(self=self))
 
     def dump_split(self):
+        if not self.running:
+            self.run()
         if not os.path.isdir(self.download_dir):
             os.makedirs(self.download_dir)
         print('《{self.title}》{self.author}'.format(self=self))
@@ -205,6 +212,8 @@ class Novel(BaseNovel):
         page.dump(folder=self.download_dir, num=num)
 
     def dump(self, overwrite=True):
+        if not self.running:
+            self.run()
         if overwrite:
             filename = '《{self.title}》{self.author}.txt'.format(self=self)
         else:

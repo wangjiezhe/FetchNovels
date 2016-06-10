@@ -3,17 +3,16 @@
 
 import re
 
-from novel import serial, utils, const
+from novel import serial, utils
 
 BASE_URL = 'http://2bgif.com/chapters/{}'
 
 
 class Bgif2(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          None, '#description',
-                         const.HEADERS, proxies,
                          chap_sel='tbody td',
                          chap_type=serial.ChapterType.path)
 

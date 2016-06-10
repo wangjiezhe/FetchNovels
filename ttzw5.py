@@ -12,12 +12,11 @@ BASE_URL = 'http://www.ttzw5.com/book/{}/{}/'
 
 class Ttzw5(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#contents',
-                         headers=const.HEADERS, proxies=proxies,
-                         encoding=const.GB,
                          chap_sel='li.zp_li',
                          chap_type=serial.ChapterType.last)
+        self.encoding = const.GB
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

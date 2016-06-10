@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils
 
 BASE_URL = 'http://www.feizw.com/Html/{}/Index.html'
 INTRO_URL = 'http://www.feizw.com/Book/{}/Index.aspx'
@@ -25,13 +25,12 @@ class FeizwTool(utils.Tool):
 
 class Feizw(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies,
-                         tool=FeizwTool,
                          chap_sel='.chapterlist li',
                          chap_type=serial.ChapterType.last)
+        self.tool = FeizwTool
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

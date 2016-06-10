@@ -22,13 +22,13 @@ class Yq123Tool(utils.Tool):
 
 class Yq123(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#TXT',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies, const.GB,
                          chap_sel='dd',
-                         chap_type=serial.ChapterType.last_rev,
-                         tool=Yq123Tool)
+                         chap_type=serial.ChapterType.last_rev)
+        self.encoding = const.GB
+        self.tool = Yq123Tool
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

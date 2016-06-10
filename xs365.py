@@ -13,12 +13,12 @@ INTRO_URL = 'http://www.365xs.org/book/{}/index.html'
 
 class Xs365(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies, const.GB,
                          chap_sel='.chapterlist li',
                          chap_type=serial.ChapterType.last)
+        self.encoding = const.GB
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

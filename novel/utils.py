@@ -179,5 +179,6 @@ def in_main(NovelClass, proxies=None, overwrite=True):
         print('No specific tid!')
         sys.exit(1)
     for tid in tids:
-        nov = NovelClass(tid, proxies)
+        nov = NovelClass(tid)
+        nov.proxies = proxies
         nov.dump(overwrite=overwrite)

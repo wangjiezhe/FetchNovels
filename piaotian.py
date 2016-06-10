@@ -61,12 +61,13 @@ class PiaotianTool(utils.Tool):
 
 class Piaotian(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         utils.base_to_url(INTRO_URL, tid), None,
-                         const.HEADERS, proxies, const.GB,
-                         page=PiaotianPage, intro_page=PiaotianIntroPage,
-                         tool=PiaotianTool)
+                         utils.base_to_url(INTRO_URL, tid), None)
+        self.encoding = const.GB
+        self.tool = PiaotianTool
+        self.page = PiaotianPage
+        self.intro_page = PiaotianIntroPage
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

@@ -30,14 +30,14 @@ class WdxsTool(utils.Tool):
 
 class Wdxs(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         self.tid = str(tid)
         super().__init__(utils.base_to_url(BASE_URL, tid), '.box_box',
                          utils.base_to_url(INTRO_URL, tid), '.j_box .words',
-                         const.HEADERS, proxies, const.GB,
-                         tool=WdxsTool,
                          chap_sel='.box_box li',
                          chap_type=serial.ChapterType.path)
+        self.encoding = const.GB
+        self.tool = WdxsTool
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

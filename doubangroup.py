@@ -20,13 +20,11 @@ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36'
 
 class DoubanGroup(BaseNovel):
 
-    def __init__(self, topic_id, proxies=None):
-        self.headers = HEADERS
-        self.proxies = proxies
-        self.topic_url = base_to_url(BASE_URL, topic_id)
+    def __init__(self, topic_id):
+        super().__init__(base_to_url(BASE_URL, topic_id))
         self.comments_url = base_to_url(COMMENTS_URL, topic_id)
         self.req = requests.get(
-            self.topic_url, headers=self.headers, proxies=self.proxies
+            self.url, headers=self.headers, proxies=self.proxies
         ).json()
 
     @property

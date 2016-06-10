@@ -8,12 +8,12 @@ BASE_URL = 'http://www.haxtxt.com/files/article/html/{}/{}/'
 
 class Haxtxt(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#BookText',
                          None, '.intro',
-                         const.HEADERS, proxies, const.GB,
                          chap_sel='.chapterlist dd',
                          chap_type=serial.ChapterType.last)
+        self.encoding = const.GB
 
     def get_title_and_author(self):
         title = self.doc('.btitle h1').text().strip('《》')

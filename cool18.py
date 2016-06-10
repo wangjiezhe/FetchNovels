@@ -20,13 +20,12 @@ class Cool18Tool(utils.Tool):
 
 class Cool18(single.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid),
                          'pre',
                          title_sel=('name', 'Description'),
-                         title_type=single.TitleType.meta,
-                         headers=const.HEADERS, proxies=proxies,
-                         tool=Cool18Tool)
+                         title_type=single.TitleType.meta)
+        self.tool = Cool18Tool
 
 
 def main():

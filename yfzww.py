@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils
 
 BASE_URL = 'http://www.yfzww.com/Book/{}'
 
@@ -21,12 +21,11 @@ class YfzwwTool(utils.Tool):
 
 class Yfzww(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
-                         headers=const.HEADERS, proxies=proxies,
-                         tool=YfzwwTool,
                          chap_sel='#chapters li',
                          chap_type=serial.ChapterType.path)
+        self.tool = YfzwwTool
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

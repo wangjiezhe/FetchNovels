@@ -8,12 +8,11 @@ BASE_URL = 'http://ebook.s-dragon.org/forum/archiver/?tid-{}.html'
 
 class Sdragon(single.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid),
                          '.archiver_postbody',
                          title_sel='h2',
-                         title_type=single.TitleType.selector,
-                         headers=const.HEADERS, proxies=proxies)
+                         title_type=single.TitleType.selector)
 
 
 def main():

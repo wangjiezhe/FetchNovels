@@ -26,13 +26,13 @@ class Lwxs520Tool(utils.Tool):
 
 class Lwxs520(serial.Novel):
 
-    def __init__(self, tid, proxies=None):
+    def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         const.HEADERS, proxies, const.GB,
-                         tool=Lwxs520Tool,
                          chap_sel='.bookinfo_td td',
                          chap_type=serial.ChapterType.last)
+        self.encoding = const.GB
+        self.tool = Lwxs520Tool
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
