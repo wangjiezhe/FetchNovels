@@ -11,8 +11,9 @@ BASE_URL = 'http://www.5uks.com/book/{}/'
 class Uks5Page(serial.Page):
 
     def get_content(self):
+        self.confirm_run()
         content = self.doc(self.selector).eq(1).html()
-        content = self.tool().refine(content)
+        content = self.refine(content)
         return content
 
 

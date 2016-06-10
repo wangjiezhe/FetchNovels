@@ -14,23 +14,29 @@ from pyquery import PyQuery as Pq
 from .base import BaseNovel
 from .decorators import retry
 from .error import PropertyNotSetError, ValueNotSetError
-from .utils import Tool, get_base_url, fix_order
+from .utils import get_base_url, fix_order
 
 
-class Page(object):
+class Page(BaseNovel):
+
+    running = False
 
     def __init__(self, url, title, selector,
-                 headers=None, proxies=None, encoding=None,
-                 tool=Tool):
+                 headers=None, proxies=None,
+                 encoding=None, tool=None):
+        super().__init__(url, headers, proxies, encoding, tool)
         self.url = url
         self.title = title
         self.selector = selector
-        self.headers = headers or {}
-        self.proxies = proxies or {}
-        self.encoding = encoding
-        self.tool = tool
 
+    def run(self):
+        self.refine = self.tool().refine
         self.doc = self.get_doc()
+        self.running = True
+
+    def confirm_run(self):
+        if not self.running:
+            self.run()
 
     @retry((HTTPError, XMLSyntaxError))
     def get_doc(self):
@@ -38,13 +44,15 @@ class Page(object):
                   proxies=self.proxies, encoding=self.encoding)
 
     def get_content(self):
+        self.confirm_run()
         if self.selector is None:
             return ''
         content = self.doc(self.selector).html()
-        content = self.tool().refine(content)
+        content = self.refine(content)
         return content
 
     def dump(self, path=None, folder=None, num=None):
+        self.confirm_run()
         if path is None:
             if num is not None:
                 pre = '「{:d}」'.format(num)
@@ -62,19 +70,25 @@ class Page(object):
             fp.write(self.get_content())
 
 
-class IntroPage(object):
+class IntroPage(BaseNovel):
+
+    running = False
 
     def __init__(self, url, selector,
                  headers=None, proxies=None, encoding=None,
-                 tool=Tool):
+                 tool=None):
+        super().__init__(url, headers, proxies, encoding, tool)
         self.url = url
-        self.headers = headers or {}
-        self.proxies = proxies or {}
-        self.encoding = encoding
         self.selector = selector
-        self.tool = tool
 
+    def run(self):
+        self.refine = self.tool().refine
         self.doc = self.get_doc()
+        self.running = True
+
+    def confirm_run(self):
+        if not self.running:
+            self.run()
 
     @retry((HTTPError, XMLSyntaxError))
     def get_doc(self):
@@ -82,11 +96,21 @@ class IntroPage(object):
                   proxies=self.proxies, encoding=self.encoding)
 
     def get_content(self):
+        self.confirm_run()
         if self.selector is None:
             return ''
         intro = self.doc(self.selector).html()
-        intro = self.tool().refine(intro)
+        intro = self.refine(intro)
         return intro
+
+    def dump(self, overwrite=True):
+        self.confirm_run()
+        filename = 'intro.txt'
+        print('intro')
+        with open(filename, 'w') as fp:
+            fp.write('简介')
+            fp.write('\n\n\n\n')
+            fp.write(self.get_content())
 
 
 class ChapterType(Enum):
@@ -184,7 +208,7 @@ class Novel(BaseNovel):
         else:
             intro_page = self.intro_page(
                 self.intro_url, self.intro_sel,
-                self.headers or None, self.proxies or None, self.encoding,
+                self.headers, self.proxies, self.encoding,
                 self.tool)
             intro = intro_page.get_content()
             return intro
@@ -207,7 +231,7 @@ class Novel(BaseNovel):
     def dump_chapter(self, url, title, num):
         page = self.page(
             url, title, self.cont_sel,
-            self.headers or None, self.proxies or None, self.encoding,
+            self.headers, self.proxies, self.encoding,
             self.tool)
         page.dump(folder=self.download_dir, num=num)
 
@@ -238,7 +262,7 @@ class Novel(BaseNovel):
     def get_chapter(self, url, title):
         page = self.page(
             url, title, self.cont_sel,
-            self.headers or None, self.proxies or None, self.encoding,
+            self.headers, self.proxies, self.encoding,
             self.tool)
         return page.get_content()
 

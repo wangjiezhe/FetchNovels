@@ -15,15 +15,16 @@ INTRO_URL = 'http://www.piaotian.net/bookinfo/{}/{}.html'
 class PiaotianPage(serial.Page):
 
     def get_content(self):
+        self.confirm_run()
         content = self.doc.html()
         pat = re.compile(r'.*<!-- 标题上AD结束 -->(.*)<!-- 翻页上AD开始 -->.*',
                          re.S)
         content = re.match(pat, content).group(1)
-        content = self.tool().refine(content)
+        content = self.refine(content)
         return content
 
 
-class PiaotianIntroPageTool(serial.Tool):
+class PiaotianIntroPageTool(utils.Tool):
 
     def __init__(self):
         super().__init__()
@@ -39,10 +40,11 @@ class PiaotianIntroPage(serial.IntroPage):
         self.tool = PiaotianIntroPageTool
 
     def get_content(self):
+        self.confirm_run()
         intro = self.doc('div').filter(
             lambda i, e: 'float:left' in (Pq(e).attr('style') or '')
         ).html()
-        intro = self.tool().refine(intro)
+        intro = self.refine(intro)
         return intro
 
 

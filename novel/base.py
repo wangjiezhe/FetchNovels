@@ -9,12 +9,14 @@ from .utils import Tool
 
 class BaseNovel(ABC):
 
-    def __init__(self, url):
+    def __init__(self, url,
+                 headers=None, proxies=None,
+                 encoding=None, tool=None):
         self.url = url
-        self._headers = HEADERS
-        self._proxies = None
-        self.encoding=None
-        self.tool = Tool
+        self._headers = headers or HEADERS
+        self._proxies = proxies
+        self.encoding = encoding
+        self.tool = tool or Tool
 
     @property
     def headers(self):
