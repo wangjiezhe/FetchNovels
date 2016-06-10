@@ -25,7 +25,6 @@ class Page(BaseNovel):
                  headers=None, proxies=None,
                  encoding=None, tool=None):
         super().__init__(url, headers, proxies, encoding, tool)
-        self.url = url
         self.title = title
         self.selector = selector
 
@@ -78,7 +77,6 @@ class IntroPage(BaseNovel):
                  headers=None, proxies=None, encoding=None,
                  tool=None):
         super().__init__(url, headers, proxies, encoding, tool)
-        self.url = url
         self.selector = selector
 
     def run(self):
