@@ -6,7 +6,7 @@ from novel import serial, utils, const
 BASE_URL = 'http://www.haxtxt.com/files/article/html/{}/{}/'
 
 
-class Haxtxt(serial.Novel):
+class Haxtxt(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#BookText',

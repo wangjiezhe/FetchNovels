@@ -8,7 +8,7 @@ from novel import serial, utils
 BASE_URL = 'http://2bgif.com/chapters/{}'
 
 
-class Bgif2(serial.Novel):
+class Bgif2(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',

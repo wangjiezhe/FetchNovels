@@ -21,7 +21,7 @@ class Zhaishu8Tool(utils.Tool):
         ))
 
 
-class Zhaishu8(serial.Novel):
+class Zhaishu8(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#texts',

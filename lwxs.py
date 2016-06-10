@@ -11,7 +11,7 @@ BASE_URL = 'http://www.lwxs.com/shu/{}/{}/'
 INTRO_URL = 'http://www.lwxs.com/info-{}.html'
 
 
-class Lwxs(serial.Novel):
+class Lwxs(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.zhangjieTXT',

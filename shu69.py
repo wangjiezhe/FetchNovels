@@ -12,7 +12,7 @@ BASE_URL = 'http://www.69shu.com/{}/'
 INTRO_URL = 'http://www.69shu.com/modules/article/jianjie.php?id={}'
 
 
-class Shu69(serial.Novel):
+class Shu69(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.yd_text2',

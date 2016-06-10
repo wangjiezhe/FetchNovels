@@ -10,7 +10,7 @@ from novel import serial, utils, const
 BASE_URL = 'http://www.ttzw5.com/book/{}/{}/'
 
 
-class Ttzw5(serial.Novel):
+class Ttzw5(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#contents',

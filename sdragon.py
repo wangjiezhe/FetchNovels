@@ -6,7 +6,7 @@ from novel import single, utils, const
 BASE_URL = 'http://ebook.s-dragon.org/forum/archiver/?tid-{}.html'
 
 
-class Sdragon(single.Novel):
+class Sdragon(single.SingleNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid),

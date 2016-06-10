@@ -18,7 +18,7 @@ class Cool18Tool(utils.Tool):
         ))
 
 
-class Cool18(single.Novel):
+class Cool18(single.SingleNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid),

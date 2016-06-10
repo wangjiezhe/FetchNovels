@@ -18,7 +18,7 @@ class TitleType(Enum):
     meta = 2
 
 
-class Novel(BaseNovel):
+class SingleNovel(BaseNovel):
 
     running = False
 

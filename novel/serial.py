@@ -118,7 +118,7 @@ class ChapterType(Enum):
     last_rev = 4
 
 
-class Novel(BaseNovel):
+class SerialNovel(BaseNovel):
 
     running = False
 

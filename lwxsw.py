@@ -9,7 +9,7 @@ BASE_URL = 'http://www.lwxsw.org/books/{}/{}/'
 INTRO_URL = 'http://www.lwxsw.org/book/{}/index.html'
 
 
-class Lwxsw(serial.Novel):
+class Lwxsw(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',

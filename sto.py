@@ -40,7 +40,7 @@ class StoTool(utils.Tool):
         )
 
 
-class Sto(serial.Novel):
+class Sto(serial.SerialNovel):
 
     def __init__(self, tid):
         self.tid = tid

@@ -11,7 +11,7 @@ BASE_URL = 'http://www.365xs.org/books/{}/{}/'
 INTRO_URL = 'http://www.365xs.org/book/{}/index.html'
 
 
-class Xs365(serial.Novel):
+class Xs365(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',

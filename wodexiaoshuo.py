@@ -28,7 +28,7 @@ class WdxsTool(utils.Tool):
         )
 
 
-class Wdxs(serial.Novel):
+class Wdxs(serial.SerialNovel):
 
     def __init__(self, tid):
         self.tid = str(tid)

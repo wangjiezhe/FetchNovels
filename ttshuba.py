@@ -11,7 +11,7 @@ BASE_URL = 'http://www.ttshuba.com/shu/{}/{}/'
 INTRO_URL = 'http://www.ttshuba.com/info-{}.html'
 
 
-class Ttshuba(serial.Novel):
+class Ttshuba(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.zhangjieTXT',

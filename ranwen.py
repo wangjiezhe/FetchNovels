@@ -8,7 +8,7 @@ from novel import serial, utils, const
 BASE_URL = 'http://www.ranwen.org/files/article/{}/{}/'
 
 
-class Ranwen(serial.Novel):
+class Ranwen(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',

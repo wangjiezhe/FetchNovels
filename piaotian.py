@@ -61,7 +61,7 @@ class PiaotianTool(utils.Tool):
         ))
 
 
-class Piaotian(serial.Novel):
+class Piaotian(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,

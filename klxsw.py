@@ -10,7 +10,7 @@ from novel import serial, utils, const
 BASE_URL = 'http://www.klxsw.com/files/article/html/{}/{}/'
 
 
-class Klxsw(serial.Novel):
+class Klxsw(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#r1c')
