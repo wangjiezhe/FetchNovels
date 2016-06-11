@@ -41,7 +41,7 @@ class Shu69(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Shu69, const.HEADERS)
+    utils.in_main(Shu69, const.GOAGENT)
 
 
 if __name__ == '__main__':
