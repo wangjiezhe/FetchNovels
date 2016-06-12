@@ -268,10 +268,7 @@ class SerialNovel(BaseNovel):
         self.close()
 
     def _dump(self, overwrite=True):
-        if overwrite:
-            filename = '《{self.title}》{self.author}.txt'.format(self=self)
-        else:
-            filename = get_filename(self.title, self.author)
+        filename = get_filename(self.title, self.author, overwrite)
         print(filename)
 
         with open(filename, 'w') as fp:

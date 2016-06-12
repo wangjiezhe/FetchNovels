@@ -70,10 +70,7 @@ class SingleNovel(BaseNovel):
     def dump(self, overwrite=True):
         self.confirm_run()
         print(self.title)
-        if overwrite:
-            filename = '{self.title}.txt'.format(self=self)
-        else:
-            filename = get_filename(self.title)
+        filename = get_filename(self.title, overwrite=overwrite)
         content = self.get_content()
         with open(filename, 'w') as fp:
             fp.write(self.title)

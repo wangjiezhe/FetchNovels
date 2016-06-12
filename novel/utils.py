@@ -169,18 +169,19 @@ def get_base_url(url):
     return base_url
 
 
-def get_filename(title, author=None):
+def get_filename(title, author=None, overwrite=True):
     if author:
         base = '《{}》{}'.format(title, author)
     else:
         base = title
 
     filename = '{}.txt'.format(base)
-    if os.path.exists(filename):
-        for i in count(1):
-            filename = '{}({:d}).txt'.format(base, i)
-            if not os.path.exists(filename):
-                break
+    if not overwrite:
+        if os.path.exists(filename):
+            for i in count(1):
+                filename = '{}({:d}).txt'.format(base, i)
+                if not os.path.exists(filename):
+                    break
     return filename
 
 
