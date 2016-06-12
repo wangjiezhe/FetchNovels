@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
 from enum import Enum
-from itertools import count
 from urllib.error import HTTPError
 
 from pyquery import PyQuery as Pq
@@ -11,6 +9,7 @@ from pyquery import PyQuery as Pq
 from .base import BaseNovel
 from .decorators import retry
 from .error import MethodNotSetError, ValueNotSetError
+from .utils import get_filename
 
 
 class TitleType(Enum):
@@ -74,18 +73,9 @@ class SingleNovel(BaseNovel):
         if overwrite:
             filename = '{self.title}.txt'.format(self=self)
         else:
-            filename = self.get_filename()
+            filename = get_filename(self.title)
         content = self.get_content()
         with open(filename, 'w') as fp:
             fp.write(self.title)
             fp.write('\n\n\n\n')
             fp.write(content)
-
-    def get_filename(self):
-        filename = '{self.title}.txt'.format(self=self)
-        if os.path.exists(filename):
-            for i in count(1):
-                filename = '{self.title}({num:d}).txt'.format(self=self, num=i)
-                if not os.path.exists(filename):
-                    break
-        return filename

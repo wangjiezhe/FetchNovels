@@ -5,12 +5,12 @@ Some help functions
 """
 
 import collections
+import os
 import re
+import sqlite3
 import string
 import sys
 from urllib.parse import urlparse, urlunparse
-
-import sqlite3
 
 from .error import Error
 
@@ -167,6 +167,21 @@ def get_base_url(url):
     result = urlparse(url)
     base_url = urlunparse((result.scheme, result.netloc, '', '', '', ''))
     return base_url
+
+
+def get_filename(title, author=None):
+    if author:
+        base = '《{}》{}'.format(title, author)
+    else:
+        base = title
+
+    filename = '{}.txt'.format(base)
+    if os.path.exists(filename):
+        for i in count(1):
+            filename = '{}({:d}).txt'.format(base, i)
+            if not os.path.exists(filename):
+                break
+    return filename
 
 
 def in_main(NovelClass, proxies=None, overwrite=True):

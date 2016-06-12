@@ -4,7 +4,6 @@
 import os
 from abc import abstractmethod
 from enum import Enum
-from itertools import count
 from urllib.error import HTTPError
 from urllib.parse import urljoin
 
@@ -14,7 +13,7 @@ from pyquery import PyQuery as Pq
 from .base import BaseNovel
 from .decorators import retry
 from .error import PropertyNotSetError, ValueNotSetError
-from .utils import get_base_url, fix_order, SqlHelper
+from .utils import get_base_url, fix_order, SqlHelper, get_filename
 
 
 class Page(BaseNovel):
@@ -267,7 +266,7 @@ class SerialNovel(BaseNovel):
         if overwrite:
             filename = '《{self.title}》{self.author}.txt'.format(self=self)
         else:
-            filename = self.get_filename()
+            filename = get_filename(self.title, self.author)
         print(filename)
 
         with open(filename, 'w') as fp:
@@ -286,12 +285,3 @@ class SerialNovel(BaseNovel):
         self.run()
         self.dump(overwrite=overwrite)
         self.close()
-
-    def get_filename(self):
-        filename = '《{self.title}》{self.author}.txt'.format(self=self)
-        if os.path.exists(filename):
-            for i in count(1):
-                filename = '《{self.title}》{self.author}({num:d}).txt'.format(self=self, num=i)
-                if not os.path.exists(filename):
-                    break
-        return filename
