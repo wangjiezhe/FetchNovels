@@ -29,15 +29,14 @@ class SingleNovel(BaseNovel):
         self.title_sel = title_sel
         self.title_type = title_type
 
-    def run(self):
+    def run(self, refresh=False):
+        if self.running and not refresh:
+            return
         self.refine = self.tool().refine
         self.doc = self.get_doc()
         self.title = self.get_title()
+        self.content = self.get_content()
         self.running = True
-
-    def confirm_run(self):
-        if not self.running:
-            self.run()
 
     @retry(HTTPError)
     def get_doc(self):
@@ -57,7 +56,6 @@ class SingleNovel(BaseNovel):
             raise ValueNotSetError('title_type')
 
     def get_content(self):
-        self.confirm_run()
         if self.cont_sel is None:
             raise MethodNotSetError('get_content')
         content = '\n\n\n\n'.join(
@@ -68,11 +66,10 @@ class SingleNovel(BaseNovel):
         return content
 
     def dump(self, overwrite=True):
-        self.confirm_run()
+        self.run()
         print(self.title)
         filename = get_filename(self.title, overwrite=overwrite)
-        content = self.get_content()
         with open(filename, 'w') as fp:
             fp.write(self.title)
             fp.write('\n\n\n\n')
-            fp.write(content)
+            fp.write(self.content)
