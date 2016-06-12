@@ -10,6 +10,7 @@ import re
 import sqlite3
 import string
 import sys
+from multiprocessing.dummy import Pool
 from urllib.parse import urlparse, urlunparse
 
 from .error import Error
@@ -196,10 +197,15 @@ def in_main(NovelClass, proxies=None, overwrite=True):
     if len(tids) == 0:
         print('No specific tid!')
         sys.exit(1)
-    for tid in tids:
+
+    def dump(tid):
         nov = NovelClass(tid)
         nov.proxies = proxies
         nov.dump(overwrite=overwrite)
+
+    num = len(tids)
+    with Pool(num) as p:
+        p.map(dump, tids)
 
 
 class SqlHelper():
