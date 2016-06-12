@@ -20,8 +20,6 @@ from .utils import get_base_url, fix_order, SqlHelper, get_filename
 
 class Page(BaseNovel):
 
-    running = False
-
     def __init__(self, url, title, selector,
                  headers=None, proxies=None,
                  encoding=None, tool=None):
@@ -30,9 +28,7 @@ class Page(BaseNovel):
         self.selector = selector
 
     def run(self, refresh=False):
-        if self.running and not refresh:
-            return
-        self.refine = self.tool().refine
+        super().run(refresh=refresh)
         self.doc = self.get_doc()
         self.content = self.get_content()
         self.running = True
@@ -70,8 +66,6 @@ class Page(BaseNovel):
 
 class IntroPage(BaseNovel):
 
-    running = False
-
     def __init__(self, url, selector,
                  headers=None, proxies=None, encoding=None,
                  tool=None):
@@ -79,9 +73,7 @@ class IntroPage(BaseNovel):
         self.selector = selector
 
     def run(self, refresh=False):
-        if self.running and not refresh:
-            return
-        self.refine = self.tool().refine
+        super().run(refresh=refresh)
         self.doc = self.get_doc()
         self.content = self.get_content()
         self.running = True
@@ -117,8 +109,6 @@ class ChapterType(Enum):
 
 class SerialNovel(BaseNovel):
 
-    running = False
-
     def __init__(self, url, cont_sel,
                  intro_url=None, intro_sel=None,
                  chap_sel=None, chap_type=None):
@@ -132,9 +122,7 @@ class SerialNovel(BaseNovel):
         self.chap_type = chap_type
 
     def run(self, refresh=False, parallel=True):
-        if self.running and not refresh:
-            return
-        self.refine = self.tool().refine
+        super().run(refresh=refresh)
         self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
 

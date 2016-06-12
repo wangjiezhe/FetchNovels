@@ -23,9 +23,13 @@ class DoubanGroup(BaseNovel):
     def __init__(self, topic_id):
         super().__init__(base_to_url(BASE_URL, topic_id))
         self.comments_url = base_to_url(COMMENTS_URL, topic_id)
+
+    def run(self):
         self.req = requests.get(
             self.url, headers=self.headers, proxies=self.proxies
         ).json()
+        self.content = self.get_content()
+        self.running = True
 
     @property
     def title(self):
@@ -65,11 +69,12 @@ class DoubanGroup(BaseNovel):
         return content
 
     def dump(self, overwrite=True):
+        self.run()
         print(self.title)
         filename = '{self.title}.txt'.format(self=self)
         filename = filename.replace('/', '_')
         with open(filename, 'w') as fp:
-            fp.write(self.get_content())
+            fp.write(self.content)
 
 
 def main():

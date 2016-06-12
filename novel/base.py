@@ -16,6 +16,13 @@ class BaseNovel(ABC):
         self._proxies = proxies
         self.encoding = encoding
         self.tool = tool or Tool
+        self.running = False
+
+    def run(self, refresh=False):
+        if self.running and not refresh:
+            return
+        self.refine = self.tool().refine
+        # self.running = True
 
     @property
     def headers(self):

@@ -19,8 +19,6 @@ class TitleType(Enum):
 
 class SingleNovel(BaseNovel):
 
-    running = False
-
     def __init__(self, url, cont_sel,
                  title_sel=None, title_type=None):
         super().__init__(url)
@@ -30,9 +28,7 @@ class SingleNovel(BaseNovel):
         self.title_type = title_type
 
     def run(self, refresh=False):
-        if self.running and not refresh:
-            return
-        self.refine = self.tool().refine
+        super().run(refresh=refresh)
         self.doc = self.get_doc()
         self.title = self.get_title()
         self.content = self.get_content()
