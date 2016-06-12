@@ -217,8 +217,7 @@ class SerialNovel(BaseNovel):
                             "《{self.title}》{self.author}".format(self=self))
 
     def dump_split(self):
-        if not self.running:
-            self.run()
+        self.confirm_run()
         if not os.path.isdir(self.download_dir):
             os.makedirs(self.download_dir)
         print('《{self.title}》{self.author}'.format(self=self))
@@ -234,8 +233,7 @@ class SerialNovel(BaseNovel):
         page.dump(folder=self.download_dir, num=num)
 
     def dump(self, overwrite=True):
-        if not self.running:
-            self.run()
+        self.confirm_run()
         if overwrite:
             filename = '《{self.title}》{self.author}.txt'.format(self=self)
         else:
