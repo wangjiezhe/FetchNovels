@@ -166,7 +166,7 @@ class SerialNovel(BaseNovel):
         print(title)
         page = self.page(
             url, title, self.cont_sel,
-            self.headers, self.proxies,
+            None, self.proxies,
             self.encoding, self.tool
         )
         page.run()
@@ -237,7 +237,7 @@ class SerialNovel(BaseNovel):
         else:
             intro_page = self.intro_page(
                 self.intro_url, self.intro_sel,
-                self.headers, self.proxies, self.encoding,
+                None, self.proxies, self.encoding,
                 self.tool)
             intro_page.run()
             return intro_page.content

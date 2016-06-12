@@ -11,8 +11,10 @@ import sqlite3
 import string
 import sys
 from multiprocessing.dummy import Pool
+from random import randrange
 from urllib.parse import urlparse, urlunparse
 
+from .const import UAS
 from .error import Error
 
 
@@ -184,6 +186,12 @@ def get_filename(title, author=None, overwrite=True):
                 if not os.path.exists(filename):
                     break
     return filename
+
+
+def get_headers():
+    ua = randrange(len(UAS))
+    headers = {'User-Agent': ua}
+    return headers
 
 
 def in_main(NovelClass, proxies=None, overwrite=True):

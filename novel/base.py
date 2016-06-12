@@ -3,8 +3,7 @@
 
 from abc import ABC, abstractmethod
 
-from .const import HEADERS
-from .utils import Tool
+from .utils import Tool, get_headers
 
 
 class BaseNovel(ABC):
@@ -13,7 +12,7 @@ class BaseNovel(ABC):
                  headers=None, proxies=None,
                  encoding=None, tool=None):
         self.url = url
-        self._headers = headers or HEADERS
+        self._headers = headers or get_headers()
         self._proxies = proxies
         self.encoding = encoding
         self.tool = tool or Tool
