@@ -141,18 +141,25 @@ class SerialNovel(BaseNovel):
         self.db_name = os.path.join(gettempdir(),
                                     '{self.title}.db'.format(self=self))
         self.db = SqlHelper(self.db_name)
-        self.db.create_table('''CREATE TABLE IF NOT EXISTS chapters
-                                (id INTEGER PRIMARY KEY,
-                                 url TEXT,
-                                 title NTEXT,
-                                 text NTEXT)''')
-        self.db.insert_many_data('INSERT OR IGNORE INTO chapters(id, url, title) VALUES (?, ?, ?)',
-                                 self.chapter_list)
+        self.db.create_table(
+            '''CREATE TABLE IF NOT EXISTS chapters
+               (id INTEGER PRIMARY KEY,
+                url TEXT,
+                title NTEXT,
+                text NTEXT)'''
+        )
+        self.db.insert_many_data(
+            'INSERT OR IGNORE INTO chapters(id, url, title) VALUES (?, ?, ?)',
+            self.chapter_list
+        )
+        self.db.insert_data(
+            'INSERT OR IGNORE INTO chapters VALUES (?, ?, ?, ?)',
+            (-1, self.intro_url or self.url, 'Introduction', self.get_intro())
+        )
 
-        self.db.insert_data('INSERT OR IGNORE INTO chapters VALUES (?, ?, ?, ?)',
-                            (-1, self.intro_url or self.url, 'Introduction', self.get_intro()))
-
-        cursors = self.db.select_data('SELECT id, url, title FROM chapters WHERE text IS NULL')
+        cursors = self.db.select_data(
+            'SELECT id, url, title FROM chapters WHERE text IS NULL'
+        )
         if parallel:
             with Pool(100) as p:
                 p.starmap(self.update_chapter, cursors)
@@ -170,8 +177,10 @@ class SerialNovel(BaseNovel):
             self.encoding, self.tool
         )
         page.run()
-        self.db.update_data('UPDATE chapters SET text=? WHERE id=?',
-                            (page.content, i))
+        self.db.update_data(
+            'UPDATE chapters SET text=? WHERE id=?',
+            (page.content, i)
+        )
 
     def close(self):
         self.db.close()
@@ -281,11 +290,15 @@ class SerialNovel(BaseNovel):
             fp.write(self.author)
 
             fp.write('\n\n\n')
-            cursor = self.db.select_data('SELECT text FROM chapters WHERE id=-1')
+            cursor = self.db.select_data(
+                'SELECT text FROM chapters WHERE id=-1'
+            )
             intro = cursor.fetchone()[0]
             fp.write(intro)
 
-            cursors = self.db.select_data('SELECT * FROM chapters WHERE id>=0')
+            cursors = self.db.select_data(
+                'SELECT * FROM chapters WHERE id>=0'
+            )
             for i, _, title, text in cursors:
                 fp.write('\n\n\n\n')
                 fp.write(title)

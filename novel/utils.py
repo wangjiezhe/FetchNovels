@@ -250,7 +250,7 @@ class SqlHelper():
 
     def select_data(self, sql, parameters=None):
         try:
-            self.cursor =  self.conn.execute(sql, parameters or ())
+            self.cursor = self.conn.execute(sql, parameters or ())
             return self.cursor
         except Exception as e:
             print('select data: {}'.format(e))
