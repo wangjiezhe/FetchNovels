@@ -4,6 +4,7 @@
 import os
 from abc import abstractmethod
 from enum import Enum
+from multiprocessing.dummy import Pool
 from urllib.error import HTTPError
 from urllib.parse import urljoin
 
@@ -149,20 +150,24 @@ class SerialNovel(BaseNovel):
         self.db.insert_many_data('INSERT INTO chapters(id, url, title) VALUES (?, ?, ?)',
                                  self.chapter_list)
 
-        cursors = self.db.select_data('SELECT * from chapters')
-        for i, url, title, _ in cursors:
-            page = self.page(
-                url, title, self.cont_sel,
-                self.headers, self.proxies,
-                self.encoding, self.tool
-            )
-            content = page.get_content()
-            self.db.update_data('UPDATE chapters SET text=? WHERE id=?', (content, i))
-
         self.db.insert_data('INSERT INTO chapters VALUES (?, ?, ?, ?)',
                             (-1, self.intro_url or self.url, 'Introduction', self.get_intro()))
 
+        cursors = self.db.select_data('SELECT id, url, title FROM chapters WHERE text IS NULL')
+        with Pool(10) as p:
+            p.starmap(self.update_chapter, cursors.fetchall())
+
         self.running = True
+
+    def update_chapter(self, i, url, title):
+        print(title)
+        page = self.page(
+            url, title, self.cont_sel,
+            self.headers, self.proxies,
+            self.encoding, self.tool
+        )
+        content = page.get_content()
+        self.db.update_data('UPDATE chapters SET text=? WHERE id=?', (content, i))
 
     def close(self):
         self.db.close()
@@ -244,7 +249,7 @@ class SerialNovel(BaseNovel):
             os.makedirs(download_dir)
         print('《{self.title}》{self.author}'.format(self=self))
 
-        cursors = self.db.select_data('SELECT * from chapters')
+        cursors = self.db.select_data('SELECT * FROM chapters')
         for i, _, title, text in cursors:
             if title == 'Introduction':
                 filename = '{}.txt'.format(title)
@@ -273,7 +278,13 @@ class SerialNovel(BaseNovel):
             fp.write(self.title)
             fp.write('\n\n')
             fp.write(self.author)
-            cursors = self.db.select_data('SELECT * from chapters')
+
+            fp.write('\n\n\n')
+            cursor = self.db.select_data('SELECT text FROM chapters WHERE id=-1')
+            intro = cursor.fetchone()[0]
+            fp.write(intro)
+
+            cursors = self.db.select_data('SELECT * FROM chapters WHERE id>=0')
             for i, _, title, text in cursors:
                 fp.write('\n\n\n\n')
                 fp.write(title)
