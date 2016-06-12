@@ -5,6 +5,7 @@ import re
 from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
+from selenium import webdriver
 
 from novel import serial, utils, const
 
@@ -18,7 +19,26 @@ class PiaotianPage(serial.Page):
         content = self.doc.html()
         pat = re.compile(r'.*<!-- 标题上AD结束 -->(.*)<!-- 翻页上AD开始 -->.*',
                          re.S)
-        content = re.match(pat, content).group(1)
+        try:
+            content = re.match(pat, content).group(1)
+        except AttributeError:
+            if 'http' in self.proxies:
+                service_args = [
+                    '--proxy=' + self.proxies['http'],
+                    '--proxy-type=http'
+                ]
+            else:
+                service_args = None
+            driver = webdriver.PhantomJS(service_args=service_args)
+            driver.get(self.url)
+            driver.execute_script('''
+                var element = document.querySelector(".toplink");
+                if (element)
+                    element.parentNode.removeChild(element);
+            ''')
+            content = driver.find_element_by_id('content').text
+            driver.close()
+            return content
         content = self.refine(content)
         return content
 
