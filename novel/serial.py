@@ -14,7 +14,7 @@ from pyquery import PyQuery as Pq
 from .base import BaseNovel
 from .decorators import retry
 from .error import PropertyNotSetError, ValueNotSetError
-from .utils import get_base_url, fix_order
+from .utils import get_base_url, fix_order, SqlHelper
 
 
 class Page(BaseNovel):
@@ -134,15 +134,40 @@ class SerialNovel(BaseNovel):
         self.chap_sel = chap_sel
         self.chap_type = chap_type
 
-    def run(self):
+    def run(self, refresh=False):
+        if self.running and not refresh:
+            return
         self.refine = self.tool().refine
         self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
+
+        self.db = SqlHelper(':memory:')
+        self.db.create_table('''CREATE TABLE chapters
+                                (id INTEGER PRIMARY KEY,
+                                 url TEXT,
+                                 title NTEXT,
+                                 text NTEXT)''')
+        self.db.insert_many_data('INSERT INTO chapters(id, url, title) VALUES (?, ?, ?)',
+                                 self.chapter_list)
+
+        self.db.insert_data('INSERT INTO chapters VALUES (?, ?, ?, ?)',
+                            (-1, self.intro_url or self.url, 'Introduction', self.get_intro()))
+
+        cursors = self.db.select_data('SELECT * from chapters')
+        for i, url, title, _ in cursors:
+            page = self.page(
+                url, title, self.cont_sel,
+                self.headers, self.proxies,
+                self.encoding, self.tool
+            )
+            content = page.get_content()
+            self.db.update_data('UPDATE chapters SET text=? WHERE id=?', (content, i))
+
         self.running = True
 
-    def confirm_run(self):
-        if not self.running:
-            self.run()
+    def close(self):
+        self.db.close()
+        self.running = False
 
     @retry((HTTPError, XMLSyntaxError))
     def get_doc(self):
@@ -155,7 +180,6 @@ class SerialNovel(BaseNovel):
 
     @property
     def chapter_list(self):
-        self.confirm_run()
         if self.chap_sel and self.chap_type:
             return self.chapter_list_with_sel(self.chap_sel, self.chap_type)
         raise PropertyNotSetError('chapter_list')
@@ -196,7 +220,6 @@ class SerialNovel(BaseNovel):
 
     @retry(HTTPError)
     def get_intro(self):
-        self.confirm_run()
         if self.intro_url is None:
             if self.intro_sel is None:
                 return ''
@@ -216,51 +239,53 @@ class SerialNovel(BaseNovel):
         return os.path.join(os.getcwd(),
                             "《{self.title}》{self.author}".format(self=self))
 
-    def dump_split(self):
-        self.confirm_run()
-        if not os.path.isdir(self.download_dir):
-            os.makedirs(self.download_dir)
+    def _dump_split(self):
+        download_dir = self.download_dir
+        if not os.path.isdir(download_dir):
+            os.makedirs(download_dir)
         print('《{self.title}》{self.author}'.format(self=self))
-        for i, url, title in self.chapter_list:
-            self.dump_chapter(url, title, i + 1)
 
-    @retry(HTTPError)
-    def dump_chapter(self, url, title, num):
-        page = self.page(
-            url, title, self.cont_sel,
-            self.headers, self.proxies, self.encoding,
-            self.tool)
-        page.dump(folder=self.download_dir, num=num)
+        cursors = self.db.select_data('SELECT * from chapters')
+        for i, _, title, text in cursors:
+            if title == 'Introduction':
+                filename = '{}.txt'.format(title)
+            else:
+                filename = '「{:d}」{}.txt'.format(i,title)
+            path = os.path.join(download_dir, filename)
+            with open(path, 'w') as fp:
+                fp.write(title)
+                fp.write('\n\n\n\n')
+                fp.write(text)
+                fp.write('\n')
 
-    def dump(self, overwrite=True):
-        self.confirm_run()
+    def dump_split(self):
+        self.run()
+        self._dump_split()
+        self.close()
+
+    def _dump(self, overwrite=True):
         if overwrite:
             filename = '《{self.title}》{self.author}.txt'.format(self=self)
         else:
             filename = self.get_filename()
         print(filename)
+
         with open(filename, 'w') as fp:
             fp.write(self.title)
             fp.write('\n\n')
             fp.write(self.author)
-            fp.write('\n\n\n')
-            fp.write(self.get_intro())
-            for _, url, title in self.chapter_list:
-                content = self.get_chapter(url, title)
+            cursors = self.db.select_data('SELECT * from chapters')
+            for i, _, title, text in cursors:
                 fp.write('\n\n\n\n')
-                print(title)
                 fp.write(title)
                 fp.write('\n\n\n')
-                fp.write(content)
+                fp.write(text)
                 fp.write('\n')
 
-    @retry(HTTPError)
-    def get_chapter(self, url, title):
-        page = self.page(
-            url, title, self.cont_sel,
-            self.headers, self.proxies, self.encoding,
-            self.tool)
-        return page.get_content()
+    def dump(self, overwrite=True):
+        self.run()
+        self.dump(overwrite=overwrite)
+        self.close()
 
     def get_filename(self):
         filename = '《{self.title}》{self.author}.txt'.format(self=self)

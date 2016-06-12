@@ -10,6 +10,8 @@ import string
 import sys
 from urllib.parse import urlparse, urlunparse
 
+import sqlite3
+
 from .error import Error
 
 
@@ -182,3 +184,49 @@ def in_main(NovelClass, proxies=None, overwrite=True):
         nov = NovelClass(tid)
         nov.proxies = proxies
         nov.dump(overwrite=overwrite)
+
+
+class SqlHelper():
+
+    def __init__(self, db):
+        self.conn = sqlite3.connect(db, check_same_thread=False)
+
+    def create_table(self, sql):
+        try:
+            self.conn.execute(sql)
+        except Exception as e:
+            print('create table: {}'.format(e))
+
+    def insert_data(self, sql, parameters=None):
+        try:
+            self.conn.execute(sql, parameters)
+            self.conn.commit()
+        except Exception as e:
+            print('insert data: {}'.format(e))
+
+    def insert_many_data(self, sql, parameters=None):
+        try:
+            self.conn.executemany(sql, parameters)
+            self.conn.commit()
+        except Exception as e:
+            print('insert many data: {}'.format(e))
+
+    def update_data(self, sql, parameters=None):
+        try:
+            self.conn.execute(sql, parameters)
+            self.conn.commit()
+        except Exception as e:
+            print('update data: {}'.format(e))
+
+    def select_data(self, sql, parameters=None):
+        try:
+            self.cursor =  self.conn.execute(sql, parameters or ())
+            return self.cursor
+        except Exception as e:
+            print('select data: {}'.format(e))
+
+    def close(self):
+        try:
+            self.conn.close()
+        except Exception as e:
+            print('close connection: {}'.format(e))
