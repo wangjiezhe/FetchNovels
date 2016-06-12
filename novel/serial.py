@@ -149,9 +149,6 @@ class SerialNovel(BaseNovel):
         self.db.insert_many_data('INSERT INTO chapters(id, url, title) VALUES (?, ?, ?)',
                                  self.chapter_list)
 
-        self.db.insert_data('INSERT INTO chapters VALUES (?, ?, ?, ?)',
-                            (-1, self.intro_url or self.url, 'Introduction', self.get_intro()))
-
         cursors = self.db.select_data('SELECT * from chapters')
         for i, url, title, _ in cursors:
             page = self.page(
@@ -161,6 +158,9 @@ class SerialNovel(BaseNovel):
             )
             content = page.get_content()
             self.db.update_data('UPDATE chapters SET text=? WHERE id=?', (content, i))
+
+        self.db.insert_data('INSERT INTO chapters VALUES (?, ?, ?, ?)',
+                            (-1, self.intro_url or self.url, 'Introduction', self.get_intro()))
 
         self.running = True
 
@@ -283,5 +283,5 @@ class SerialNovel(BaseNovel):
 
     def dump(self, overwrite=True):
         self.run()
-        self.dump(overwrite=overwrite)
+        self._dump(overwrite=overwrite)
         self.close()
