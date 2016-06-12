@@ -154,7 +154,7 @@ class SerialNovel(BaseNovel):
                             (-1, self.intro_url or self.url, 'Introduction', self.get_intro()))
 
         cursors = self.db.select_data('SELECT id, url, title FROM chapters WHERE text IS NULL')
-        with Pool(10) as p:
+        with Pool(100) as p:
             p.starmap(self.update_chapter, cursors.fetchall())
 
         self.running = True
