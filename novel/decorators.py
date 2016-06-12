@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import traceback
-from time import sleep
 from functools import wraps
+from time import sleep
 
 
 def retry(ExceptionToTrack, tries=5, delay=5):
@@ -16,7 +16,7 @@ def retry(ExceptionToTrack, tries=5, delay=5):
                     return func(*args, **kwargs)
                 except ExceptionToTrack:
                     traceback.print_exc()
-                    print("Wait {:d} seconds to retry ...".format(m_delay))
+                    print('Wait {:d} seconds to retry ...'.format(m_delay))
                     sleep(m_delay)
                     m_delay *= 2
             return func(*args, **kwargs)

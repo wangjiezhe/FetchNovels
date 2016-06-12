@@ -18,22 +18,22 @@ class NotSetError(Error):
         self.value = value
 
     def __repr__(self):
-        return "{self.value} {self.message} not set.".format(self=self)
+        return '{self.value} {self.message} not set.'.format(self=self)
 
 
 class ValueNotSetError(NotSetError):
 
     def __init__(self, message):
-        super().__init__("Value", message)
+        super().__init__('Value', message)
 
 
 class MethodNotSetError(NotSetError):
 
     def __init__(self, message):
-        super().__init__("Method", message)
+        super().__init__('Method', message)
 
 
 class PropertyNotSetError(NotSetError):
 
     def __init__(self, message):
-        super().__init__("Property", message)
+        super().__init__('Property', message)
