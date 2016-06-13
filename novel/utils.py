@@ -11,8 +11,12 @@ import sqlite3
 import string
 import sys
 from multiprocessing.dummy import Pool
+from queue import Queue
 from random import randrange
+from threading import Thread
+from time import sleep
 from urllib.parse import urlparse, urlunparse
+from uuid import uuid4
 
 from .const import UAS
 from .error import Error
@@ -216,47 +220,78 @@ def in_main(NovelClass, proxies=None, overwrite=True):
         p.map(dump, tids)
 
 
-class SqlHelper():
+def is_sql_select(sql):
+    return sql.lower().strip().startswith('select')
+
+
+class SqlHelper(Thread):
 
     def __init__(self, db):
-        self.conn = sqlite3.connect(db, check_same_thread=False)
+        super().__init__()
+        self.db = db
+        self.queue = Queue()
+        self.results = {}
+        self.exit = False
+        self.exit_token = str(uuid4())
+        self.conn = sqlite3.connect(self.db, check_same_thread=False)
+        self.cursor = self.conn.cursor()
+        self.start()
 
-    def create_table(self, sql):
-        try:
-            self.conn.execute(sql)
-        except Exception as e:
-            print('create table: {}'.format(e))
+    def run(self):
+        for token, sql, args, many in iter(self.queue.get, None):
+            if token != self.exit_token:
+                self.query(token, sql, args, many)
+                if self.queue.empty():
+                    self.conn.commit()
 
-    def insert_data(self, sql, parameters=None):
-        try:
-            self.conn.execute(sql, parameters)
-            self.conn.commit()
-        except Exception as e:
-            print('insert data: {}'.format(e))
-
-    def insert_many_data(self, sql, parameters=None):
-        try:
-            self.conn.executemany(sql, parameters)
-            self.conn.commit()
-        except Exception as e:
-            print('insert many data: {}'.format(e))
-
-    def update_data(self, sql, parameters=None):
-        try:
-            self.conn.execute(sql, parameters)
-            self.conn.commit()
-        except Exception as e:
-            print('update data: {}'.format(e))
-
-    def select_data(self, sql, parameters=None):
-        try:
-            self.cursor = self.conn.execute(sql, parameters or ())
-            return self.cursor
-        except Exception as e:
-            print('select data: {}'.format(e))
+            if self.exit and self.queue.empty():
+                self.conn.commit()
+                self.conn.close()
+                return
 
     def close(self):
-        try:
-            self.conn.close()
-        except Exception as e:
-            print('close connection: {}'.format(e))
+        self.exit = True
+        self.queue.put((self.exit_token, '', (), 1))
+
+    def query(self, token, sql, args, many):
+        if is_sql_select(sql):
+            try:
+                if many:
+                    self.cursor.executemany(sql, args)
+                else:
+                    self.cursor.execute(sql, args)
+                self.results[token] = self.cursor.fetchall()
+            except sqlite3.Error as e:
+                self.results[token] = (
+                    'Query error: {}: {}: {}'.format(sql, args, e))
+        else:
+            try:
+                if many:
+                    self.cursor.executemany(sql, args)
+                else:
+                    self.cursor.execute(sql, args)
+            except sqlite3.Error as e:
+                print('Query error: {}: {}: {}'.format(sql, args, e))
+
+
+    def query_result(self, token):
+        delay = 0.001
+        while True:
+            if token in self.results:
+                return self.results.pop(token)
+            sleep(delay)
+            if delay < 8:
+                delay += delay
+
+    def execute(self, sql=None, args=None, many=False):
+        sql = sql or ''
+        args = args or ()
+        token = str(uuid4())
+        if is_sql_select(sql):
+            self.queue.put((token, sql, args, many))
+            return self.query_result(token)
+        else:
+            self.queue.put((token, sql, args, many))
+
+    def executemany(self, sql=None, args=None):
+        self.execute(sql, args, many=True)

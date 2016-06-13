@@ -129,43 +129,43 @@ class SerialNovel(BaseNovel):
         self.db_name = os.path.join(gettempdir(),
                                     '{self.title}.db'.format(self=self))
         self.db = SqlHelper(self.db_name)
-        self.db.create_table(
+        self.db.execute(
             '''CREATE TABLE IF NOT EXISTS chapters
                (id INTEGER PRIMARY KEY,
                 url TEXT,
                 title NTEXT,
                 text NTEXT)'''
         )
-        self.db.insert_many_data(
+        self.db.executemany(
             'INSERT OR IGNORE INTO chapters(id, url, title) VALUES (?, ?, ?)',
             self.chapter_list
         )
-        self.db.insert_data(
+        self.db.execute(
             'INSERT OR IGNORE INTO chapters VALUES (?, ?, ?, ?)',
             (-1, self.intro_url or self.url, 'Introduction', self.get_intro())
         )
 
-        cursors = self.db.select_data(
+        empty_chapters = self.db.execute(
             'SELECT id, url, title FROM chapters WHERE text IS NULL'
         )
         if parallel:
             with Pool(100) as p:
-                p.starmap(self.update_chapter, cursors)
+                p.starmap(self.update_chapter, empty_chapters)
         else:
-            for line in cursors:
+            for line in empty_chapters:
                 self.update_chapter(*line)
 
         self.running = True
 
     def update_chapter(self, i, url, title):
-        print(title)
+        # print(title)
         page = self.page(
             url, title, self.cont_sel,
             None, self.proxies,
             self.encoding, self.tool
         )
         page.run()
-        self.db.update_data(
+        self.db.execute(
             'UPDATE chapters SET text=? WHERE id=?',
             (page.content, i)
         )
@@ -250,7 +250,7 @@ class SerialNovel(BaseNovel):
             os.makedirs(download_dir)
         print('《{self.title}》{self.author}'.format(self=self))
 
-        cursors = self.db.select_data('SELECT * FROM chapters')
+        cursors = self.db.execute('SELECT * FROM chapters')
         for i, _, title, text in cursors:
             if title == 'Introduction':
                 filename = '{}.txt'.format(title)
@@ -278,16 +278,15 @@ class SerialNovel(BaseNovel):
             fp.write(self.author)
 
             fp.write('\n\n\n')
-            cursor = self.db.select_data(
+            intro = self.db.execute(
                 'SELECT text FROM chapters WHERE id=-1'
-            )
-            intro = cursor.fetchone()[0]
+            )[0][0]
             fp.write(intro)
 
-            cursors = self.db.select_data(
+            chapters = self.db.execute(
                 'SELECT * FROM chapters WHERE id>=0'
             )
-            for i, _, title, text in cursors:
+            for i, _, title, text in chapters:
                 fp.write('\n\n\n\n')
                 fp.write(title)
                 fp.write('\n\n\n')
