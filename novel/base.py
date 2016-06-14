@@ -18,6 +18,8 @@ class BaseNovel(ABC):
         self.tool = tool or Tool
         self.running = False
 
+        self.refine = None
+
     def run(self, refresh=False):
         if self.running and not refresh:
             return

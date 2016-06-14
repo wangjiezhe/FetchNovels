@@ -28,6 +28,9 @@ class Page(BaseNovel):
         self.title = title
         self.selector = selector
 
+        self.doc = None
+        self.content = ''
+
     def run(self, refresh=False):
         super().run(refresh=refresh)
         self.doc = self.get_doc()
@@ -72,6 +75,9 @@ class IntroPage(BaseNovel):
                  tool=None):
         super().__init__(url, headers, proxies, encoding, tool)
         self.selector = selector
+
+        self.doc = None
+        self.content = ''
 
     def run(self, refresh=False):
         super().run(refresh=refresh)
@@ -121,6 +127,9 @@ class SerialNovel(BaseNovel):
         self.intro_page = IntroPage
         self.chap_sel = chap_sel
         self.chap_type = chap_type
+
+        self.doc = self.db = None
+        self.title = self.author = self.db_name = ''
 
     def run(self, refresh=False, parallel=True):
         super().run(refresh=refresh)
@@ -258,7 +267,7 @@ class SerialNovel(BaseNovel):
             if title == 'Introduction':
                 filename = '{}.txt'.format(title)
             else:
-                filename = '「{:d}」{}.txt'.format(i,title)
+                filename = '「{:d}」{}.txt'.format(i, title)
             path = os.path.join(download_dir, filename)
             with open(path, 'w') as fp:
                 fp.write(title)
