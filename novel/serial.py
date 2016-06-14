@@ -12,11 +12,15 @@ from urllib.parse import urljoin
 
 from lxml.etree import XMLSyntaxError
 from pyquery import PyQuery as Pq
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
+from .models import Novel, Chapter, Base
 from .base import BaseNovel
 from .decorators import retry
 from .error import PropertyNotSetError, ValueNotSetError
-from .utils import get_base_url, fix_order, SqlHelper, get_filename
+from .utils import get_base_url, fix_order, get_filename
 
 
 class Page(BaseNovel):
@@ -120,6 +124,7 @@ class SerialNovel(BaseNovel):
                  intro_url=None, intro_sel=None,
                  chap_sel=None, chap_type=None):
         super().__init__(url)
+        self.tid = 1
         self.cont_sel = cont_sel
         self.intro_url = intro_url
         self.intro_sel = intro_sel
@@ -128,7 +133,7 @@ class SerialNovel(BaseNovel):
         self.chap_sel = chap_sel
         self.chap_type = chap_type
 
-        self.doc = self.db = None
+        self.doc = self.session = None
         self.title = self.author = self.db_name = ''
 
     def run(self, refresh=False, parallel=True):
@@ -136,54 +141,53 @@ class SerialNovel(BaseNovel):
         self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
 
-        self.db_name = os.path.join(gettempdir(),
-                                    '{self.title}.db'.format(self=self))
-        self.db = SqlHelper(self.db_name)
-        self.db.execute(
-            '''CREATE TABLE IF NOT EXISTS chapters
-               (id INTEGER PRIMARY KEY,
-                url TEXT,
-                title TEXT,
-                text TEXT)'''
+        db_name = os.path.join(gettempdir(),
+                               '{self.title}.db'.format(self=self))
+        engine = create_engine(
+            'sqlite:///' + db_name,
+            connect_args={'check_same_thread': False},
+            poolclass=StaticPool
         )
-        self.db.executemany(
-            'INSERT OR IGNORE INTO chapters(id, url, title) VALUES (?, ?, ?)',
-            self.chapter_list
-        )
-        self.db.execute(
-            'INSERT OR IGNORE INTO chapters VALUES (?, ?, ?, ?)',
-            (-1, self.intro_url or self.url, 'Introduction', self.get_intro())
-        )
+        db_session = sessionmaker(bind=engine, autocommit=True)
+        self.session = db_session()
+        Base.metadata.create_all(engine)
 
-        empty_chapters = self.db.execute(
-            'SELECT id, url, title FROM chapters WHERE text IS NULL'
-        )
+        novel = self.session.query(Novel).filter_by(id=self.tid).first()
+
+        if not novel:
+            # noinspection PyArgumentList
+            novel = Novel(id=self.tid, title=self.title, author=self.author, intro=self.get_intro())
+            self.session.add(novel)
+
+            # noinspection PyArgumentList
+            novel.chapters = [Chapter(id=tid, title=title, url=url)
+                              for tid, url, title in self.chapter_list]
+
+        empty_chapters = self.session.query(Chapter).filter(Chapter.text.is_(None))
+
         if parallel:
             # with ThreadPoolExecutor(100) as e:
-            #     e.map(self.update_chapter, *(zip(*empty_chapters)))
+            #     e.map(self.update_chapter, empty_chapters)
             with Pool(100) as p:
-                p.starmap(self.update_chapter, empty_chapters, 10)
+                p.map(self.update_chapter, empty_chapters, 10)
         else:
-            for line in empty_chapters:
-                self.update_chapter(*line)
+            for ch in empty_chapters:
+                self.update_chapter(ch)
 
         self.running = True
 
-    def update_chapter(self, i, url, title):
-        # print(title)
+    def update_chapter(self, ch):
+        print(ch.title)
         page = self.page(
-            url, title, self.cont_sel,
+            ch.url, ch.title, self.cont_sel,
             None, self.proxies,
             self.encoding, self.tool
         )
         page.run()
-        self.db.execute(
-            'UPDATE chapters SET text=? WHERE id=?',
-            (page.content, i)
-        )
+        ch.text = page.content
 
     def close(self):
-        self.db.close()
+        self.session.close()
         self.running = False
 
     @retry((HTTPError, XMLSyntaxError))
@@ -262,17 +266,17 @@ class SerialNovel(BaseNovel):
             os.makedirs(download_dir)
         print('《{self.title}》{self.author}'.format(self=self))
 
-        cursors = self.db.execute('SELECT * FROM chapters')
-        for i, _, title, text in cursors:
-            if title == 'Introduction':
-                filename = '{}.txt'.format(title)
+        chapters = self.session.query(Chapter).all()
+        for ch in chapters:
+            if ch.title == 'Introduction':
+                filename = '{}.txt'.format(ch.title)
             else:
-                filename = '「{:d}」{}.txt'.format(i, title)
+                filename = '「{:d}」{}.txt'.format(ch.id, ch.title)
             path = os.path.join(download_dir, filename)
             with open(path, 'w') as fp:
-                fp.write(title)
+                fp.write(ch.title)
                 fp.write('\n\n\n\n')
-                fp.write(text)
+                fp.write(ch.text)
                 fp.write('\n')
 
     def dump_split(self):
@@ -290,19 +294,15 @@ class SerialNovel(BaseNovel):
             fp.write(self.author)
 
             fp.write('\n\n\n')
-            intro = self.db.execute(
-                'SELECT text FROM chapters WHERE id=-1'
-            )[0][0]
+            intro = self.session.query(Novel).filter_by(id=self.tid).one().intro
             fp.write(intro)
 
-            chapters = self.db.execute(
-                'SELECT * FROM chapters WHERE id>=0'
-            )
-            for i, _, title, text in chapters:
+            chapters = self.session.query(Chapter).all()
+            for ch in chapters:
                 fp.write('\n\n\n\n')
-                fp.write(title)
+                fp.write(ch.title)
                 fp.write('\n\n\n')
-                fp.write(text)
+                fp.write(ch.text)
                 fp.write('\n')
 
     def dump(self, overwrite=True):
