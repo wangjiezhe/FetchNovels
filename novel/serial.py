@@ -134,8 +134,8 @@ class SerialNovel(BaseNovel):
             '''CREATE TABLE IF NOT EXISTS chapters
                (id INTEGER PRIMARY KEY,
                 url TEXT,
-                title NTEXT,
-                text NTEXT)'''
+                title TEXT,
+                text TEXT)'''
         )
         self.db.executemany(
             'INSERT OR IGNORE INTO chapters(id, url, title) VALUES (?, ?, ?)',
