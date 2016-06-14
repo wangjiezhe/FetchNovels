@@ -8,7 +8,6 @@ from pyquery import PyQuery as Pq
 
 from .base import BaseNovel
 from .decorators import retry
-from .error import MethodNotSetError, ValueNotSetError
 from .utils import get_filename
 
 
@@ -41,7 +40,7 @@ class SingleNovel(BaseNovel):
 
     def get_title(self):
         if self.title_sel is None:
-            raise MethodNotSetError('get_title')
+            raise NotImplementedError('get_title')
         if self.title_type == TitleType.selector:
             return self.refine(self.doc(self.title_sel).html())
         elif self.title_type == TitleType.meta:
@@ -49,11 +48,11 @@ class SingleNovel(BaseNovel):
                 lambda i, e: Pq(e).attr(self.title_sel[0]) == self.title_sel[1]
             ).attr('content')
         else:
-            raise ValueNotSetError('title_type')
+            raise NameError('title_type')
 
     def get_content(self):
         if self.cont_sel is None:
-            raise MethodNotSetError('get_content')
+            raise NotImplementedError('get_content')
         content = '\n\n\n\n'.join(
             self.doc(self.cont_sel).map(
                 lambda i, e: self.refine(Pq(e).html())

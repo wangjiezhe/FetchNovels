@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, error, const, utils
+from novel import serial, const, utils
 
 BASE_URL = 'http://www.sto.cc/{}-1/'
 PAGE_URL = 'http://www.sto.cc/{}-{}/'
@@ -59,7 +59,7 @@ class Sto(serial.SerialNovel):
         if st.group(1) == self.tid:
             page_num = int(st.group(2))
         else:
-            raise error.Error('Something strange may happened.')
+            raise Exception('Something strange may happened.')
         return [(i+1, PAGE_URL.format(self.tid, i+1), '第{:d}頁'.format(i+1)) for i in range(page_num)]
 
     def get_intro(self):

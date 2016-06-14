@@ -19,7 +19,6 @@ from sqlalchemy.pool import StaticPool
 from .models import Novel, Chapter, Base
 from .base import BaseNovel
 from .decorators import retry
-from .error import PropertyNotSetError, ValueNotSetError
 from .utils import get_base_url, fix_order, get_filename
 
 
@@ -203,7 +202,7 @@ class SerialNovel(BaseNovel):
     def chapter_list(self):
         if self.chap_sel and self.chap_type:
             return self.chapter_list_with_sel(self.chap_sel, self.chap_type)
-        raise PropertyNotSetError('chapter_list')
+        raise NotImplementedError('chapter_list')
 
     def chapter_list_with_sel(self, selector, chap_type):
         clist = self.doc(selector).filter(
@@ -236,7 +235,7 @@ class SerialNovel(BaseNovel):
             )
             clist.sort(key=lambda s: int(s[0]))
         else:
-            raise ValueNotSetError('chap_type')
+            raise NameError('chap_type')
         return clist
 
     @retry(HTTPError)
