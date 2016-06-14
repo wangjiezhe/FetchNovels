@@ -10,10 +10,9 @@ import re
 import string
 import sys
 from multiprocessing.dummy import Pool
-from random import randrange
 from urllib.parse import urlparse, urlunparse
 
-from .config import UAS
+from .config import check_first
 
 
 class Tool(object):
@@ -186,12 +185,6 @@ def get_filename(title, author=None, overwrite=True):
     return filename
 
 
-def get_headers():
-    ua = randrange(len(UAS))
-    headers = {'User-Agent': ua}
-    return headers
-
-
 def in_main(NovelClass, proxies=None, overwrite=True):
     """
     A pre-defined main function
@@ -208,6 +201,8 @@ def in_main(NovelClass, proxies=None, overwrite=True):
         nov = NovelClass(tid)
         nov.proxies = proxies
         nov.dump(overwrite=overwrite)
+
+    check_first()
 
     num = len(tids)
     with Pool(num) as p:

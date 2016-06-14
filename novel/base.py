@@ -3,7 +3,8 @@
 
 from abc import ABC, abstractmethod
 
-from .utils import Tool, get_headers
+from .config import get_headers
+from .utils import Tool
 
 
 class BaseNovel(ABC):
