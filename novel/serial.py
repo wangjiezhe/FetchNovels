@@ -175,6 +175,16 @@ class SerialNovel(BaseNovel):
             # noinspection PyArgumentList
             novel.chapters = [Chapter(id=tid, title=title, url=url)
                               for tid, url, title in self.chapter_list]
+        else:
+            old_chapters_ids = self.session.query(Chapter.id).filter_by(
+                novel_id=self.tid, novel_source=self.get_source()
+            ).all()
+            old_chapters_ids = list(*zip(*old_chapters_ids))
+            # noinspection PyArgumentList
+            novel.chapters.extend(
+                [Chapter(id=cid, title=title, url=url)
+                 for cid, url, title in self.chapter_list
+                 if cid not in old_chapters_ids])
 
         empty_chapters = self.session.query(Chapter).filter(Chapter.text.is_(None))
 

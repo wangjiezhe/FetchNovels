@@ -15,5 +15,5 @@ Chrome/51.0.2704.84 Safari/537.36',
 Chrome/50.0.2661.76 YaBrowser/16.6.0.6383 (beta) Safari/537.36',
 )
 
-CACHE_DIR = '/tmp'
-DB_NAME = 'novel.db'
+CACHE_DIR = '~/.cache/novel/'
+DB_NAME = 'cache.db'
