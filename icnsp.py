@@ -12,7 +12,8 @@ class Icnsp(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#msgdiv',
                          None, '.noveldes',
                          chap_sel='.c_chapter td',
-                         chap_type=serial.ChapterType.path)
+                         chap_type=serial.ChapterType.path,
+                         tid=tid)
 
     def get_title_and_author(self):
         title = self.doc('.h2_subject').text()

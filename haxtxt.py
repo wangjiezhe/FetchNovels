@@ -12,7 +12,8 @@ class Haxtxt(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#BookText',
                          None, '.intro',
                          chap_sel='.chapterlist dd',
-                         chap_type=serial.ChapterType.last)
+                         chap_type=serial.ChapterType.last,
+                         tid=tid)
         self.encoding = const.GB
 
     def get_title_and_author(self):

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import *
+# from sqlalchemy import *
+from sqlalchemy import Column, Integer, String, Text, ForeignKeyConstraint
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy.orm import relationship
 
@@ -34,6 +35,7 @@ class Novel(Base):
     title = Column(String)
     author = Column(String)
     intro = Column(Text)
+    source = Column(String, primary_key=True)
 
     chapters = relationship('Chapter')
 
@@ -50,4 +52,10 @@ class Chapter(Base):
     title = Column(String)
     text = Column(Text)
 
-    novel_id = Column(Integer, ForeignKey('novel.id'))
+    novel_id = Column(Integer, primary_key=True)
+    novel_source = Column(String, primary_key=True)
+
+    ForeignKeyConstraint(
+        [novel_id, novel_source],
+        [Novel.id, Novel.source]
+    )

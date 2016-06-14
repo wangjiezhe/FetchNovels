@@ -24,7 +24,8 @@ class Yfzww(serial.SerialNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          chap_sel='#chapters li',
-                         chap_type=serial.ChapterType.path)
+                         chap_type=serial.ChapterType.path,
+                         tid=tid)
         self.tool = YfzwwTool
 
     def get_title_and_author(self):

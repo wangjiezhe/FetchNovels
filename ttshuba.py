@@ -17,7 +17,8 @@ class Ttshuba(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.zhangjieTXT',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
                          chap_sel='dd',
-                         chap_type=serial.ChapterType.last)
+                         chap_type=serial.ChapterType.last,
+                         tid=tid)
         self.encoding = const.GB
 
     def get_title_and_author(self):

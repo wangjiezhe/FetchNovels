@@ -16,7 +16,8 @@ class Dzxsw(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
-                         utils.base_to_url(INTRO_URL, tid), '#cintro')
+                         utils.base_to_url(INTRO_URL, tid), '#cintro',
+                         tid=tid)
 
     def get_title_and_author(self):
         name = self.doc('.title').text()

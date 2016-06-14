@@ -14,7 +14,8 @@ class Bgif2(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          None, '#description',
                          chap_sel='tbody td',
-                         chap_type=serial.ChapterType.path)
+                         chap_type=serial.ChapterType.path,
+                         tid=tid)
 
     def get_title_and_author(self):
         st = self.doc('title').text()

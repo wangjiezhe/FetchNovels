@@ -30,7 +30,8 @@ class Lwxs520(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
                          chap_sel='.bookinfo_td td',
-                         chap_type=serial.ChapterType.last)
+                         chap_type=serial.ChapterType.last,
+                         tid=tid)
         self.encoding = const.GB
         self.tool = Lwxs520Tool
 

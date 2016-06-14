@@ -25,7 +25,8 @@ class Yq123(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#TXT',
                          None, '.introtxt',
                          chap_sel='dd',
-                         chap_type=serial.ChapterType.last_rev)
+                         chap_type=serial.ChapterType.last_rev,
+                         tid=tid)
         self.encoding = const.GB
         self.tool = Yq123Tool
 

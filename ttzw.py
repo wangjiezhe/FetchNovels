@@ -14,7 +14,8 @@ class Ttzw(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          intro_sel='#intro',
                          chap_sel='dd',
-                         chap_type=serial.ChapterType.last)
+                         chap_type=serial.ChapterType.last,
+                         tid=tid)
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

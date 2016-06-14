@@ -16,7 +16,8 @@ class Shu69(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.yd_text2',
-                         utils.base_to_url(INTRO_URL, tid), '.jianjie')
+                         utils.base_to_url(INTRO_URL, tid), '.jianjie',
+                         tid=tid)
         self.encoding = const.GB
 
     def get_title_and_author(self):

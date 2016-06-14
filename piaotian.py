@@ -83,7 +83,8 @@ class Piaotian(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         utils.base_to_url(INTRO_URL, tid), None)
+                         utils.base_to_url(INTRO_URL, tid), None,
+                         tid=tid)
         self.encoding = const.GB
         self.tool = PiaotianTool
         self.page = PiaotianPage

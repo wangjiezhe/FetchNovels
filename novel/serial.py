@@ -6,7 +6,6 @@ from abc import abstractmethod
 # from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from multiprocessing.dummy import Pool
-from tempfile import gettempdir
 from urllib.error import HTTPError
 from urllib.parse import urljoin
 
@@ -16,6 +15,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from .const import CACHE_DIR, DB_NAME
 from .models import Novel, Chapter, Base
 from .base import BaseNovel
 from .decorators import retry
@@ -121,9 +121,10 @@ class SerialNovel(BaseNovel):
 
     def __init__(self, url, cont_sel,
                  intro_url=None, intro_sel=None,
-                 chap_sel=None, chap_type=None):
+                 chap_sel=None, chap_type=None,
+                 tid=None):
         super().__init__(url)
-        self.tid = 1
+        self.tid = tid
         self.cont_sel = cont_sel
         self.intro_url = intro_url
         self.intro_sel = intro_sel
@@ -131,19 +132,25 @@ class SerialNovel(BaseNovel):
         self.intro_page = IntroPage
         self.chap_sel = chap_sel
         self.chap_type = chap_type
+        self.db_name = os.path.join(CACHE_DIR, DB_NAME)
 
         self.doc = self.session = None
-        self.title = self.author = self.db_name = ''
+        self.title = self.author = ''
+
+    @classmethod
+    def get_source(cls):
+        return cls.__name__.lower()
+
+    def new_tid(self):
+        return self.session.query(Novel).filter(Novel.id < 0).count() - 1
 
     def run(self, refresh=False, parallel=True):
         super().run(refresh=refresh)
         self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
 
-        db_name = os.path.join(gettempdir(),
-                               '{self.title}.db'.format(self=self))
         engine = create_engine(
-            'sqlite:///' + db_name,
+            'sqlite:///' + self.db_name,
             connect_args={'check_same_thread': False},
             poolclass=StaticPool
         )
@@ -151,11 +158,18 @@ class SerialNovel(BaseNovel):
         self.session = db_session()
         Base.metadata.create_all(engine)
 
-        novel = self.session.query(Novel).filter_by(id=self.tid).first()
+        if self.tid:
+            novel = self.session.query(Novel).filter_by(
+                id=self.tid, source=self.get_source()
+            ).first()
+        else:
+            novel = None
+            self.tid = self.new_tid()
 
         if not novel:
             # noinspection PyArgumentList
-            novel = Novel(id=self.tid, title=self.title, author=self.author, intro=self.get_intro())
+            novel = Novel(id=self.tid, title=self.title, author=self.author,
+                          intro=self.get_intro(), source=self.get_source())
             self.session.add(novel)
 
             # noinspection PyArgumentList
@@ -293,7 +307,9 @@ class SerialNovel(BaseNovel):
             fp.write(self.author)
 
             fp.write('\n\n\n')
-            intro = self.session.query(Novel).filter_by(id=self.tid).one().intro
+            intro = self.session.query(Novel).filter_by(
+                id=self.tid, source=self.get_source()
+            ).one().intro
             fp.write(intro)
 
             chapters = self.session.query(Chapter).all()
