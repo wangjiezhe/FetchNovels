@@ -3,6 +3,7 @@
 
 import os
 from abc import abstractmethod
+# from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from multiprocessing.dummy import Pool
 from tempfile import gettempdir
@@ -149,8 +150,10 @@ class SerialNovel(BaseNovel):
             'SELECT id, url, title FROM chapters WHERE text IS NULL'
         )
         if parallel:
+            # with ThreadPoolExecutor(100) as e:
+            #     e.map(self.update_chapter, *(zip(*empty_chapters)))
             with Pool(100) as p:
-                p.starmap(self.update_chapter, empty_chapters)
+                p.starmap(self.update_chapter, empty_chapters, 10)
         else:
             for line in empty_chapters:
                 self.update_chapter(*line)
