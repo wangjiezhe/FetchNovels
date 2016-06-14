@@ -3,7 +3,7 @@
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, const, utils
+from novel import serial, config, utils
 
 BASE_URL = 'http://www.biquge.la/book/{}/'
 
@@ -15,7 +15,7 @@ class Biquge(serial.SerialNovel):
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(

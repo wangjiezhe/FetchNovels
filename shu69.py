@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.69shu.com/{}/'
 INTRO_URL = 'http://www.69shu.com/modules/article/jianjie.php?id={}'
@@ -18,7 +18,7 @@ class Shu69(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.yd_text2',
                          utils.base_to_url(INTRO_URL, tid), '.jianjie',
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
@@ -42,7 +42,7 @@ class Shu69(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Shu69, const.GOAGENT)
+    utils.in_main(Shu69, config.GOAGENT)
 
 
 if __name__ == '__main__':

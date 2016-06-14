@@ -3,7 +3,7 @@
 
 import re
 
-from novel import single, utils, const
+from novel import single, utils, config
 
 BASE_URL = 'http://www.cool18.com/bbs4/index.php?app=forum&act=threadview&tid={}'
 
@@ -29,7 +29,7 @@ class Cool18(single.SingleNovel):
 
 
 def main():
-    utils.in_main(Cool18, const.GOAGENT, overwrite=False)
+    utils.in_main(Cool18, config.GOAGENT, overwrite=False)
 
 
 if __name__ == '__main__':

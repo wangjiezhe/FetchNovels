@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.123yq.org/read/{}/{}/'
 
@@ -27,7 +27,7 @@ class Yq123(serial.SerialNovel):
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last_rev,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
         self.tool = Yq123Tool
 
     def get_title_and_author(self):
@@ -37,7 +37,7 @@ class Yq123(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Yq123, const.GOAGENT)
+    utils.in_main(Yq123, config.GOAGENT)
 
 
 if __name__ == '__main__':

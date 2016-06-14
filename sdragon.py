@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from novel import single, utils, const
+from novel import single, utils, config
 
 BASE_URL = 'http://ebook.s-dragon.org/forum/archiver/?tid-{}.html'
 
@@ -16,7 +16,7 @@ class Sdragon(single.SingleNovel):
 
 
 def main():
-    utils.in_main(Sdragon, const.GOAGENT)
+    utils.in_main(Sdragon, config.GOAGENT)
 
 
 if __name__ == '__main__':

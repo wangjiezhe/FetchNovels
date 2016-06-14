@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.zhaishu8.com/xiaoshuo/{}/{}/'
 INTRO_URL = 'http://www.zhaishu8.com/book/{}/index.aspx'
@@ -29,7 +29,7 @@ class Zhaishu8(serial.SerialNovel):
                          chap_sel='#BookText li',
                          chap_type=serial.ChapterType.last,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
         self.tool = Zhaishu8Tool
 
     def get_title_and_author(self):
@@ -39,7 +39,7 @@ class Zhaishu8(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Zhaishu8, const.GOAGENT)
+    utils.in_main(Zhaishu8, config.GOAGENT)
 
 
 if __name__ == '__main__':

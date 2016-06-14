@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.lwxs520.com/books/{}/{}/'
 INTRO_URL = 'http://www.lwxs520.com/book/{}/'
@@ -32,7 +32,7 @@ class Lwxs520(serial.SerialNovel):
                          chap_sel='.bookinfo_td td',
                          chap_type=serial.ChapterType.last,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
         self.tool = Lwxs520Tool
 
     def get_title_and_author(self):
@@ -60,7 +60,7 @@ class Lwxs520(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Lwxs520, const.GOAGENT)
+    utils.in_main(Lwxs520, config.GOAGENT)
 
 
 if __name__ == '__main__':

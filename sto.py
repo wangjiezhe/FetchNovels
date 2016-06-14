@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, const, utils
+from novel import serial, config, utils
 
 BASE_URL = 'http://www.sto.cc/{}-1/'
 PAGE_URL = 'http://www.sto.cc/{}-{}/'
@@ -71,7 +71,7 @@ class Sto(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Sto, const.GOAGENT)
+    utils.in_main(Sto, config.GOAGENT)
 
 
 if __name__ == '__main__':

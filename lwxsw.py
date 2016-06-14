@@ -3,7 +3,7 @@
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.lwxsw.org/books/{}/{}/'
 INTRO_URL = 'http://www.lwxsw.org/book/{}/index.html'
@@ -17,7 +17,7 @@ class Lwxsw(serial.SerialNovel):
                          chap_sel='.bookinfo_td td',
                          chap_type=serial.ChapterType.last,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
@@ -32,7 +32,7 @@ class Lwxsw(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Lwxsw, const.GOAGENT)
+    utils.in_main(Lwxsw, config.GOAGENT)
 
 
 if __name__ == '__main__':

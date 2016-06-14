@@ -7,7 +7,7 @@ from urllib.parse import urljoin
 from pyquery import PyQuery as Pq
 from selenium import webdriver
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.piaotian.net/html/{}/{}/'
 INTRO_URL = 'http://www.piaotian.net/bookinfo/{}/{}.html'
@@ -85,7 +85,7 @@ class Piaotian(serial.SerialNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid), None,
                          utils.base_to_url(INTRO_URL, tid), None,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
         self.tool = PiaotianTool
         self.page = PiaotianPage
         self.intro_page = PiaotianIntroPage
@@ -114,7 +114,7 @@ class Piaotian(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Piaotian, const.GOAGENT)
+    utils.in_main(Piaotian, config.GOAGENT)
 
 
 if __name__ == '__main__':

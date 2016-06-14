@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.ttzw5.com/book/{}/{}/'
 
@@ -17,7 +17,7 @@ class Ttzw5(serial.SerialNovel):
                          chap_sel='li.zp_li',
                          chap_type=serial.ChapterType.last,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.haxtxt.com/files/article/html/{}/{}/'
 
@@ -14,7 +14,7 @@ class Haxtxt(serial.SerialNovel):
                          chap_sel='.chapterlist dd',
                          chap_type=serial.ChapterType.last,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
 
     def get_title_and_author(self):
         title = self.doc('.btitle h1').text().strip('《》')
@@ -23,7 +23,7 @@ class Haxtxt(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Haxtxt, const.GOAGENT)
+    utils.in_main(Haxtxt, config.GOAGENT)
 
 
 if __name__ == '__main__':

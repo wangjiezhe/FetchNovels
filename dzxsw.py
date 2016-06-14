@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.dzxsw.la/book/{}/index.html'
 INTRO_URL = 'http://www.dzxsw.la/book/{}/'
@@ -43,7 +43,7 @@ class Dzxsw(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Dzxsw, const.GOAGENT)
+    utils.in_main(Dzxsw, config.GOAGENT)
 
 
 if __name__ == '__main__':

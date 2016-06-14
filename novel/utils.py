@@ -13,7 +13,7 @@ from multiprocessing.dummy import Pool
 from random import randrange
 from urllib.parse import urlparse, urlunparse
 
-from .const import UAS
+from .config import UAS
 
 
 class Tool(object):

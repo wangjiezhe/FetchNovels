@@ -15,7 +15,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from .const import CACHE_DIR, DB_NAME
+from .config import CACHE_DB, check_first
 from .models import Novel, Chapter, Base
 from .base import BaseNovel
 from .decorators import retry
@@ -132,7 +132,6 @@ class SerialNovel(BaseNovel):
         self.intro_page = IntroPage
         self.chap_sel = chap_sel
         self.chap_type = chap_type
-        self.db_name = os.path.join(CACHE_DIR, DB_NAME)
 
         self.doc = self.session = None
         self.title = self.author = ''
@@ -149,8 +148,10 @@ class SerialNovel(BaseNovel):
         self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
 
+        check_first()
+
         engine = create_engine(
-            'sqlite:///' + self.db_name,
+            'sqlite:///' + CACHE_DB,
             connect_args={'check_same_thread': False},
             poolclass=StaticPool
         )

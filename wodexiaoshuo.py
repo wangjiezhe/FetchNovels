@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.wodexiaoshuo.com/{}/chapter.html'
 INTRO_URL = 'http://www.wodexiaoshuo.com/{}/'
@@ -37,7 +37,7 @@ class Wdxs(serial.SerialNovel):
                          chap_sel='.box_box li',
                          chap_type=serial.ChapterType.path,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
         self.tool = WdxsTool
 
     def get_title_and_author(self):
@@ -53,7 +53,7 @@ class Wdxs(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Wdxs, const.GOAGENT)
+    utils.in_main(Wdxs, config.GOAGENT)
 
 
 if __name__ == '__main__':

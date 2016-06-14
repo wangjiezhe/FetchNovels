@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.lwxs.com/shu/{}/{}/'
 INTRO_URL = 'http://www.lwxs.com/info-{}.html'
@@ -19,7 +19,7 @@ class Lwxs(serial.SerialNovel):
                          chap_sel='dd',
                          chap_type=serial.ChapterType.last,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
@@ -29,7 +29,7 @@ class Lwxs(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Lwxs, const.GOAGENT)
+    utils.in_main(Lwxs, config.GOAGENT)
 
 
 if __name__ == '__main__':

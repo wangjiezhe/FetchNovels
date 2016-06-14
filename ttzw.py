@@ -3,7 +3,7 @@
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, const, utils
+from novel import serial, config, utils
 
 BASE_URL = 'http://www.ttzw.com/book/{}/'
 
@@ -30,7 +30,7 @@ class Ttzw(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Ttzw, const.GOAGENT)
+    utils.in_main(Ttzw, config.GOAGENT)
 
 
 if __name__ == '__main__':

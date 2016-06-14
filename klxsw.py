@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.klxsw.com/files/article/html/{}/{}/'
 
@@ -15,7 +15,7 @@ class Klxsw(serial.SerialNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#r1c',
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
@@ -49,7 +49,7 @@ class Klxsw(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Klxsw, const.GOAGENT)
+    utils.in_main(Klxsw, config.GOAGENT)
 
 
 if __name__ == '__main__':

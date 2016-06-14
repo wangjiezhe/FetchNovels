@@ -3,7 +3,7 @@
 
 from pyquery import PyQuery as Pq
 
-from novel import serial, utils, const
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.ranwen.org/files/article/{}/{}/'
 
@@ -15,7 +15,7 @@ class Ranwen(serial.SerialNovel):
                          chap_sel='dd',
                          chap_type=serial.ChapterType.whole,
                          tid=tid)
-        self.encoding = const.GB
+        self.encoding = config.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
@@ -30,7 +30,7 @@ class Ranwen(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Ranwen, const.GOAGENT)
+    utils.in_main(Ranwen, config.GOAGENT)
 
 
 if __name__ == '__main__':
