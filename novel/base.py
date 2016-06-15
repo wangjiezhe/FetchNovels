@@ -5,6 +5,7 @@ from urllib.error import HTTPError
 
 from lxml.etree import XMLSyntaxError
 from pyquery import PyQuery
+from requests import ConnectionError
 
 from .config import get_headers
 from .decorators import retry
@@ -33,10 +34,10 @@ class BaseNovel(object):
         self.doc = self.get_doc()
         self.running = True
 
-    @retry((HTTPError, XMLSyntaxError))
+    @retry((HTTPError, XMLSyntaxError, ConnectionError))
     def get_doc(self):
         return PyQuery(url=self.url, headers=self.headers,
-                       roxies=self.proxies, encoding=self.encoding)
+                       proxies=self.proxies, encoding=self.encoding)
 
     @property
     def headers(self):

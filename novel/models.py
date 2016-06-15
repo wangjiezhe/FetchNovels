@@ -60,6 +60,7 @@ class General(Base):
 
 class Novel(General):
     id = Column(Integer, primary_key=True)
+    title = Column(String)
     author = Column(String)
     intro = Column(Text)
     source = Column(String, primary_key=True)
@@ -67,8 +68,8 @@ class Novel(General):
     chapters = relationship('Chapter', backref='novel')
 
     ForeignKeyConstraint(
-        [id, source],
-        [General.id, General.source]
+        [id, source, title],
+        [General.id, General.source, General.title]
     )
 
 

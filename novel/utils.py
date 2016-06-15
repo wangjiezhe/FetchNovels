@@ -9,12 +9,12 @@ import os
 import re
 import string
 import sys
-from multiprocessing.dummy import Pool
+# from multiprocessing.dummy import Pool
 from urllib.parse import urlparse, urlunparse
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
+from sqlalchemy.pool import SingletonThreadPool
 
 from .config import check_first
 from .models import Base
@@ -194,8 +194,7 @@ def get_filename(title, author=None, overwrite=True):
 def connect_database(db):
     engine = create_engine(
         'sqlite:///' + db,
-        connect_args={'check_same_thread': False},
-        poolclass=StaticPool
+        poolclass=SingletonThreadPool
     )
     db_session = sessionmaker(bind=engine, autocommit=True)
     session = db_session()
@@ -215,13 +214,15 @@ def in_main(NovelClass, proxies=None, overwrite=True):
         print('No specific tid!')
         sys.exit(1)
 
-    def dump(tid):
-        nov = NovelClass(tid)
+    def dump(t):
+        nov = NovelClass(t)
         nov.proxies = proxies
         nov.dump(overwrite=overwrite)
 
     check_first()
 
-    num = len(tids)
-    with Pool(num) as p:
-        p.map(dump, tids)
+    # num = len(tids)
+    # with Pool(num) as p:
+    #     p.map(dump, tids)
+    for tid in tids:
+        dump(tid)
