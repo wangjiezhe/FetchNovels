@@ -70,20 +70,20 @@ class SinglePage(BaseNovel):
     def run(self, refresh=False):
         super().run(refresh=refresh)
         self.doc = self.get_doc()
-        if not self.title:
+        if self.title is None:
             self.title = self.get_title()
         self.content = self.get_content()
         # self.running = True
 
     def get_content(self):
-        if not self.selector:
+        if self.selector is None:
             return ''
         content = self.doc(self.selector).html()
         content = self.refine(content)
         return content
 
     def get_title(self):
-        if self.title:
+        if self.title is not None:
             return self.title
         else:
             raise NotImplementedError('get_title')

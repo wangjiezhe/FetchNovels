@@ -105,7 +105,7 @@ class SerialNovel(BaseNovel):
         self.session = db_session()
         Base.metadata.create_all(engine)
 
-        if self.tid:
+        if self.tid is not None:
             novel = self.session.query(Novel).filter_by(
                 id=self.tid, source=self.get_source()
             ).first()
@@ -113,7 +113,7 @@ class SerialNovel(BaseNovel):
             novel = None
             self.tid = self.new_tid()
 
-        if not novel:
+        if novel is None:
             # noinspection PyArgumentList
             novel = Novel(id=self.tid, title=self.title, author=self.author,
                           intro=self.get_intro(), source=self.get_source())

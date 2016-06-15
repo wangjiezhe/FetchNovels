@@ -171,7 +171,7 @@ def get_base_url(url):
 
 
 def get_filename(title, author=None, overwrite=True):
-    if author:
+    if author is not None:
         base = '《{}》{}'.format(title, author)
     else:
         base = title

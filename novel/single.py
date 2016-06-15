@@ -41,7 +41,7 @@ class SingleNovel(SinglePage):
             raise NameError('title_type')
 
     def get_content(self):
-        if not self.selector:
+        if self.selector is None:
             raise NotImplementedError('get_content')
         content = '\n\n\n\n'.join(
             self.doc(self.selector).map(
