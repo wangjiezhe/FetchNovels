@@ -22,10 +22,6 @@ class SingleNovel(SinglePage):
         self.title_sel = title_sel
         self.title_type = title_type
 
-    def run(self, refresh=False):
-        super().run(refresh=refresh)
-        self.title = self.get_title()
-
     def get_title(self):
         if self.title_sel is None:
             raise NotImplementedError('get_title')

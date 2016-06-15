@@ -23,7 +23,8 @@ class BaseNovel(object):
         self.tool = tool or Tool
         self.running = False
 
-        self.refine = None
+        self.refine = self.doc = None
+        self.title = self.author = ''
 
     def run(self, refresh=False):
         if self.running and not refresh:
@@ -65,8 +66,7 @@ class SinglePage(BaseNovel):
         super().__init__(url, headers, proxies, encoding, tool)
         self.selector = selector
 
-        self.doc = None
-        self.title = self.content = ''
+        self.content = ''
 
     def run(self, refresh=False):
         super().run(refresh=refresh)

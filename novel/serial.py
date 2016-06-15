@@ -78,8 +78,7 @@ class SerialNovel(BaseNovel):
         self.chap_sel = chap_sel
         self.chap_type = chap_type
 
-        self.doc = self.session = None
-        self.title = self.author = ''
+        self.session = None
 
     @classmethod
     def get_source(cls):
