@@ -4,7 +4,7 @@
 import re
 from urllib.parse import urljoin
 
-from pyquery import PyQuery as Pq
+from pyquery import PyQuery
 from selenium import webdriver
 
 from novel import serial, utils, config
@@ -60,7 +60,7 @@ class PiaotianIntroPage(serial.IntroPage):
 
     def get_content(self):
         intro = self.doc('div').filter(
-            lambda i, e: 'float:left' in (Pq(e).attr('style') or '')
+            lambda i, e: 'float:left' in (PyQuery(e).attr('style') or '')
         ).html()
         intro = self.refine(intro)
         return intro
@@ -92,23 +92,23 @@ class Piaotian(serial.SerialNovel):
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('name') == 'keywords'
+            lambda i, e: PyQuery(e).attr('name') == 'keywords'
         ).attr('content')
         name = re.match(r'(.*?),.*', st).group(1)
         author = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('name') == 'author'
+            lambda i, e: PyQuery(e).attr('name') == 'author'
         ).attr('content')
         return name, author
 
     @property
     def chapter_list(self):
         clist = self.doc('li').filter(
-            lambda i, e: (Pq(e)('a').attr('href') and
-                          re.match(r'\d+\.html', Pq(e)('a').attr('href')))
+            lambda i, e: (PyQuery(e)('a').attr('href') and
+                          re.match(r'\d+\.html', PyQuery(e)('a').attr('href')))
         ).map(
             lambda i, e: (i,
-                          urljoin(self.url, Pq(e)('a').attr('href')),
-                          Pq(e).text())
+                          urljoin(self.url, PyQuery(e)('a').attr('href')),
+                          PyQuery(e).text())
         )
         return clist
 

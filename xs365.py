@@ -3,7 +3,7 @@
 
 import re
 
-from pyquery import PyQuery as Pq
+from pyquery import PyQuery
 
 from novel import serial, utils, config
 
@@ -23,7 +23,7 @@ class Xs365(serial.SerialNovel):
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('name') == 'author').attr('content')
+            lambda i, e: PyQuery(e).attr('name') == 'author').attr('content')
         return re.match(r'(.*)版权属于作者(.*)', st).groups()
 
 

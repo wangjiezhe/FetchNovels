@@ -4,7 +4,7 @@
 import re
 from urllib.parse import urljoin
 
-from pyquery import PyQuery as Pq
+from pyquery import PyQuery
 
 from novel import serial, utils, config
 
@@ -22,7 +22,7 @@ class Shu69(serial.SerialNovel):
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('name') == 'keywords'
+            lambda i, e: PyQuery(e).attr('name') == 'keywords'
         ).attr('content')
         name = re.match(r'(.*?),.*', st).group(1)
         author = self.doc('.mu_beizhu').eq(0)('a').eq(1).text()
@@ -31,12 +31,12 @@ class Shu69(serial.SerialNovel):
     @property
     def chapter_list(self):
         clist = self.doc('.mulu_list').eq(1)('li').filter(
-            lambda i, e: Pq(e)('a').attr('href')
+            lambda i, e: PyQuery(e)('a').attr('href')
         ).map(
             lambda i, e: (i,
                           urljoin(utils.get_base_url(self.url),
-                                  Pq(e)('a').attr('href')),
-                          Pq(e).text())
+                                  PyQuery(e)('a').attr('href')),
+                          PyQuery(e).text())
         )
         return clist
 

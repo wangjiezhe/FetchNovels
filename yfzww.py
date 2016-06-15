@@ -3,7 +3,7 @@
 
 import re
 
-from pyquery import PyQuery as Pq
+from pyquery import PyQuery
 
 from novel import serial, utils
 
@@ -30,18 +30,18 @@ class Yfzww(serial.SerialNovel):
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('property') == 'og:novel:book_name'
+            lambda i, e: PyQuery(e).attr('property') == 'og:novel:book_name'
         ).attr('content')
 
         author = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('property') == 'og:novel:author'
+            lambda i, e: PyQuery(e).attr('property') == 'og:novel:author'
         ).attr('content')
 
         return name, author
 
     def get_intro(self):
         intro = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('property') == 'og:description'
+            lambda i, e: PyQuery(e).attr('property') == 'og:description'
         ).attr('content')
         return intro
 

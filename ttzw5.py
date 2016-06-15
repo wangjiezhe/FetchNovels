@@ -3,7 +3,7 @@
 
 import re
 
-from pyquery import PyQuery as Pq
+from pyquery import PyQuery
 
 from novel import serial, utils, config
 
@@ -21,7 +21,7 @@ class Ttzw5(serial.SerialNovel):
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
-            lambda i, e: Pq(e).attr('name') == 'keywords'
+            lambda i, e: PyQuery(e).attr('name') == 'keywords'
         ).attr('content')
         name = re.match(r'(.*?),.*', st).group(1)
 

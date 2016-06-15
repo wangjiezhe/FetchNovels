@@ -8,8 +8,7 @@ from multiprocessing.dummy import Pool
 from urllib.error import HTTPError
 from urllib.parse import urljoin
 
-from lxml.etree import XMLSyntaxError
-from pyquery import PyQuery as Pq
+from pyquery import PyQuery
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -47,6 +46,7 @@ class Page(SinglePage):
             fp.write(self.title)
             fp.write('\n\n\n')
             fp.write(self.content)
+            fp.write('\n')
 
 
 class IntroPage(SinglePage):
@@ -56,15 +56,6 @@ class IntroPage(SinglePage):
                  tool=None):
         super().__init__(url, selector, headers, proxies, encoding, tool)
         self.title = 'Introduction'
-
-    def dump(self, overwrite=True):
-        self.run()
-        filename = 'intro.txt'
-        print('intro')
-        with open(filename, 'w') as fp:
-            fp.write('简介')
-            fp.write('\n\n\n\n')
-            fp.write(self.content)
 
 
 class ChapterType(Enum):
@@ -169,11 +160,6 @@ class SerialNovel(BaseNovel):
         self.session.close()
         self.running = False
 
-    @retry((HTTPError, XMLSyntaxError))
-    def get_doc(self):
-        return Pq(url=self.url, headers=self.headers,
-                  proxies=self.proxies, encoding=self.encoding)
-
     def get_title_and_author(self):
         return NotImplementedError('get_title_and_author')
 
@@ -185,32 +171,32 @@ class SerialNovel(BaseNovel):
 
     def chapter_list_with_sel(self, selector, chap_type):
         clist = self.doc(selector).filter(
-            lambda i, e: Pq(e)('a').attr('href')
+            lambda i, e: PyQuery(e)('a').attr('href')
         )
         if chap_type == ChapterType.whole:
             clist = clist.map(
                 lambda i, e: (i,
-                              Pq(e)('a').attr('href'),
-                              Pq(e).text())
+                              PyQuery(e)('a').attr('href'),
+                              PyQuery(e).text())
             )
         elif chap_type == ChapterType.path:
             clist = clist.map(
                 lambda i, e: (i,
                               urljoin(get_base_url(self.url),
-                                      Pq(e)('a').attr('href')),
-                              Pq(e).text())
+                                      PyQuery(e)('a').attr('href')),
+                              PyQuery(e).text())
             )
         elif chap_type == ChapterType.last:
             clist = clist.map(
                 lambda i, e: (i,
-                              urljoin(self.url, Pq(e)('a').attr('href')),
-                              Pq(e).text())
+                              urljoin(self.url, PyQuery(e)('a').attr('href')),
+                              PyQuery(e).text())
             )
         elif chap_type == ChapterType.last_rev:
             clist = clist.map(
                 lambda i, e: (fix_order(i),
-                              urljoin(self.url, Pq(e)('a').attr('href')),
-                              Pq(e).text())
+                              urljoin(self.url, PyQuery(e)('a').attr('href')),
+                              PyQuery(e).text())
             )
             clist.sort(key=lambda s: int(s[0]))
         else:
