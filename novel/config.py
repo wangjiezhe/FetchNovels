@@ -20,7 +20,7 @@ Chrome/50.0.2661.76 YaBrowser/16.6.0.6383 (beta) Safari/537.36',
 
 
 def get_headers():
-    ua = randrange(len(UAS))
+    ua = UAS[randrange(len(UAS))]
     headers = {'User-Agent': ua}
     return headers
 
