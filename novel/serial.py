@@ -15,6 +15,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from .single import SinglePage
 from .config import CACHE_DB
 from .models import Novel, Chapter, Base
 from .base import BaseNovel
@@ -22,35 +23,13 @@ from .decorators import retry
 from .utils import get_base_url, fix_order, get_filename
 
 
-class Page(BaseNovel):
+class Page(SinglePage):
 
     def __init__(self, url, title, selector,
                  headers=None, proxies=None,
                  encoding=None, tool=None):
-        super().__init__(url, headers, proxies, encoding, tool)
+        super().__init__(url, selector, headers, proxies, encoding, tool)
         self.title = title
-        self.selector = selector
-
-        self.doc = None
-        self.content = ''
-
-    def run(self, refresh=False):
-        super().run(refresh=refresh)
-        self.doc = self.get_doc()
-        self.content = self.get_content()
-        self.running = True
-
-    @retry((HTTPError, XMLSyntaxError))
-    def get_doc(self):
-        return Pq(url=self.url, headers=self.headers,
-                  proxies=self.proxies, encoding=self.encoding)
-
-    def get_content(self):
-        if self.selector is None:
-            return ''
-        content = self.doc(self.selector).html()
-        content = self.refine(content)
-        return content
 
     def dump(self, path=None, folder=None, num=None):
         self.run()
@@ -71,34 +50,12 @@ class Page(BaseNovel):
             fp.write(self.content)
 
 
-class IntroPage(BaseNovel):
+class IntroPage(SinglePage):
 
     def __init__(self, url, selector,
                  headers=None, proxies=None, encoding=None,
                  tool=None):
-        super().__init__(url, headers, proxies, encoding, tool)
-        self.selector = selector
-
-        self.doc = None
-        self.content = ''
-
-    def run(self, refresh=False):
-        super().run(refresh=refresh)
-        self.doc = self.get_doc()
-        self.content = self.get_content()
-        self.running = True
-
-    @retry((HTTPError, XMLSyntaxError))
-    def get_doc(self):
-        return Pq(url=self.url, headers=self.headers,
-                  proxies=self.proxies, encoding=self.encoding)
-
-    def get_content(self):
-        if self.selector is None:
-            return ''
-        intro = self.doc(self.selector).html()
-        intro = self.refine(intro)
-        return intro
+        super().__init__(url, selector, headers, proxies, encoding, tool)
 
     def dump(self, overwrite=True):
         self.run()
