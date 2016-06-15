@@ -15,8 +15,6 @@ class Base(object):
     def __tablename__(cls):
         return cls.__name__.lower()
 
-    id = Column(Integer, primary_key=True)
-
     def __repr__(self):
         return '<{}({})>'.format(type(self).__name__, self.column_items_ignore_text)
 
@@ -43,16 +41,39 @@ class Base(object):
         return self.column_items
 
 
-class Novel(Base):
+class Website(Base):
+    name = Column(String, primary_key=True)
+    url = Column(String)
+
+    novels = relationship('Novel', backref='website')
+
+
+class General(Base):
+    id = Column(Integer, primary_key=True)
     title = Column(String)
+    source = Column(String, primary_key=True)
+
+    ForeignKeyConstraint(
+        [source], [Website.name]
+    )
+
+
+class Novel(General):
+    id = Column(Integer, primary_key=True)
     author = Column(String)
     intro = Column(Text)
     source = Column(String, primary_key=True)
 
-    chapters = relationship('Chapter')
+    chapters = relationship('Chapter', backref='novel')
+
+    ForeignKeyConstraint(
+        [id, source],
+        [General.id, General.source]
+    )
 
 
 class Chapter(Base):
+    id = Column(Integer, primary_key=True)
     url = Column(String)
     title = Column(String)
     text = Column(Text)

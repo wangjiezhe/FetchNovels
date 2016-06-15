@@ -11,7 +11,7 @@ from urllib.parse import urljoin
 from pyquery import PyQuery
 
 from .config import CACHE_DB
-from .models import Novel, Chapter
+from .models import Novel, Chapter, Website
 from .base import BaseNovel, SinglePage
 from .decorators import retry
 from .utils import get_base_url, fix_order, get_filename, connect_database
@@ -90,9 +90,14 @@ class SerialNovel(BaseNovel):
     def run(self, refresh=False, parallel=True):
         super().run(refresh=refresh)
         self.title, self.author = self.get_title_and_author()
+        print(self.title, self.author)
 
         self.session = connect_database(CACHE_DB)
+        self._add_novel()
+        self._update_chapters()
 
+    # noinspection PyArgumentList
+    def _add_novel(self):
         if self.tid is not None:
             novel = self.session.query(Novel).filter_by(
                 id=self.tid, source=self.get_source()
@@ -102,38 +107,47 @@ class SerialNovel(BaseNovel):
             self.tid = self.new_tid()
 
         if novel is None:
-            # noinspection PyArgumentList
             novel = Novel(id=self.tid, title=self.title, author=self.author,
                           intro=self.get_intro(), source=self.get_source())
             self.session.add(novel)
 
-            # noinspection PyArgumentList
             novel.chapters = [Chapter(id=tid, title=title, url=url)
                               for tid, url, title in self.chapter_list]
+
+            website = self.session.query(Website).filter_by(name=novel.source).first()
+            if website is not None:
+                website.novels.append(novel)
+            else:
+                website = Website(name=novel.source, url=get_base_url(self.url))
+                self.session.add(website)
+                website.novels = [novel]
+
         else:
             old_chapters_ids = self.session.query(Chapter.id).filter_by(
                 novel_id=self.tid, novel_source=self.get_source()
             ).all()
             old_chapters_ids = list(*zip(*old_chapters_ids))
-            # noinspection PyArgumentList
             novel.chapters.extend(
                 [Chapter(id=cid, title=title, url=url)
                  for cid, url, title in self.chapter_list
                  if cid not in old_chapters_ids])
 
+    def _update_chapters(self, parallel=True):
         empty_chapters = \
-            self.session.query(Chapter).filter(Chapter.text.is_(None))
+            self.session.query(Chapter).filter_by(
+                novel_id=self.tid, novel_source=self.get_source()
+            ).filter(Chapter.text.is_(None))
 
         if parallel:
             # with ThreadPoolExecutor(100) as e:
-            #     e.map(self.update_chapter, empty_chapters)
+            #     e.map(self._update_chapter, empty_chapters)
             with Pool(100) as p:
-                p.map(self.update_chapter, empty_chapters, 10)
+                p.map(self._update_chapter, empty_chapters, 10)
         else:
             for ch in empty_chapters:
-                self.update_chapter(ch)
+                self._update_chapter(ch)
 
-    def update_chapter(self, ch):
+    def _update_chapter(self, ch):
         print(ch.title)
         page = self.page(
             ch.url, ch.title, self.cont_sel,
@@ -227,7 +241,9 @@ class SerialNovel(BaseNovel):
             fp.write(intro)
             fp.write('\n')
 
-        chapters = self.session.query(Chapter).all()
+        chapters = self.session.query(Chapter).filter_by(
+            novel_id=self.tid, novel_source=self.get_source()
+        ).all()
         for ch in chapters:
             filename = '「{:d}」{}.txt'.format(ch.id, ch.title)
             path = os.path.join(download_dir, filename)
@@ -257,7 +273,9 @@ class SerialNovel(BaseNovel):
             ).one().intro
             fp.write(intro)
 
-            chapters = self.session.query(Chapter).all()
+            chapters = self.session.query(Chapter).filter_by(
+                novel_id=self.tid, novel_source=self.get_source()
+            ).all()
             for ch in chapters:
                 fp.write('\n\n\n\n')
                 fp.write(ch.title)
