@@ -18,17 +18,29 @@ class Base(object):
     id = Column(Integer, primary_key=True)
 
     def __repr__(self):
-        res = '<{}(id: {}, {})>'.format(
-            type(self).__name__,
-            self.id,
-            ', '.join('{}: {}'.format(k, v) for k, v in vars(self).items()
-                      if k in self._display_vars())
-        )
-        return res
+        return '<{}({})>'.format(type(self).__name__, self.column_items_ignore_text)
 
-    def _display_vars(self):
-        return [k for k in vars(self).keys()
-                if not k.startswith('_') and k != 'id']
+    @property
+    def columns(self):
+        return self.__table__.columns.keys()
+
+    @property
+    def column_items(self):
+        return {c: getattr(self, c) for c in self.columns}
+
+    @property
+    def column_items_ignore_text(self):
+        return {k.name: self._short_item(k)
+                for k in self.__table__.columns.values()}
+
+    def _short_item(self, k):
+        if isinstance(k.type, Text):
+            return '{} characters'.format(len(getattr(self, k.name)))
+        else:
+            return getattr(self, k.name)
+
+    def to_json(self):
+        return self.column_items
 
 
 class Novel(Base):
@@ -38,14 +50,6 @@ class Novel(Base):
     source = Column(String, primary_key=True)
 
     chapters = relationship('Chapter')
-
-    def __repr__(self):
-        res = "<Novel(id: {self.id}, source: '{self.source}', title: '{self.title}', \
-author: '{self.author}', chapters: {num:d}, intro: '{intro}')>".format(
-            self=self, num=len(self.chapters),
-            intro=self.intro.strip().replace('\n', '\t')
-        )
-        return res
 
 
 class Chapter(Base):
