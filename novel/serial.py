@@ -28,18 +28,19 @@ class Page(SinglePage):
         super().__init__(url, selector, headers, proxies, encoding, tool)
         self.title = title
 
-    def dump(self, path=None, folder=None, num=None):
+    def dump(self, overwrite=True, path=None, folder=None, num=None):
         self.run()
         if path is None:
             if num is not None:
                 pre = '「{:d}」'.format(num)
             else:
                 pre = ''
-            name = '{}{}.txt'.format(pre, self.title)
+            filename = '{}{}'.format(
+                pre, get_filename(self.title, overwrite=overwrite))
             if folder is None:
-                path = os.path.join(os.getcwd(), name)
+                path = os.path.join(os.getcwd(), filename)
             else:
-                path = os.path.join(folder, name)
+                path = os.path.join(folder, filename)
         print(self.title)
         with open(path, 'w') as fp:
             fp.write(self.title)
