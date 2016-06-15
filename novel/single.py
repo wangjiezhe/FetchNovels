@@ -34,7 +34,8 @@ class SingleNovel(SinglePage):
             return self.refine(self.doc(self.title_sel).html())
         elif self.title_type == TitleType.meta:
             return self.doc('meta').filter(
-                lambda i, e: PyQuery(e).attr(self.title_sel[0]) == self.title_sel[1]
+                lambda i, e:
+                PyQuery(e).attr(self.title_sel[0]) == self.title_sel[1]
             ).attr('content')
         else:
             raise NameError('title_type')

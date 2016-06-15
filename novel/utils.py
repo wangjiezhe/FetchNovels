@@ -151,7 +151,8 @@ def base_to_url(base_url, tid):
     elif field_count == 2:
         return base_url.format(int(tid) // 1000, tid)
     else:
-        raise Exception('Function base_to_url with {} replacement fields is not defined!'.format(field_count))
+        raise Exception(
+            'Function base_to_url with {} replacement fields is not defined!'.format(field_count))
 
 
 def get_base_url(url):

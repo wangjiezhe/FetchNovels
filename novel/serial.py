@@ -132,7 +132,8 @@ class SerialNovel(BaseNovel):
                  for cid, url, title in self.chapter_list
                  if cid not in old_chapters_ids])
 
-        empty_chapters = self.session.query(Chapter).filter(Chapter.text.is_(None))
+        empty_chapters = \
+            self.session.query(Chapter).filter(Chapter.text.is_(None))
 
         if parallel:
             # with ThreadPoolExecutor(100) as e:

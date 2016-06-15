@@ -35,7 +35,8 @@ class Dzxsw(serial.SerialNovel):
         ).map(
             lambda i, e: (
                 i,
-                urljoin(utils.get_base_url(self.url), PyQuery(e)('a').attr('href')),
+                urljoin(utils.get_base_url(self.url),
+                        PyQuery(e)('a').attr('href')),
                 PyQuery(e).text()
             )
         )

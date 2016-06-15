@@ -29,6 +29,7 @@ CACHE_DIR = os.path.join(HOME_DIR, '.cache', 'novel')
 CACHE_DB = os.path.join(CACHE_DIR, 'cache.db')
 NOVEL_LIST_JSON = os.path.join(CACHE_DIR, 'novel_list.json')
 
+
 def check_first():
     if not os.path.exists(CACHE_DIR):
         os.makedirs(CACHE_DIR)

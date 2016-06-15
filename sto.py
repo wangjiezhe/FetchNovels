@@ -56,12 +56,14 @@ class Sto(serial.SerialNovel):
 
     @property
     def chapter_list(self):
-        st = re.search(r'ANP_goToPage\("Page_select",(\d+),(\d+),1\);', self.doc.html())
+        st = re.search(
+            r'ANP_goToPage\("Page_select",(\d+),(\d+),1\);', self.doc.html())
         if st.group(1) == self.tid:
             page_num = int(st.group(2))
         else:
             raise Exception('Something strange may happened.')
-        return [(i+1, PAGE_URL.format(self.tid, i+1), '第{:d}頁'.format(i+1)) for i in range(page_num)]
+        return [(i + 1, PAGE_URL.format(self.tid, i + 1), '第{:d}頁'.format(i + 1))
+                for i in range(page_num)]
 
     def get_intro(self):
         intro = self.doc('meta').filter(

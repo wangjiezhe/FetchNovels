@@ -42,7 +42,8 @@ class Klxsw(serial.SerialNovel):
             lambda i, e: PyQuery(e)('a').attr('href')
         ).map(
             lambda i, e: (i,
-                          urljoin(self.url, PyQuery(e)('a').attr('href').strip()),
+                          urljoin(self.url,
+                                  PyQuery(e)('a').attr('href').strip()),
                           PyQuery(e).text())
         )
         return clist
