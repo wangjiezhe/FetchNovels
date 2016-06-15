@@ -244,12 +244,19 @@ class SerialNovel(BaseNovel):
             os.makedirs(download_dir)
         print('《{self.title}》{self.author}'.format(self=self))
 
+        intro = self.session.query(Novel).filter_by(
+            id=self.tid, source=self.get_source()
+        ).one().intro
+        path = os.path.join(download_dir, 'Introduction.txt')
+        with open(path, 'w') as fp:
+            fp.write('Introduction')
+            fp.write('\n\n\n\n')
+            fp.write(intro)
+            fp.write('\n')
+
         chapters = self.session.query(Chapter).all()
         for ch in chapters:
-            if ch.title == 'Introduction':
-                filename = '{}.txt'.format(ch.title)
-            else:
-                filename = '「{:d}」{}.txt'.format(ch.id, ch.title)
+            filename = '「{:d}」{}.txt'.format(ch.id, ch.title)
             path = os.path.join(download_dir, filename)
             with open(path, 'w') as fp:
                 fp.write(ch.title)
