@@ -13,10 +13,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from .single import SinglePage
 from .config import CACHE_DB
 from .models import Novel, Chapter, Base
-from .base import BaseNovel
+from .base import BaseNovel, SinglePage
 from .decorators import retry
 from .utils import get_base_url, fix_order, get_filename
 

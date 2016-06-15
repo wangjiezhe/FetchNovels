@@ -83,7 +83,10 @@ class SinglePage(BaseNovel):
         return content
 
     def get_title(self):
-        raise NotImplementedError('get_title')
+        if self.title:
+            return self.title
+        else:
+            raise NotImplementedError('get_title')
 
     def dump(self, overwrite=True):
         self.run()
