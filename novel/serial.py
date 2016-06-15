@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from abc import abstractmethod
 # from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from multiprocessing.dummy import Pool
@@ -56,6 +55,7 @@ class IntroPage(SinglePage):
                  headers=None, proxies=None, encoding=None,
                  tool=None):
         super().__init__(url, selector, headers, proxies, encoding, tool)
+        self.title = 'Introduction'
 
     def dump(self, overwrite=True):
         self.run()
@@ -174,9 +174,8 @@ class SerialNovel(BaseNovel):
         return Pq(url=self.url, headers=self.headers,
                   proxies=self.proxies, encoding=self.encoding)
 
-    @abstractmethod
     def get_title_and_author(self):
-        pass
+        return NotImplementedError('get_title_and_author')
 
     @property
     def chapter_list(self):

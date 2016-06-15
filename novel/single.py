@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from abc import abstractmethod
+
 from enum import Enum
 from urllib.error import HTTPError
 
@@ -27,6 +27,8 @@ class SinglePage(BaseNovel):
     def run(self, refresh=False):
         super().run(refresh=refresh)
         self.doc = self.get_doc()
+        if not self.title:
+            self.title = self.get_title()
         self.content = self.get_content()
         # self.running = True
 
@@ -41,9 +43,8 @@ class SinglePage(BaseNovel):
         content = self.refine(content)
         return content
 
-    @abstractmethod
-    def dump(self, overwrite=True):
-        pass
+    def get_title(self):
+        raise NotImplementedError('get_title')
 
 
 class TitleType(Enum):

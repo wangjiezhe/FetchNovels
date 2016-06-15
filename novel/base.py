@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from abc import ABC, abstractmethod
-
 from .config import get_headers
 from .utils import Tool
 
 
-class BaseNovel(ABC):
+class BaseNovel(object):
 
     def __init__(self, url,
                  headers=None, proxies=None,
@@ -43,6 +41,5 @@ class BaseNovel(ABC):
     def proxies(self, value):
         self._proxies = value or {}
 
-    @abstractmethod
     def dump(self, overwrite=True):
-        pass
+        raise NotImplementedError('dump')
