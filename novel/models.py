@@ -40,9 +40,10 @@ class Novel(Base):
     chapters = relationship('Chapter')
 
     def __repr__(self):
-        res = "<Novel(id: {self.id}, title: '{self.title}', \
-author: '{self.author}', chapters: {num:d}, intro: '{self.intro}')>".format(
-            self=self, num=len(self.chapters)
+        res = "<Novel(id: {self.id}, source: '{self.source}', title: '{self.title}', \
+author: '{self.author}', chapters: {num:d}, intro: '{intro}')>".format(
+            self=self, num=len(self.chapters),
+            intro=self.intro.strip().replace('\n', '\t')
         )
         return res
 
