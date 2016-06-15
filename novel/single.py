@@ -25,7 +25,6 @@ class SingleNovel(SinglePage):
     def run(self, refresh=False):
         super().run(refresh=refresh)
         self.title = self.get_title()
-        self.running = True
 
     def get_title(self):
         if self.title_sel is None:

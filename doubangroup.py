@@ -24,7 +24,10 @@ class DoubanGroup(BaseNovel):
         super().__init__(base_to_url(BASE_URL, topic_id))
         self.comments_url = base_to_url(COMMENTS_URL, topic_id)
 
-    def run(self):
+        self.req = None
+        self.content = ''
+
+    def run(self, refresh=True):
         self.req = requests.get(
             self.url, headers=self.headers, proxies=self.proxies
         ).json()

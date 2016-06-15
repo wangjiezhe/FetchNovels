@@ -93,7 +93,6 @@ class SerialNovel(BaseNovel):
 
     def run(self, refresh=False, parallel=True):
         super().run(refresh=refresh)
-        self.doc = self.get_doc()
         self.title, self.author = self.get_title_and_author()
 
         engine = create_engine(
@@ -144,8 +143,6 @@ class SerialNovel(BaseNovel):
         else:
             for ch in empty_chapters:
                 self.update_chapter(ch)
-
-        self.running = True
 
     def update_chapter(self, ch):
         print(ch.title)

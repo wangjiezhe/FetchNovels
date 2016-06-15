@@ -29,7 +29,8 @@ class BaseNovel(object):
         if self.running and not refresh:
             return
         self.refine = self.tool().refine
-        # self.running = True
+        self.doc = self.get_doc()
+        self.running = True
 
     @retry((HTTPError, XMLSyntaxError))
     def get_doc(self):
@@ -69,11 +70,9 @@ class SinglePage(BaseNovel):
 
     def run(self, refresh=False):
         super().run(refresh=refresh)
-        self.doc = self.get_doc()
         if self.title is None:
             self.title = self.get_title()
         self.content = self.get_content()
-        # self.running = True
 
     def get_content(self):
         if self.selector is None:
