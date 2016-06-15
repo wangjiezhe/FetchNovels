@@ -9,15 +9,12 @@ from urllib.error import HTTPError
 from urllib.parse import urljoin
 
 from pyquery import PyQuery
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
 
 from .config import CACHE_DB
-from .models import Novel, Chapter, Base
+from .models import Novel, Chapter
 from .base import BaseNovel, SinglePage
 from .decorators import retry
-from .utils import get_base_url, fix_order, get_filename
+from .utils import get_base_url, fix_order, get_filename, connect_database
 
 
 class Page(SinglePage):
@@ -95,14 +92,7 @@ class SerialNovel(BaseNovel):
         super().run(refresh=refresh)
         self.title, self.author = self.get_title_and_author()
 
-        engine = create_engine(
-            'sqlite:///' + CACHE_DB,
-            connect_args={'check_same_thread': False},
-            poolclass=StaticPool
-        )
-        db_session = sessionmaker(bind=engine, autocommit=True)
-        self.session = db_session()
-        Base.metadata.create_all(engine)
+        self.session = connect_database(CACHE_DB)
 
         if self.tid is not None:
             novel = self.session.query(Novel).filter_by(

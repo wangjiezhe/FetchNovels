@@ -12,6 +12,11 @@ import sys
 from multiprocessing.dummy import Pool
 from urllib.parse import urlparse, urlunparse
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+
+from .models import Base
 from .config import check_first
 
 
@@ -184,6 +189,18 @@ def get_filename(title, author=None, overwrite=True):
                 if not os.path.exists(filename):
                     break
     return filename
+
+
+def connect_database(db):
+    engine = create_engine(
+        'sqlite:///' + db,
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool
+    )
+    db_session = sessionmaker(bind=engine, autocommit=True)
+    session = db_session()
+    Base.metadata.create_all(engine)
+    return session
 
 
 def in_main(NovelClass, proxies=None, overwrite=True):
