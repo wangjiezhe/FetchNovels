@@ -115,11 +115,14 @@ class SerialNovel(BaseNovel):
             novel.chapters = [Chapter(id=tid, title=title, url=url)
                               for tid, url, title in self.chapter_list]
 
-            website = self.session.query(Website).filter_by(name=novel.source).first()
+            website = self.session.query(Website).filter_by(
+                name=novel.source
+            ).first()
             if website:
                 website.novels.append(novel)
             else:
-                website = Website(name=novel.source, url=get_base_url(self.url))
+                website = Website(name=novel.source,
+                                  url=get_base_url(self.url))
                 self.session.add(website)
                 website.novels = [novel]
 
@@ -134,10 +137,9 @@ class SerialNovel(BaseNovel):
                  if cid not in old_chapters_ids])
 
     def _update_chapters(self, parallel=True):
-        empty_chapters = \
-            self.session.query(Chapter).filter_by(
-                novel_id=self.tid, novel_source=self.get_source()
-            ).filter(Chapter.text.is_(None))
+        empty_chapters = self.session.query(Chapter).filter_by(
+            novel_id=self.tid, novel_source=self.get_source()
+        ).filter(Chapter.text.is_(None))
 
         if parallel:
             # with ThreadPoolExecutor(100) as e:
