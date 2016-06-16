@@ -66,7 +66,7 @@ class SerialNovel(BaseNovel):
     def __init__(self, url, cont_sel,
                  intro_url=None, intro_sel=None,
                  chap_sel=None, chap_type=None,
-                 tid=None):
+                 tid=None, cache=True):
         super().__init__(url)
         self.tid = tid
         self.cont_sel = cont_sel
@@ -76,6 +76,7 @@ class SerialNovel(BaseNovel):
         self.intro_page = IntroPage
         self.chap_sel = chap_sel
         self.chap_type = chap_type
+        self.cache = cache
 
         self.session = None
 
@@ -83,7 +84,7 @@ class SerialNovel(BaseNovel):
     def get_source(cls):
         return cls.__name__.lower()
 
-    def new_tid(self):
+    def _new_tid(self):
         return self.session.query(Novel).filter(Novel.id < 0).count() - 1
 
     def run(self, refresh=False, parallel=True):
@@ -91,9 +92,10 @@ class SerialNovel(BaseNovel):
         self.title, self.author = self.get_title_and_author()
         print(self.title, self.author)
 
-        self.session = connect_database(CACHE_DB)
-        self._add_novel()
-        self._update_chapters()
+        if self.cache:
+            self.session = connect_database(CACHE_DB)
+            self._add_novel()
+            self._update_chapters()
 
     # noinspection PyArgumentList
     def _add_novel(self):
@@ -103,7 +105,7 @@ class SerialNovel(BaseNovel):
             ).first()
         else:
             novel = None
-            self.tid = self.new_tid()
+            self.tid = self._new_tid()
 
         if novel is None:
             novel = Novel(id=self.tid, title=self.title, author=self.author,
@@ -150,14 +152,15 @@ class SerialNovel(BaseNovel):
         print(ch.title)
         page = self.page(
             ch.url, ch.title, self.cont_sel,
-            None, self.proxies,
-            self.encoding, self.tool
+            None, self.proxies, self.encoding,
+            self.tool
         )
         page.run()
         ch.text = page.content
 
     def close(self):
-        self.session.close()
+        if self.cache:
+            self.session.close()
         self.running = False
 
     def get_title_and_author(self):
@@ -166,10 +169,10 @@ class SerialNovel(BaseNovel):
     @property
     def chapter_list(self):
         if self.chap_sel and self.chap_type:
-            return self.chapter_list_with_sel(self.chap_sel, self.chap_type)
+            return self._chapter_list_with_sel(self.chap_sel, self.chap_type)
         raise NotImplementedError('chapter_list')
 
-    def chapter_list_with_sel(self, selector, chap_type):
+    def _chapter_list_with_sel(self, selector, chap_type):
         clist = self.doc(selector).filter(
             lambda i, e: PyQuery(e)('a').attr('href')
         )
@@ -223,9 +226,12 @@ class SerialNovel(BaseNovel):
             os.makedirs(download_dir)
         print('《{self.title}》{self.author}'.format(self=self))
 
-        intro = self.session.query(Novel).filter_by(
-            id=self.tid, source=self.get_source()
-        ).one().intro
+        if self.cache:
+            intro = self.session.query(Novel).filter_by(
+                id=self.tid, source=self.get_source()
+            ).one().intro
+        else:
+            intro = self.get_intro()
         path = os.path.join(download_dir, 'Introduction.txt')
         with open(path, 'w') as fp:
             fp.write('Introduction')
@@ -233,17 +239,28 @@ class SerialNovel(BaseNovel):
             fp.write(intro)
             fp.write('\n')
 
-        chapters = self.session.query(Chapter).filter_by(
-            novel_id=self.tid, novel_source=self.get_source()
-        ).all()
-        for ch in chapters:
-            filename = '「{:d}」{}.txt'.format(ch.id, ch.title)
-            path = os.path.join(download_dir, filename)
-            with open(path, 'w') as fp:
-                fp.write(ch.title)
-                fp.write('\n\n\n\n')
-                fp.write(ch.text)
-                fp.write('\n')
+        if self.cache:
+            chapters = self.session.query(Chapter).filter_by(
+                novel_id=self.tid, novel_source=self.get_source()
+            ).all()
+            for ch in chapters:
+                filename = '「{:d}」{}.txt'.format(ch.id + 1, ch.title)
+                path = os.path.join(download_dir, filename)
+                with open(path, 'w') as fp:
+                    fp.write(ch.title)
+                    fp.write('\n\n\n\n')
+                    fp.write(ch.text)
+                    fp.write('\n')
+        else:
+            for i, url, title in self.chapter_list:
+                self._dump_chapter(url, title, i + 1)
+
+    def _dump_chapter(self, url, title, num):
+        page = self.page(
+            url, title, self.cont_sel,
+            None, self.proxies, self.encoding,
+            self.tool)
+        page.dump(folder=self.download_dir, num=num)
 
     def dump_split(self):
         self.run()
@@ -260,20 +277,42 @@ class SerialNovel(BaseNovel):
             fp.write(self.author)
 
             fp.write('\n\n\n')
-            intro = self.session.query(Novel).filter_by(
-                id=self.tid, source=self.get_source()
-            ).one().intro
+            if self.cache:
+                intro = self.session.query(Novel).filter_by(
+                    id=self.tid, source=self.get_source()
+                ).one().intro
+            else:
+                intro = self.get_intro()
             fp.write(intro)
 
-            chapters = self.session.query(Chapter).filter_by(
-                novel_id=self.tid, novel_source=self.get_source()
-            ).order_by(Chapter.id).all()
-            for ch in chapters:
-                fp.write('\n\n\n\n')
-                fp.write(ch.title)
-                fp.write('\n\n\n')
-                fp.write(ch.text)
-                fp.write('\n')
+            if self.cache:
+                chapters = self.session.query(Chapter).filter_by(
+                    novel_id=self.tid, novel_source=self.get_source()
+                ).order_by(Chapter.id).all()
+                for ch in chapters:
+                    fp.write('\n\n\n\n')
+                    fp.write(ch.title)
+                    fp.write('\n\n\n')
+                    fp.write(ch.text)
+                    fp.write('\n')
+            else:
+                for _, url, title in self.chapter_list:
+                    fp.write('\n\n\n\n')
+                    print(title)
+                    fp.write(title)
+                    fp.write('\n\n\n')
+                    fp.write(self._get_chapter(url, title))
+                    fp.write('\n')
+
+    def _get_chapter(self, url, title):
+        print(title)
+        page = self.page(
+            url, title, self.cont_sel,
+            None, self.proxies, self.encoding,
+            self.tool
+        )
+        page.run()
+        return page.content
 
     def dump(self, overwrite=True):
         self.run()
