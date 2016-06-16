@@ -23,7 +23,7 @@ class SingleNovel(SinglePage):
         self.title_type = title_type
 
     def get_title(self):
-        if self.title_sel is None:
+        if not self.title_sel:
             raise NotImplementedError('get_title')
         if self.title_type == TitleType.selector:
             return self.refine(self.doc(self.title_sel).html())
@@ -36,7 +36,7 @@ class SingleNovel(SinglePage):
             raise NameError('title_type')
 
     def get_content(self):
-        if self.selector is None:
+        if not self.selector:
             raise NotImplementedError('get_content')
         content = '\n\n\n\n'.join(
             self.doc(self.selector).map(

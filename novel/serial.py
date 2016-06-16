@@ -27,14 +27,14 @@ class Page(SinglePage):
 
     def dump(self, overwrite=True, path=None, folder=None, num=None):
         self.run()
-        if path is None:
+        if not path:
             if num is not None:
                 pre = '「{:d}」'.format(num)
             else:
                 pre = ''
             filename = '{}{}'.format(
                 pre, get_filename(self.title, overwrite=overwrite))
-            if folder is None:
+            if not folder:
                 path = os.path.join(os.getcwd(), filename)
             else:
                 path = os.path.join(folder, filename)
@@ -115,7 +115,7 @@ class SerialNovel(BaseNovel):
                               for tid, url, title in self.chapter_list]
 
             website = self.session.query(Website).filter_by(name=novel.source).first()
-            if website is not None:
+            if website:
                 website.novels.append(novel)
             else:
                 website = Website(name=novel.source, url=get_base_url(self.url))
@@ -206,8 +206,8 @@ class SerialNovel(BaseNovel):
 
     @retry(HTTPError)
     def get_intro(self):
-        if self.intro_url is None:
-            if self.intro_sel is None:
+        if not self.intro_url:
+            if not self.intro_sel:
                 return ''
             intro = self.doc(self.intro_sel).html()
             intro = self.refine(intro)
