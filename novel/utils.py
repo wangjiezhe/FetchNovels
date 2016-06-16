@@ -194,7 +194,8 @@ def get_filename(title, author=None, overwrite=True):
 def connect_database(db):
     engine = create_engine(
         'sqlite:///' + db,
-        poolclass=SingletonThreadPool
+        poolclass=SingletonThreadPool,
+        pool_size=100
     )
     db_session = sessionmaker(bind=engine, autocommit=True)
     session = db_session()

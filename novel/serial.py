@@ -14,7 +14,7 @@ from .config import CACHE_DB
 from .models import Novel, Chapter, Website
 from .base import BaseNovel, SinglePage
 from .decorators import retry
-from .utils import get_base_url, fix_order, get_filename, connect_database
+from .utils import get_base_url, get_filename, connect_database
 
 
 class Page(SinglePage):
@@ -59,7 +59,6 @@ class ChapterType(Enum):
     whole = 1
     path = 2
     last = 3
-    last_rev = 4
 
 
 class SerialNovel(BaseNovel):
@@ -193,13 +192,6 @@ class SerialNovel(BaseNovel):
                               urljoin(self.url, PyQuery(e)('a').attr('href')),
                               PyQuery(e).text())
             )
-        elif chap_type == ChapterType.last_rev:
-            clist = clist.map(
-                lambda i, e: (fix_order(i),
-                              urljoin(self.url, PyQuery(e)('a').attr('href')),
-                              PyQuery(e).text())
-            )
-            clist.sort(key=lambda s: int(s[0]))
         else:
             raise NameError('chap_type')
         return clist
@@ -275,7 +267,7 @@ class SerialNovel(BaseNovel):
 
             chapters = self.session.query(Chapter).filter_by(
                 novel_id=self.tid, novel_source=self.get_source()
-            ).all()
+            ).order_by(Chapter.id).all()
             for ch in chapters:
                 fp.write('\n\n\n\n')
                 fp.write(ch.title)

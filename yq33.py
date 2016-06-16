@@ -6,6 +6,7 @@ import re
 from pyquery import PyQuery
 
 from novel import serial, utils, config
+from novel.utils import fix_order
 
 BASE_URL = 'http://www.33yq.com/read/{}/{}/'
 
@@ -24,8 +25,6 @@ class Yq33(serial.SerialNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#TXT',
                          None, '.introtxt',
-                         chap_sel='dd',
-                         chap_type=serial.ChapterType.last_rev,
                          tid=tid)
         self.encoding = config.GB
         self.tool = Yq33Tool
@@ -34,6 +33,17 @@ class Yq33(serial.SerialNovel):
         st = self.doc('meta').filter(
             lambda i, e: PyQuery(e).attr('name') == 'keywords').attr('content')
         return re.match(r'(.*?),(.*?),', st).groups()
+
+    @property
+    def chapter_list(self):
+        clist = self.doc('dd').filter(
+            lambda i, e: PyQuery(e)('a').attr('href')
+        ).map(
+            lambda i, e: (fix_order(i),
+                          PyQuery(e)('a').attr('href'),
+                          PyQuery(e).text())
+        )
+        return clist
 
 
 def main():
