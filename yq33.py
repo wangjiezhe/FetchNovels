@@ -7,10 +7,10 @@ from pyquery import PyQuery
 
 from novel import serial, utils, config
 
-BASE_URL = 'http://www.123yq.org/read/{}/{}/'
+BASE_URL = 'http://www.33yq.com/read/{}/{}/'
 
 
-class Yq123Tool(utils.Tool):
+class Yq33Tool(utils.Tool):
 
     def __init__(self):
         super().__init__()
@@ -19,7 +19,7 @@ class Yq123Tool(utils.Tool):
         )
 
 
-class Yq123(serial.SerialNovel):
+class Yq33(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#TXT',
@@ -28,7 +28,7 @@ class Yq123(serial.SerialNovel):
                          chap_type=serial.ChapterType.last_rev,
                          tid=tid)
         self.encoding = config.GB
-        self.tool = Yq123Tool
+        self.tool = Yq33Tool
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
@@ -37,7 +37,7 @@ class Yq123(serial.SerialNovel):
 
 
 def main():
-    utils.in_main(Yq123, config.GOAGENT)
+    utils.in_main(Yq33, config.GOAGENT)
 
 
 if __name__ == '__main__':
