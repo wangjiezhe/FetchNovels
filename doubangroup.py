@@ -19,6 +19,11 @@ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36'
 }
 
 
+def refine(text):
+    text = text.replace('\r\n', '\n')
+    return text
+
+
 class DoubanGroup(base.BaseNovel):
 
     def __init__(self, topic_id):
@@ -27,12 +32,20 @@ class DoubanGroup(base.BaseNovel):
         self.comments_url = utils.base_to_url(COMMENTS_URL, topic_id)
 
         self.req = self.session = None
-        self.content = ''
+        self.author_id = self.content = ''
+        self.num_comments = 0
 
     def run(self, refresh=True):
+        if self.running and not refresh:
+            return
+        self.refine = refine
         self.req = requests.get(
             self.url, headers=self.headers, proxies=self.proxies
         ).json()
+        self.title = self.req['title']
+        self.author_id = self.req['author']['id']
+        self.num_comments = self.req['comments_count']
+        print(self.title)
         if self.cache:
             self.session = utils.connect_database(config.CACHE_DB)
             self._add_website()
@@ -40,6 +53,11 @@ class DoubanGroup(base.BaseNovel):
         else:
             self.content = self.get_content()
         self.running = True
+
+    def close(self):
+        if self.cache:
+            self.session.close()
+        self.running = False
 
     # noinspection PyArgumentList
     def _add_website(self):
@@ -54,30 +72,13 @@ class DoubanGroup(base.BaseNovel):
     # noinspection PyArgumentList
     def _add_article(self):
         article = self.session.query(models.Article).filter_by(
-            id=self.tid, source=self.get_content()
+            id=self.tid, source=self.get_source()
         ).first()
 
         if not article:
             article = models.Article(id=self.tid, title=self.title,
                                      text=self.get_content(), source=self.get_source())
             self.session.add(article)
-
-    @property
-    def title(self):
-        return self.req['title']
-
-    @property
-    def author_id(self):
-        return self.req['author']['id']
-
-    @property
-    def num_comments(self):
-        return self.req['comments_count']
-
-    @staticmethod
-    def refine(text):
-        text = text.replace('\r\n', '\n')
-        return text
 
     def get_content(self):
         content_list = [self.refine(self.req['content'])]
@@ -99,11 +100,10 @@ class DoubanGroup(base.BaseNovel):
         content = '\n\n\n\n'.join(content_list)
         return content
 
-    def dump(self, overwrite=True):
-        self.run()
-        print(self.title)
-        filename = '{self.title}.txt'.format(self=self)
+    def _dump(self, overwrite=True):
+        filename = utils.get_filename(self.title, overwrite=overwrite)
         filename = filename.replace('/', '_')
+        print(filename)
         if self.cache:
             content = self.session.query(models.Article).filter_by(
                 id=self.tid, source=self.get_source()
@@ -112,6 +112,11 @@ class DoubanGroup(base.BaseNovel):
             content = self.content
         with open(filename, 'w') as fp:
             fp.write(content)
+
+    def dump(self, overwrite=True):
+        self.run()
+        self._dump(overwrite=overwrite)
+        self.close()
 
 
 def main():
