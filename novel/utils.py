@@ -204,7 +204,7 @@ def connect_database(db):
     return session
 
 
-def in_main(NovelClass, proxies=None, overwrite=True):
+def in_main(NovelClass, proxies=None, overwrite=True, cache=None):
     """
     A pre-defined main function
 
@@ -219,6 +219,8 @@ def in_main(NovelClass, proxies=None, overwrite=True):
     def dump(t):
         nov = NovelClass(t)
         nov.proxies = proxies
+        if cache is not None:
+            nov.cache = cache
         nov.dump(overwrite=overwrite)
 
     check_first()

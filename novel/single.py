@@ -62,7 +62,7 @@ class SingleNovel(SinglePage):
             article = None
             self.tid = self._new_tid()
 
-        if article is None:
+        if not article:
             article = Article(id=self.tid, title=self.title,
                               text=self.get_content(), source=self.get_source())
             self.session.add(article)

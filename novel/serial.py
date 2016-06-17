@@ -115,7 +115,7 @@ class SerialNovel(BaseNovel):
             novel = None
             self.tid = self._new_tid()
 
-        if novel is None:
+        if not novel:
             novel = Novel(id=self.tid, title=self.title, author=self.author,
                           intro=self.get_intro(), source=self.get_source())
             self.session.add(novel)
