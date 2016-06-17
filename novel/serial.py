@@ -11,7 +11,7 @@ from urllib.parse import urljoin
 from pyquery import PyQuery
 
 from .config import CACHE_DB
-from .models import Novel, Chapter, Website
+from .models import Serial, Chapter, Website
 from .base import BaseNovel, SinglePage
 from .decorators import retry
 from .utils import get_base_url, get_filename, connect_database
@@ -79,8 +79,8 @@ class SerialNovel(BaseNovel):
         self.session = None
 
     def _new_tid(self):
-        return self.session.query(Novel).filter(
-            Novel.source == self.get_source(), Novel.id < 0
+        return self.session.query(Serial).filter(
+            Serial.source == self.get_source(), Serial.id < 0
         ).count() - 1
 
     def run(self, refresh=False, parallel=True):
@@ -108,7 +108,7 @@ class SerialNovel(BaseNovel):
     # noinspection PyArgumentList
     def _add_novel(self):
         if self.tid is not None:
-            novel = self.session.query(Novel).filter_by(
+            novel = self.session.query(Serial).filter_by(
                 id=self.tid, source=self.get_source()
             ).first()
         else:
@@ -116,8 +116,8 @@ class SerialNovel(BaseNovel):
             self.tid = self._new_tid()
 
         if not novel:
-            novel = Novel(id=self.tid, title=self.title, author=self.author,
-                          intro=self.get_intro(), source=self.get_source())
+            novel = Serial(id=self.tid, title=self.title, author=self.author,
+                           intro=self.get_intro(), source=self.get_source())
             self.session.add(novel)
 
             novel.chapters = [Chapter(id=tid, title=title, url=url)
@@ -225,7 +225,7 @@ class SerialNovel(BaseNovel):
         print('《{self.title}》{self.author}'.format(self=self))
 
         if self.cache:
-            intro = self.session.query(Novel).filter_by(
+            intro = self.session.query(Serial).filter_by(
                 id=self.tid, source=self.get_source()
             ).one().intro
         else:
@@ -276,7 +276,7 @@ class SerialNovel(BaseNovel):
 
             fp.write('\n\n\n')
             if self.cache:
-                intro = self.session.query(Novel).filter_by(
+                intro = self.session.query(Serial).filter_by(
                     id=self.tid, source=self.get_source()
                 ).one().intro
             else:
