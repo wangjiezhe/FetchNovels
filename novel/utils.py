@@ -5,6 +5,7 @@ Some help functions
 """
 
 import collections
+import itertools
 import os
 import re
 import string
@@ -184,7 +185,7 @@ def get_filename(title, author=None, overwrite=True):
     filename = '{}.txt'.format(base)
     if not overwrite:
         if os.path.exists(filename):
-            for i in count(1):
+            for i in itertools.count(1):
                 filename = '{}({:d}).txt'.format(base, i)
                 if not os.path.exists(filename):
                     break

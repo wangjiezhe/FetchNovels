@@ -12,7 +12,8 @@ class Sis(single.SingleNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid),
                          '.archiver_postbody',
                          title_sel='h2',
-                         title_type=single.TitleType.selector)
+                         title_type=single.TitleType.selector,
+                         tid=tid)
 
 
 def main():

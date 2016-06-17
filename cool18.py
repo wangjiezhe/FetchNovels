@@ -24,7 +24,8 @@ class Cool18(single.SingleNovel):
         super().__init__(utils.base_to_url(BASE_URL, tid),
                          'pre',
                          title_sel=('name', 'Description'),
-                         title_type=single.TitleType.meta)
+                         title_type=single.TitleType.meta,
+                         tid=tid)
         self.tool = Cool18Tool
 
 

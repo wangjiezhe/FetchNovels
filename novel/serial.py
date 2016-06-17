@@ -67,8 +67,7 @@ class SerialNovel(BaseNovel):
                  intro_url=None, intro_sel=None,
                  chap_sel=None, chap_type=None,
                  tid=None, cache=True):
-        super().__init__(url)
-        self.tid = tid
+        super().__init__(url, tid=tid, cache=cache)
         self.cont_sel = cont_sel
         self.intro_url = intro_url
         self.intro_sel = intro_sel
@@ -76,16 +75,13 @@ class SerialNovel(BaseNovel):
         self.intro_page = IntroPage
         self.chap_sel = chap_sel
         self.chap_type = chap_type
-        self.cache = cache
 
         self.session = None
 
-    @classmethod
-    def get_source(cls):
-        return cls.__name__.lower()
-
     def _new_tid(self):
-        return self.session.query(Novel).filter(Novel.id < 0).count() - 1
+        return self.session.query(Novel).filter(
+            Novel.source == self.get_source(), Novel.id < 0
+        ).count() - 1
 
     def run(self, refresh=False, parallel=True):
         super().run(refresh=refresh)
@@ -94,8 +90,20 @@ class SerialNovel(BaseNovel):
 
         if self.cache:
             self.session = connect_database(CACHE_DB)
+            self._add_website()
             self._add_novel()
             self._update_chapters()
+
+    # noinspection PyArgumentList
+    def _add_website(self):
+        website = self.session.query(Website).filter_by(
+            name=self.get_source()
+        ).first()
+
+        if not website:
+            website = Website(name=self.get_source(),
+                              url=get_base_url(self.url))
+            self.session.add(website)
 
     # noinspection PyArgumentList
     def _add_novel(self):
@@ -114,18 +122,6 @@ class SerialNovel(BaseNovel):
 
             novel.chapters = [Chapter(id=tid, title=title, url=url)
                               for tid, url, title in self.chapter_list]
-
-            website = self.session.query(Website).filter_by(
-                name=novel.source
-            ).first()
-            if website:
-                website.novels.append(novel)
-            else:
-                website = Website(name=novel.source,
-                                  url=get_base_url(self.url))
-                self.session.add(website)
-                website.novels = [novel]
-
         else:
             old_chapters_ids = self.session.query(Chapter.id).filter_by(
                 novel_id=self.tid, novel_source=self.get_source()
