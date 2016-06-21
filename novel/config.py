@@ -4,6 +4,7 @@
 Some constants
 """
 
+import json
 import os
 from random import randrange
 
@@ -33,3 +34,29 @@ def get_headers():
 def check_first():
     if not os.path.exists(CACHE_DIR):
         os.makedirs(CACHE_DIR)
+
+
+def load_novel_list():
+    with open(NOVEL_LIST_JSON) as fp:
+        nl = json.load(fp)
+    return nl
+
+
+def update_novel_list(nl, source, tid):
+    if source in nl:
+        if tid not in nl[source]:
+            nl[source].append(tid)
+    else:
+        nl[source] = [tid]
+    return nl
+
+
+def save_novel_list(nl):
+    with open(NOVEL_LIST_JSON, 'w') as fp:
+        json.dump(nl, fp, indent=2)
+
+
+def update_and_save_novel_list(source, tid):
+    nl = load_novel_list()
+    nl = update_novel_list(nl, source, tid)
+    save_novel_list(nl)

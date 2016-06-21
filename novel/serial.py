@@ -314,5 +314,7 @@ class SerialNovel(BaseNovel):
 
     def dump(self, overwrite=True):
         self.run()
+        if self.cache:
+            self.update_novel_list()
         self._dump(overwrite=overwrite)
         self.close()

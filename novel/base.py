@@ -7,7 +7,7 @@ from lxml.etree import XMLSyntaxError
 from pyquery import PyQuery
 from requests import ConnectionError
 
-from .config import get_headers
+from .config import get_headers, update_and_save_novel_list
 from .decorators import retry
 from .utils import Tool
 
@@ -40,6 +40,9 @@ class BaseNovel(object):
         self.refine = self.tool().refine
         self.doc = self.get_doc()
         self.running = True
+
+    def update_novel_list(self):
+        update_and_save_novel_list(self.get_source(), self.tid)
 
     @retry((HTTPError, XMLSyntaxError, ConnectionError))
     def get_doc(self):
