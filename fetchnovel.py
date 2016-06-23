@@ -15,18 +15,16 @@ def main():
         sys.exit(1)
 
     novel_class = getattr(sources, source.capitalize())
+    overwrite = source in sources.DEFAULT_USE_OVERWRITE
 
     def dump(t):
         nov = novel_class(t)
-        if source in sources.USE_PROXIES:
+        if source in sources.DEFAULT_USE_PROXIES:
             nov.proxies = config.GOAGENT
-        nov.dump()
+        nov.dump(overwrite=overwrite)
 
     config.check_first()
 
-    # num = len(tids)
-    # with Pool(num) as p:
-    #     p.map(dump, tids)
     for tid in tids:
         dump(tid)
 

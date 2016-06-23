@@ -29,7 +29,7 @@ from .yfzww import Yfzww
 from .yq33 import Yq33
 from .zhaishu8 import Zhaishu8
 
-USE_PROXIES = (
+DEFAULT_USE_PROXIES = (
     'cool18',
     'dzxsw',
     'haxtxt',
@@ -50,4 +50,8 @@ USE_PROXIES = (
     'xs365',
     'yq33',
     'zhaishu8',
+)
+
+DEFAULT_USE_OVERWRITE = (
+    'cool18',
 )

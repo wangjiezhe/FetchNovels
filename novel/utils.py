@@ -9,7 +9,6 @@ import itertools
 import os
 import re
 import string
-# from multiprocessing.dummy import Pool
 from urllib.parse import urlparse, urlunparse
 
 

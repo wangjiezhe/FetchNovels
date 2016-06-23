@@ -28,7 +28,7 @@ def update_all():
     for novel in novel_list:
         novel_class = getattr(sources, novel.source.capitalize())
         nov = novel_class(novel.id)
-        if novel.source in sources.USE_PROXIES:
+        if novel.source in sources.DEFAULT_USE_PROXIES:
             nov.proxies = GOAGENT
         nov.run()
     session.close()
@@ -48,6 +48,6 @@ def sync_list_to_db():
         novel_class = getattr(sources, s.capitalize())
         for tid in tids:
             nov = novel_class(tid)
-            if s in sources.USE_PROXIES:
+            if s in sources.DEFAULT_USE_PROXIES:
                 nov.proxies = GOAGENT
             nov.run()
