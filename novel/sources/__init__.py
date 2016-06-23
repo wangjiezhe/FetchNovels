@@ -28,3 +28,26 @@ from .xs365 import Xs365
 from .yfzww import Yfzww
 from .yq33 import Yq33
 from .zhaishu8 import Zhaishu8
+
+USE_PROXIES = (
+    'cool18',
+    'dzxsw',
+    'haxtxt',
+    'klxsw',
+    'lwxs520',
+    'lwxs',
+    'lwxsw',
+    'piaotian',
+    'ranwen',
+    'sdragon',
+    'shu69',
+    'sis',
+    'sto',
+    'ttshuba',
+    'ttzw',
+    'uks5',
+    'wodexiaoshuo',
+    'xs365',
+    'yq33',
+    'zhaishu8',
+)

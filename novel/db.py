@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import SingletonThreadPool
 
 from . import sources
-from .config import CACHE_DB, load_novel_list, save_novel_list
+from .config import CACHE_DB, load_novel_list, save_novel_list, GOAGENT
 from .models import Base, Serial, Website
 
 
@@ -28,6 +28,8 @@ def update_all():
     for novel in novel_list:
         novel_class = getattr(sources, novel.source.capitalize())
         nov = novel_class(novel.id)
+        if novel.source in sources.USE_PROXIES:
+            nov.proxies = GOAGENT
         nov.run()
     session.close()
 
@@ -46,4 +48,6 @@ def sync_list_to_db():
         novel_class = getattr(sources, s.capitalize())
         for tid in tids:
             nov = novel_class(tid)
+            if s in sources.USE_PROXIES:
+                nov.proxies = GOAGENT
             nov.run()
