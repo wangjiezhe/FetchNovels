@@ -13,12 +13,7 @@ import sys
 # from multiprocessing.dummy import Pool
 from urllib.parse import urlparse, urlunparse
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import SingletonThreadPool
-
 from .config import check_first
-from .models import Base
 
 
 class Tool(object):
@@ -190,18 +185,6 @@ def get_filename(title, author=None, overwrite=True):
                 if not os.path.exists(filename):
                     break
     return filename
-
-
-def connect_database(db):
-    engine = create_engine(
-        'sqlite:///' + db,
-        poolclass=SingletonThreadPool,
-        pool_size=100
-    )
-    db_session = sessionmaker(bind=engine, autocommit=True)
-    session = db_session()
-    Base.metadata.create_all(engine)
-    return session
 
 
 def in_main(NovelClass, proxies=None, overwrite=True, cache=None):

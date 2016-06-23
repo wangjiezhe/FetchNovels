@@ -37,6 +37,9 @@ def check_first():
 
 
 def load_novel_list():
+    if not os.path.exists(NOVEL_LIST_JSON):
+        return dict()
+
     with open(NOVEL_LIST_JSON) as fp:
         nl = json.load(fp)
     return nl
