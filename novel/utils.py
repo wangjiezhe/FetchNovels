@@ -187,7 +187,7 @@ def get_filename(title, author=None, overwrite=True):
     return filename
 
 
-def in_main(NovelClass, proxies=None, overwrite=True, cache=None):
+def in_main(novel_class, proxies=None, overwrite=True, cache=None):
     """
     A pre-defined main function
 
@@ -200,7 +200,7 @@ def in_main(NovelClass, proxies=None, overwrite=True, cache=None):
         sys.exit(1)
 
     def dump(t):
-        nov = NovelClass(t)
+        nov = novel_class(t)
         nov.proxies = proxies
         if cache is not None:
             nov.cache = cache

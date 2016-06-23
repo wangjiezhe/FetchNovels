@@ -3,7 +3,7 @@
 
 import requests
 
-from novel import base, utils, config, models, db
+from novel import base, utils, models, db
 
 BASE_URL = 'https://api.douban.com/v2/group/topic/{}/'  # id
 COMMENTS_URL = BASE_URL + 'comments'
@@ -47,7 +47,7 @@ class DoubanGroup(base.BaseNovel):
         self.num_comments = self.req['comments_count']
         print(self.title)
         if self.cache:
-            self.session = db.create_session(config.CACHE_DB)
+            self.session = db.create_session()
             self._add_website()
             self._add_article()
         else:

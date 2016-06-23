@@ -6,10 +6,9 @@ from enum import Enum
 from pyquery import PyQuery
 
 from .base import SinglePage
-from .config import CACHE_DB
+from .db import create_session
 from .models import Article, Website
 from .utils import get_filename, get_base_url
-from .db import create_session
 
 
 class TitleType(Enum):
@@ -33,7 +32,7 @@ class SingleNovel(SinglePage):
         super().run(refresh=refresh)
         print(self.title)
         if self.cache:
-            self.session = create_session(CACHE_DB)
+            self.session = create_session()
             self._add_website()
             self._add_article()
 

@@ -10,7 +10,6 @@ from urllib.parse import urljoin
 
 from pyquery import PyQuery
 
-from .config import CACHE_DB
 from .models import Serial, Chapter, Website
 from .base import BaseNovel, SinglePage
 from .decorators import retry
@@ -90,7 +89,7 @@ class SerialNovel(BaseNovel):
         print(self.title, self.author)
 
         if self.cache:
-            self.session = create_session(CACHE_DB)
+            self.session = create_session()
             self._add_website()
             self._add_novel()
             self._update_chapters()
