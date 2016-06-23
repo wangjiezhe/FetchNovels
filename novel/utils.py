@@ -9,11 +9,8 @@ import itertools
 import os
 import re
 import string
-import sys
 # from multiprocessing.dummy import Pool
 from urllib.parse import urlparse, urlunparse
-
-from .config import check_first
 
 
 class Tool(object):
@@ -185,31 +182,3 @@ def get_filename(title, author=None, overwrite=True):
                 if not os.path.exists(filename):
                     break
     return filename
-
-
-def in_main(novel_class, proxies=None, overwrite=True, cache=None):
-    """
-    A pre-defined main function
-
-    Get tids for command line parameters, and save content in each files.
-    """
-    tids = sys.argv[1:]
-    print(tids)
-    if len(tids) == 0:
-        print('No specific tid!')
-        sys.exit(1)
-
-    def dump(t):
-        nov = novel_class(t)
-        nov.proxies = proxies
-        if cache is not None:
-            nov.cache = cache
-        nov.dump(overwrite=overwrite)
-
-    check_first()
-
-    # num = len(tids)
-    # with Pool(num) as p:
-    #     p.map(dump, tids)
-    for tid in tids:
-        dump(tid)
