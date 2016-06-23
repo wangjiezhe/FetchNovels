@@ -24,7 +24,7 @@ def refine(text):
     return text
 
 
-class DoubanGroup(base.BaseNovel):
+class Doubangroup(base.BaseNovel):
 
     def __init__(self, topic_id):
         super().__init__(utils.base_to_url(BASE_URL, topic_id),
