@@ -52,6 +52,6 @@ DEFAULT_USE_PROXIES = (
     'zhaishu8',
 )
 
-DEFAULT_USE_OVERWRITE = (
+DEFAULT_NOT_OVERWRITE = (
     'cool18',
 )

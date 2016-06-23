@@ -15,7 +15,7 @@ def main():
         sys.exit(1)
 
     novel_class = getattr(sources, source.capitalize())
-    overwrite = source in sources.DEFAULT_USE_OVERWRITE
+    overwrite = source not in sources.DEFAULT_NOT_OVERWRITE
 
     def dump(t):
         nov = novel_class(t)
