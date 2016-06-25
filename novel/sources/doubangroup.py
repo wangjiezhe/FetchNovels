@@ -62,22 +62,22 @@ class Doubangroup(base.BaseNovel):
     # noinspection PyArgumentList
     def _add_website(self):
         website = self.session.query(models.Website).filter_by(
-            name=self.get_source()
+            name=self.source
         ).first()
 
         if not website:
-            website = models.Website(name=self.get_source(), url=WEBSITE_URL)
+            website = models.Website(name=self.source, url=WEBSITE_URL)
             self.session.add(website)
 
     # noinspection PyArgumentList
     def _add_article(self):
         article = self.session.query(models.Article).filter_by(
-            id=self.tid, source=self.get_source()
+            id=self.tid, source=self.source
         ).first()
 
         if not article:
             article = models.Article(id=self.tid, title=self.title,
-                                     text=self.get_content(), source=self.get_source())
+                                     text=self.get_content(), source=self.source)
             self.session.add(article)
 
     def get_content(self):
@@ -106,7 +106,7 @@ class Doubangroup(base.BaseNovel):
         print(filename)
         if self.cache:
             content = self.session.query(models.Article).filter_by(
-                id=self.tid, source=self.get_source()
+                id=self.tid, source=self.source
             ).one().text
         else:
             content = self.content

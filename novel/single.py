@@ -44,11 +44,11 @@ class SingleNovel(SinglePage):
     # noinspection PyArgumentList
     def _add_website(self):
         website = self.session.query(Website).filter_by(
-            name=self.get_source()
+            name=self.source
         ).first()
 
         if not website:
-            website = Website(name=self.get_source(),
+            website = Website(name=self.source,
                               url=get_base_url(self.url))
             self.session.add(website)
 
@@ -56,7 +56,7 @@ class SingleNovel(SinglePage):
     def _add_article(self):
         if self.tid is not None:
             article = self.session.query(Article).filter_by(
-                id=self.tid, source=self.get_source()
+                id=self.tid, source=self.source
             ).first()
         else:
             article = None
@@ -64,12 +64,12 @@ class SingleNovel(SinglePage):
 
         if not article:
             article = Article(id=self.tid, title=self.title,
-                              text=self.get_content(), source=self.get_source())
+                              text=self.get_content(), source=self.source)
             self.session.add(article)
 
     def _new_tid(self):
         return self.session.query(Article).filter(
-            Article.source == self.get_source(), Article.id < 0
+            Article.source == self.source, Article.id < 0
         ).count() - 1
 
     def get_title(self):
@@ -100,7 +100,7 @@ class SingleNovel(SinglePage):
         print(filename)
         if self.cache:
             content = self.session.query(Article).filter_by(
-                id=self.tid, source=self.get_source()
+                id=self.tid, source=self.source
             ).one().text
         else:
             content = self.content

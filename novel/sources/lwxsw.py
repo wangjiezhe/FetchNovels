@@ -5,6 +5,8 @@ from pyquery import PyQuery
 
 from novel import serial, utils, config
 
+# The domain has been changed into `www.lwxs.la`,
+# but it can be redirected correctly, so there is no need to change.
 BASE_URL = 'http://www.lwxsw.org/books/{}/{}/'
 INTRO_URL = 'http://www.lwxsw.org/book/{}/index.html'
 

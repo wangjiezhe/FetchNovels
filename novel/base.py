@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from urllib.error import HTTPError
+from urllib.parse import urlparse
 
 from lxml.etree import XMLSyntaxError
 from pyquery import PyQuery
@@ -31,8 +32,17 @@ class BaseNovel(object):
         self.title = self.author = ''
 
     @classmethod
-    def get_source(cls):
+    def get_source_from_class(cls):
         return cls.__name__.lower()
+
+    def get_source_from_url(self):
+        source = urlparse(self.url).netloc
+        source = source.lstrip('www.').replace('.', '_')
+        return source
+
+    @property
+    def source(self):
+        return self.get_source_from_class()
 
     def run(self, refresh=False):
         if self.running and not refresh:
@@ -42,7 +52,7 @@ class BaseNovel(object):
         self.running = True
 
     def update_novel_list(self):
-        update_and_save_novel_list(self.get_source(), self.tid)
+        update_and_save_novel_list(self.source, self.tid)
 
     @retry((HTTPError, XMLSyntaxError, ConnectionError))
     def get_doc(self):

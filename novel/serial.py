@@ -80,7 +80,7 @@ class SerialNovel(BaseNovel):
 
     def _new_tid(self):
         return self.session.query(Serial).filter(
-            Serial.source == self.get_source(), Serial.id < 0
+            Serial.source == self.source, Serial.id < 0
         ).count() - 1
 
     def run(self, refresh=False, parallel=True):
@@ -97,11 +97,11 @@ class SerialNovel(BaseNovel):
     # noinspection PyArgumentList
     def _add_website(self):
         website = self.session.query(Website).filter_by(
-            name=self.get_source()
+            name=self.source
         ).first()
 
         if not website:
-            website = Website(name=self.get_source(),
+            website = Website(name=self.source,
                               url=get_base_url(self.url))
             self.session.add(website)
 
@@ -109,7 +109,7 @@ class SerialNovel(BaseNovel):
     def _add_novel(self):
         if self.tid is not None:
             novel = self.session.query(Serial).filter_by(
-                id=self.tid, source=self.get_source()
+                id=self.tid, source=self.source
             ).first()
         else:
             novel = None
@@ -117,14 +117,14 @@ class SerialNovel(BaseNovel):
 
         if not novel:
             novel = Serial(id=self.tid, title=self.title, author=self.author,
-                           intro=self.get_intro(), source=self.get_source())
+                           intro=self.get_intro(), source=self.source)
             self.session.add(novel)
 
             novel.chapters = [Chapter(id=tid, title=title, url=url)
                               for tid, url, title in self.chapter_list]
         else:
             old_chapters_ids = self.session.query(Chapter.id).filter_by(
-                novel_id=self.tid, novel_source=self.get_source()
+                novel_id=self.tid, novel_source=self.source
             ).all()
             old_chapters_ids = list(*zip(*old_chapters_ids))
             novel.chapters.extend(
@@ -134,7 +134,7 @@ class SerialNovel(BaseNovel):
 
     def _update_chapters(self, parallel=True):
         empty_chapters = self.session.query(Chapter).filter_by(
-            novel_id=self.tid, novel_source=self.get_source()
+            novel_id=self.tid, novel_source=self.source
         ).filter(Chapter.text.is_(None))
 
         if parallel:
@@ -226,7 +226,7 @@ class SerialNovel(BaseNovel):
 
         if self.cache:
             intro = self.session.query(Serial).filter_by(
-                id=self.tid, source=self.get_source()
+                id=self.tid, source=self.source
             ).one().intro
         else:
             intro = self.get_intro()
@@ -239,7 +239,7 @@ class SerialNovel(BaseNovel):
 
         if self.cache:
             chapters = self.session.query(Chapter).filter_by(
-                novel_id=self.tid, novel_source=self.get_source()
+                novel_id=self.tid, novel_source=self.source
             ).all()
             for ch in chapters:
                 filename = '「{:d}」{}.txt'.format(ch.id + 1, ch.title)
@@ -277,7 +277,7 @@ class SerialNovel(BaseNovel):
             fp.write('\n\n\n')
             if self.cache:
                 intro = self.session.query(Serial).filter_by(
-                    id=self.tid, source=self.get_source()
+                    id=self.tid, source=self.source
                 ).one().intro
             else:
                 intro = self.get_intro()
@@ -285,7 +285,7 @@ class SerialNovel(BaseNovel):
 
             if self.cache:
                 chapters = self.session.query(Chapter).filter_by(
-                    novel_id=self.tid, novel_source=self.get_source()
+                    novel_id=self.tid, novel_source=self.source
                 ).order_by(Chapter.id).all()
                 for ch in chapters:
                     fp.write('\n\n\n\n')
