@@ -290,7 +290,6 @@ class SerialNovel(BaseNovel):
             else:
                 for _, url, title in self.chapter_list:
                     fp.write('\n\n\n\n')
-                    print(title)
                     fp.write(title)
                     fp.write('\n\n\n')
                     fp.write(self._get_chapter(url, title))

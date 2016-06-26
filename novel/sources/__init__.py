@@ -17,6 +17,7 @@ from .piaotian import Piaotian
 from .ranwen import Ranwen
 from .sdragon import Sdragon
 from .shu69 import Shu69
+from .shushu8 import Shushu8
 from .sis import Sis
 from .sto import Sto
 from .ttshuba import Ttshuba
