@@ -7,7 +7,7 @@ from urllib.parse import urljoin
 from pyquery import PyQuery
 from selenium import webdriver
 
-from novel import serial, utils, config
+from .. import serial, utils, config
 
 BASE_URL = 'http://www.piaotian.net/html/{}/{}/'
 INTRO_URL = 'http://www.piaotian.net/bookinfo/{}/{}.html'

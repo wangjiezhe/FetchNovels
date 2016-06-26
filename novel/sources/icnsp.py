@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from novel import serial, utils
+from .. import serial, utils
 
 BASE_URL = 'http://www.icnsp.com/plugin.php?id=ysysyan_novel:novel&do=chapter&tid={}'
 

@@ -3,7 +3,7 @@
 
 import re
 
-from novel import single, utils
+from .. import single, utils
 
 BASE_URL = 'http://www.cool18.com/bbs4/index.php?app=forum&act=threadview&tid={}'
 

@@ -3,7 +3,7 @@
 
 import re
 
-from novel import serial, utils
+from .. import serial, utils
 
 BASE_URL = 'http://2bgif.com/chapters/{}'
 

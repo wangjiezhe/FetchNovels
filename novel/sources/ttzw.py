@@ -3,7 +3,7 @@
 
 from pyquery import PyQuery
 
-from novel import serial, utils
+from .. import serial, utils
 
 BASE_URL = 'http://www.ttzw.com/book/{}/'
 

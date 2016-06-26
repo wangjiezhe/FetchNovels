@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from novel import single, utils
+from .. import single, utils
 
 BASE_URL = 'http://www.sis001.com/forum/archiver/tid-{}.html'
 

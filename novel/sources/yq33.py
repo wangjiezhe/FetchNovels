@@ -5,8 +5,7 @@ import re
 
 from pyquery import PyQuery
 
-from novel import serial, utils, config
-from novel.utils import fix_order
+from .. import serial, utils, config
 
 BASE_URL = 'http://www.33yq.com/read/{}/{}/'
 
@@ -39,7 +38,7 @@ class Yq33(serial.SerialNovel):
         clist = self.doc('dd').filter(
             lambda i, e: PyQuery(e)('a').attr('href')
         ).map(
-            lambda i, e: (fix_order(i),
+            lambda i, e: (utils.fix_order(i),
                           PyQuery(e)('a').attr('href'),
                           PyQuery(e).text())
         )
