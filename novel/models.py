@@ -49,7 +49,7 @@ class Website(Base):
 
 
 class General(Base):
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     title = Column(String)
     source = Column(String, primary_key=True)
 
@@ -59,7 +59,7 @@ class General(Base):
 
 
 class Serial(General):
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     title = Column(String)
     author = Column(String)
     intro = Column(Text)
@@ -89,7 +89,7 @@ class Chapter(Base):
 
 
 class Article(General):
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     title = Column(String)
     text = Column(Text)
     source = Column(String, primary_key=True)

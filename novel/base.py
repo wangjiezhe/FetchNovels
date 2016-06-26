@@ -4,13 +4,14 @@
 from urllib.error import HTTPError
 from urllib.parse import urlparse
 
+import pypinyin
 from lxml.etree import XMLSyntaxError
 from pyquery import PyQuery
 from requests import ConnectionError
 
 from .config import get_headers, update_and_save_novel_list
 from .decorators import retry
-from .utils import Tool, string_to_int
+from .utils import Tool
 
 
 class BaseNovel(object):
@@ -34,13 +35,11 @@ class BaseNovel(object):
     @property
     def tid(self):
         if self._tid is not None:
-            try:
-                tid = int(self._tid)
-            except ValueError:
-                tid = string_to_int(str(self._tid))
+            return str(self._tid)
         else:
-            ta = '{self.title} {self.author}'.format(self=self)
-            tid = string_to_int(ta)
+            tp = pypinyin.slug(self.title, errors='ignore', separator='_')
+            ap = pypinyin.slug(self.author, errors='ignore', separator='_')
+            tid = '{} {}'.format(tp, ap)
         return tid
 
     @classmethod
