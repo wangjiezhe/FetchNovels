@@ -60,17 +60,11 @@ class SingleNovel(SinglePage):
             ).first()
         else:
             article = None
-            self.tid = self._new_tid()
 
         if not article:
             article = Article(id=self.tid, title=self.title,
                               text=self.get_content(), source=self.source)
             self.session.add(article)
-
-    def _new_tid(self):
-        return self.session.query(Article).filter(
-            Article.source == self.source, Article.id < 0
-        ).count() - 1
 
     def get_title(self):
         if not self.title_sel:

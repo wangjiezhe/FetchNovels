@@ -43,8 +43,7 @@ class StoTool(utils.Tool):
 class Sto(serial.SerialNovel):
 
     def __init__(self, tid):
-        self.tid = tid
-        super().__init__(utils.base_to_url(BASE_URL, self.tid), '#BookContent',
+        super().__init__(utils.base_to_url(BASE_URL, tid), '#BookContent',
                          tid=tid)
         self.tool = StoTool
 

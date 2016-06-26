@@ -10,7 +10,7 @@ from requests import ConnectionError
 
 from .config import get_headers, update_and_save_novel_list
 from .decorators import retry
-from .utils import Tool
+from .utils import Tool, string_to_int
 
 
 class BaseNovel(object):
@@ -24,12 +24,24 @@ class BaseNovel(object):
         self._proxies = proxies
         self.encoding = encoding
         self.tool = tool or Tool
-        self.tid = tid
+        self._tid = tid
         self.cache = cache
         self.running = False
 
         self.refine = self.doc = None
         self.title = self.author = ''
+
+    @property
+    def tid(self):
+        if self._tid is not None:
+            try:
+                tid = int(self._tid)
+            except ValueError:
+                tid = string_to_int(str(self._tid))
+        else:
+            ta = '{self.title} {self.author}'.format(self=self)
+            tid = string_to_int(ta)
+        return tid
 
     @classmethod
     def get_source_from_class(cls):

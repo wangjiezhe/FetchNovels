@@ -11,6 +11,10 @@ import re
 import string
 from urllib.parse import urlparse, urlunparse
 
+import sys
+
+import math
+
 
 class Tool(object):
     """
@@ -181,3 +185,12 @@ def get_filename(title, author=None, overwrite=True):
                 if not os.path.exists(filename):
                     break
     return filename
+
+
+# http://stackoverflow.com/a/31702461/4841163
+def string_to_int(s: str):
+    return int.from_bytes(s.encode(), sys.byteorder)
+
+
+def int_to_string(n: int):
+    return n.to_bytes(math.ceil(n.bit_length() / 8), sys.byteorder)

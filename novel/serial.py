@@ -78,11 +78,6 @@ class SerialNovel(BaseNovel):
 
         self.session = None
 
-    def _new_tid(self):
-        return self.session.query(Serial).filter(
-            Serial.source == self.source, Serial.id < 0
-        ).count() - 1
-
     def run(self, refresh=False, parallel=True):
         super().run(refresh=refresh)
         self.title, self.author = self.get_title_and_author()
@@ -113,7 +108,6 @@ class SerialNovel(BaseNovel):
             ).first()
         else:
             novel = None
-            self.tid = self._new_tid()
 
         if not novel:
             novel = Serial(id=self.tid, title=self.title, author=self.author,
