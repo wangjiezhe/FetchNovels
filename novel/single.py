@@ -35,6 +35,7 @@ class SingleNovel(SinglePage):
             self.session = create_session()
             self._add_website()
             self._add_article()
+            self.session.commit()
 
     def close(self):
         if self.cache:

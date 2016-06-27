@@ -88,6 +88,7 @@ class SerialNovel(BaseNovel):
             self._add_website()
             self._add_novel()
             self._update_chapters()
+            self.session.commit()
 
     # noinspection PyArgumentList
     def _add_website(self):

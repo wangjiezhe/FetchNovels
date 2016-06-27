@@ -10,13 +10,13 @@ from .config import CACHE_DB, load_novel_list, save_novel_list, GOAGENT
 from .models import Base, Serial, Website
 
 
-def create_session(db=CACHE_DB):
+def create_session(db=CACHE_DB, pool_size=100):
     engine = create_engine(
         'sqlite:///' + db,
         poolclass=SingletonThreadPool,
-        pool_size=100
+        pool_size=pool_size
     )
-    db_session = sessionmaker(bind=engine, autocommit=True)
+    db_session = sessionmaker(bind=engine)
     session = db_session()
     Base.metadata.create_all(engine)
     return session
@@ -25,13 +25,14 @@ def create_session(db=CACHE_DB):
 def update_all():
     session = create_session()
     novel_list = session.query(Serial).all()
+    session.close()
     for novel in novel_list:
         novel_class = getattr(sources, novel.source.capitalize())
         nov = novel_class(novel.id)
         if novel.source in sources.DEFAULT_USE_PROXIES:
             nov.proxies = GOAGENT
         nov.run()
-    session.close()
+        nov.close()
 
 
 def sync_db_to_list():

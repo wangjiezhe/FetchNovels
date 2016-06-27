@@ -50,6 +50,7 @@ class Doubangroup(base.BaseNovel):
             self.session = db.create_session()
             self._add_website()
             self._add_article()
+            self.session.commit()
         else:
             self.content = self.get_content()
         self.running = True
