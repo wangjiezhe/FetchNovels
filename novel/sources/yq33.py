@@ -35,11 +35,11 @@ class Yq33(serial.SerialNovel):
 
     @property
     def chapter_list(self):
-        clist = self.doc('dd').filter(
-            lambda i, e: PyQuery(e)('a').attr('href')
-        ).map(
+        clist = self.doc('dd').map(
             lambda i, e: (utils.fix_order(i),
                           PyQuery(e)('a').attr('href'),
                           PyQuery(e).text())
+        ).filter(
+            lambda i, e: e[1]
         )
         return clist
