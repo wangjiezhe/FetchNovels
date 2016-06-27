@@ -57,6 +57,37 @@ def list_all_novels(intro=False):
     print(pt.get_string())
 
 
+def delete_novels(source, tid=None):
+    session = create_session()
+    if tid:
+        novel_list = session.query(Serial).filter_by(
+            source=source, id=str(tid)
+        ).all()
+    else:
+        novel_list = session.query(Serial).filter_by(source=source).all()
+    for nov in novel_list:
+        for ch in nov.chapters:
+            session.delete(ch)
+        session.delete(nov)
+    session.commit()
+    session.close()
+
+
+def update_novel(source, tid):
+    novel_class = getattr(sources, source.capitalize())
+    nov = novel_class(tid)
+    if source in sources.DEFAULT_USE_PROXIES:
+        nov.proxies = GOAGENT
+    nov.run()
+
+add_novel = update_novel
+
+
+def refresh_novel(source, tid):
+    delete_novels(source, tid)
+    update_novel(source, tid)
+
+
 def sync_db_to_list():
     session = create_session()
     nl = {}
@@ -68,9 +99,5 @@ def sync_db_to_list():
 def sync_list_to_db():
     nl = load_novel_list()
     for s, tids in nl.items():
-        novel_class = getattr(sources, s.capitalize())
         for tid in tids:
-            nov = novel_class(tid)
-            if s in sources.DEFAULT_USE_PROXIES:
-                nov.proxies = GOAGENT
-            nov.run()
+            update_novel(s, tid)
