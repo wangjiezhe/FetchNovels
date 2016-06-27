@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from prettytable import PrettyTable
+import textwrap
+
+import prettytable
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import SingletonThreadPool
@@ -37,15 +39,21 @@ def update_all_novels():
         nov.close()
 
 
-def list_all_novels():
+def list_all_novels(intro=False):
     session = create_session()
     novel_list = session.query(Serial).all()
     session.close()
 
-    pt = PrettyTable()
-    pt.field_names = ('id', 'title', 'author', 'source')
+    pt = prettytable.PrettyTable()
+    pt.field_names = ['id', 'title', 'author', 'source']
+    for field in pt.field_names:
+        pt.valign[field] = 'm'
     for nov in novel_list:
         pt.add_row((nov.id, nov.title, nov.author, nov.source))
+    if intro:
+        pt.hrules = prettytable.ALL
+        intro_list = [textwrap.fill(nov.intro, width=50) for nov in novel_list]
+        pt.add_column('intro', intro_list, align='l')
     print(pt.get_string())
 
 
