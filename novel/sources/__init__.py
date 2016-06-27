@@ -14,6 +14,7 @@ from .lwxs import Lwxs
 from .lwxs520 import Lwxs520
 from .lwxsw import Lwxsw
 from .piaotian import Piaotian
+from .piaotiancc import Piaotiancc
 from .ranwen import Ranwen
 from .sdragon import Sdragon
 from .shu69 import Shu69
@@ -39,6 +40,7 @@ DEFAULT_USE_PROXIES = (
     'lwxs',
     'lwxsw',
     'piaotian',
+    'piaotiancc',
     'ranwen',
     'sdragon',
     'shu69',

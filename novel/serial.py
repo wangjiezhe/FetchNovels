@@ -5,14 +5,12 @@ import os
 # from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from multiprocessing.dummy import Pool
-from urllib.error import HTTPError
 from urllib.parse import urljoin
 
 from pyquery import PyQuery
 
 from .models import Serial, Chapter, Website
 from .base import BaseNovel, SinglePage
-from .decorators import retry
 from .utils import get_base_url, get_filename
 from .db import create_session
 
@@ -192,7 +190,6 @@ class SerialNovel(BaseNovel):
             raise NameError('chap_type')
         return clist
 
-    @retry(HTTPError)
     def get_intro(self):
         if not self.intro_url:
             if not self.intro_sel:
