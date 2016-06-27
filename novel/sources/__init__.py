@@ -42,6 +42,7 @@ DEFAULT_USE_PROXIES = (
     'ranwen',
     'sdragon',
     'shu69',
+    'shushu8',
     'sis',
     'sto',
     'ttshuba',
