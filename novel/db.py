@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from prettytable import PrettyTable
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import SingletonThreadPool
@@ -22,10 +23,11 @@ def create_session(db=CACHE_DB, pool_size=100):
     return session
 
 
-def update_all():
+def update_all_novels():
     session = create_session()
     novel_list = session.query(Serial).all()
     session.close()
+
     for novel in novel_list:
         novel_class = getattr(sources, novel.source.capitalize())
         nov = novel_class(novel.id)
@@ -33,6 +35,18 @@ def update_all():
             nov.proxies = GOAGENT
         nov.run()
         nov.close()
+
+
+def list_all_novels():
+    session = create_session()
+    novel_list = session.query(Serial).all()
+    session.close()
+
+    pt = PrettyTable()
+    pt.field_names = ('id', 'title', 'author', 'source')
+    for nov in novel_list:
+        pt.add_row((nov.id, nov.title, nov.author, nov.source))
+    print(pt.get_string())
 
 
 def sync_db_to_list():
