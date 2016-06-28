@@ -5,3 +5,4 @@ from . import sources
 
 
 __all__ = ['cli', 'config', 'utils']
+__version__ = '0.9.0'
