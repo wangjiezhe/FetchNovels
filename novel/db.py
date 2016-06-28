@@ -7,7 +7,7 @@ from sqlalchemy.pool import SingletonThreadPool
 
 from .config import CACHE_DB, load_novel_list, save_novel_list
 from .models import Base, Website
-from .novels import update_novel
+from .novels import update_novels
 
 
 def create_session(db=CACHE_DB, pool_size=100):
@@ -34,4 +34,4 @@ def sync_list_to_db():
     nl = load_novel_list()
     for s, tids in nl.items():
         for tid in tids:
-            update_novel(s, tid)
+            update_novels(s, tid)

@@ -11,46 +11,17 @@ from .db import create_session
 from .models import Serial
 
 
-def update_all_novels():
+def list_novels(source=None, tid=None, intro=False):
     session = create_session()
-    novel_list = session.query(Serial).filter_by(finish=False).all()
-    session.close()
-
-    for novel in novel_list:
-        novel_class = getattr(sources, novel.source.capitalize())
-        nov = novel_class(novel.id)
-        if novel.source in sources.DEFAULT_USE_PROXIES:
-            nov.proxies = GOAGENT
-        nov.run()
-        nov.close()
-
-
-def list_all_novels(intro=False):
-    session = create_session()
-    novel_list = session.query(Serial).all()
-    session.close()
-
-    pt = prettytable.PrettyTable()
-    pt.field_names = ['id', 'title', 'author', 'source']
-    for field in pt.field_names:
-        pt.valign[field] = 'm'
-    for nov in novel_list:
-        pt.add_row((nov.id, nov.title, nov.author, nov.source))
-    if intro:
-        pt.hrules = prettytable.ALL
-        intro_list = [textwrap.fill(nov.intro, width=50) for nov in novel_list]
-        pt.add_column('intro', intro_list, align='l')
-    print(pt.get_string())
-
-
-def list_novels(source, tid=None, intro=False):
-    session = create_session()
-    if tid:
-        novel_list = session.query(Serial).filter_by(
-            source=source, id=str(tid)
-        ).all()
+    if source:
+        if tid:
+            novel_list = session.query(Serial).filter_by(
+                source=source, id=str(tid)
+            ).all()
+        else:
+            novel_list = session.query(Serial).filter_by(source=source).all()
     else:
-        novel_list = session.query(Serial).filter_by(source=source).all()
+        novel_list = session.query(Serial).all()
     session.close()
 
     pt = prettytable.PrettyTable()
@@ -82,19 +53,52 @@ def delete_novels(source, tid=None):
     session.close()
 
 
-def update_novel(source, tid):
+def update_novels(source=None, tid=None):
+    session = create_session()
+
+    if source:
+        if tid:
+            _update_novel(source, tid)
+        else:
+            novel_list = session.query(Serial).filter_by(
+                source=source, finish=False
+            ).all()
+            for novel in novel_list:
+                _update_novel(source, novel.id)
+    else:
+        novel_list = session.query(Serial).filter_by(finish=False).all()
+
+        for novel in novel_list:
+            _update_novel(novel.source, novel.id)
+
+    session.commit()
+    session.close()
+
+
+def _update_novel(source, tid):
     novel_class = getattr(sources, source.capitalize())
     nov = novel_class(tid)
     if source in sources.DEFAULT_USE_PROXIES:
         nov.proxies = GOAGENT
     nov.run()
+    nov.close()
 
-add_novel = update_novel
+
+def add_novel(source, tid):
+    return _update_novel(source, tid)
+
+
+def dump_novel(source, tid):
+    novel_class = getattr(sources, source.capitalize())
+    nov = novel_class(tid)
+    if source in sources.DEFAULT_USE_PROXIES:
+        nov.proxies = GOAGENT
+    nov.dump()
 
 
 def refresh_novel(source, tid):
     delete_novels(source, tid)
-    update_novel(source, tid)
+    add_novel(source, tid)
 
 
 def mark_finish(source, tid):
