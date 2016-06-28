@@ -7,11 +7,11 @@ import prettytable
 
 from . import sources
 from .config import GOAGENT
-from .db import create_session
+from .db import create_session, update_novel
 from .models import Serial
 
 
-def list_novels(source=None, tid=None, intro=False):
+def list_novels(source=None, tid=None, show_intro=False, show_finish=False):
     session = create_session()
     if source:
         if tid:
@@ -26,14 +26,17 @@ def list_novels(source=None, tid=None, intro=False):
 
     pt = prettytable.PrettyTable()
     pt.field_names = ['id', 'title', 'author', 'source']
-    for field in pt.field_names:
-        pt.valign[field] = 'm'
+    pt.valign = 'm'
+    # for field in pt.field_names:
+    #     pt.valign[field] = 'm'
     for nov in novel_list:
         pt.add_row((nov.id, nov.title, nov.author, nov.source))
-    if intro:
+    if show_intro:
         pt.hrules = prettytable.ALL
-        intro_list = [textwrap.fill(nov.intro, width=50) for nov in novel_list]
+        intro_list = [textwrap.fill(nov.intro.replace('\t', ' '), width=50) for nov in novel_list]
         pt.add_column('intro', intro_list, align='l')
+    if show_finish:
+        pt.add_column('finish', [nov.finish for nov in novel_list], valign='m')
     print(pt.get_string())
 
 
@@ -58,34 +61,25 @@ def update_novels(source=None, tid=None):
 
     if source:
         if tid:
-            _update_novel(source, tid)
+            update_novel(source, tid)
         else:
             novel_list = session.query(Serial).filter_by(
                 source=source, finish=False
             ).all()
             for novel in novel_list:
-                _update_novel(source, novel.id)
+                update_novel(source, novel.id)
     else:
         novel_list = session.query(Serial).filter_by(finish=False).all()
 
         for novel in novel_list:
-            _update_novel(novel.source, novel.id)
+            update_novel(novel.source, novel.id)
 
     session.commit()
     session.close()
 
 
-def _update_novel(source, tid):
-    novel_class = getattr(sources, source.capitalize())
-    nov = novel_class(tid)
-    if source in sources.DEFAULT_USE_PROXIES:
-        nov.proxies = GOAGENT
-    nov.run()
-    nov.close()
-
-
 def add_novel(source, tid):
-    return _update_novel(source, tid)
+    return update_novel(source, tid)
 
 
 def dump_novel(source, tid):
@@ -93,7 +87,8 @@ def dump_novel(source, tid):
     nov = novel_class(tid)
     if source in sources.DEFAULT_USE_PROXIES:
         nov.proxies = GOAGENT
-    nov.dump()
+    overwrite = source not in sources.DEFAULT_NOT_OVERWRITE
+    nov.dump(overwrite=overwrite)
 
 
 def refresh_novel(source, tid):

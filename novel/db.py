@@ -5,9 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import SingletonThreadPool
 
-from .config import CACHE_DB, load_novel_list, save_novel_list
+from . import sources
+from .config import CACHE_DB, GOAGENT, load_novel_list, save_novel_list
 from .models import Base, Website
-from .novels import update_novels
 
 
 def create_session(db=CACHE_DB, pool_size=100):
@@ -34,4 +34,13 @@ def sync_list_to_db():
     nl = load_novel_list()
     for s, tids in nl.items():
         for tid in tids:
-            update_novels(s, tid)
+            update_novel(s, tid)
+
+
+def update_novel(source, tid):
+    novel_class = getattr(sources, source.capitalize())
+    nov = novel_class(tid)
+    if source in sources.DEFAULT_USE_PROXIES:
+        nov.proxies = GOAGENT
+    nov.run()
+    nov.close()
