@@ -27,7 +27,7 @@ def create_session(db=CACHE_DB, pool_size=100):
 
 def update_all_novels():
     session = create_session()
-    novel_list = session.query(Serial).all()
+    novel_list = session.query(Serial).filter_by(finish=False).all()
     session.close()
 
     for novel in novel_list:
@@ -109,6 +109,16 @@ add_novel = update_novel
 def refresh_novel(source, tid):
     delete_novels(source, tid)
     update_novel(source, tid)
+
+
+def mark_finish(source, tid):
+    session = create_session()
+    nov = session.query(Serial).filter_by(
+        source=source, id=str(tid)
+    ).one()
+    nov.finish = True
+    session.commit()
+    session.close()
 
 
 def sync_db_to_list():

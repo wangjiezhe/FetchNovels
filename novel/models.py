@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # from sqlalchemy import *
-from sqlalchemy import Column, Integer, String, Text, ForeignKeyConstraint
+from sqlalchemy import Column, Integer, String, Text, ForeignKeyConstraint, Boolean
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy.orm import relationship
 
@@ -64,6 +64,7 @@ class Serial(General):
     author = Column(String)
     intro = Column(Text)
     source = Column(String, primary_key=True)
+    finish = Column(Boolean, default=False)
 
     chapters = relationship('Chapter', backref='novel')
 
