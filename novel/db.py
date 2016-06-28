@@ -57,6 +57,29 @@ def list_all_novels(intro=False):
     print(pt.get_string())
 
 
+def list_novels(source, tid=None, intro=False):
+    session = create_session()
+    if tid:
+        novel_list = session.query(Serial).filter_by(
+            source=source, id=str(tid)
+        ).all()
+    else:
+        novel_list = session.query(Serial).filter_by(source=source).all()
+    session.close()
+
+    pt = prettytable.PrettyTable()
+    pt.field_names = ['id', 'title', 'author', 'source']
+    for field in pt.field_names:
+        pt.valign[field] = 'm'
+    for nov in novel_list:
+        pt.add_row((nov.id, nov.title, nov.author, nov.source))
+    if intro:
+        pt.hrules = prettytable.ALL
+        intro_list = [textwrap.fill(nov.intro, width=50) for nov in novel_list]
+        pt.add_column('intro', intro_list, align='l')
+    print(pt.get_string())
+
+
 def delete_novels(source, tid=None):
     session = create_session()
     if tid:
