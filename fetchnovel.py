@@ -4,7 +4,7 @@
 import re
 import sys
 
-from novel import novels, config
+from novel import cli, config
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
     config.check_first()
 
     for tid in tids:
-        novels.dump_novel(source, tid)
+        cli.dump_novel(source, tid)
 
 
 if __name__ == '__main__':
