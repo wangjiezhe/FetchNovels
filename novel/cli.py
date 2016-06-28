@@ -27,13 +27,12 @@ def list_novels(source=None, tid=None, show_intro=False, show_finish=False):
     pt = prettytable.PrettyTable()
     pt.field_names = ['id', 'title', 'author', 'source']
     pt.valign = 'm'
-    # for field in pt.field_names:
-    #     pt.valign[field] = 'm'
     for nov in novel_list:
         pt.add_row((nov.id, nov.title, nov.author, nov.source))
     if show_intro:
         pt.hrules = prettytable.ALL
-        intro_list = [textwrap.fill(nov.intro.replace('\t', ' '), width=50) for nov in novel_list]
+        intro_list = [textwrap.fill(nov.intro.replace, width=50)
+                      for nov in novel_list]
         pt.add_column('intro', intro_list, align='l')
     if show_finish:
         pt.add_column('finish', [nov.finish for nov in novel_list], valign='m')

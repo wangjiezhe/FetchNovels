@@ -4,8 +4,8 @@
 将输入的阿拉伯数字转化为汉字
 """
 
-import sys
 import re
+import sys
 from itertools import repeat
 
 ZERO = '零'
@@ -64,9 +64,6 @@ def int_to_cn(num):
     elif num < 0:
         if_minus = NEGATIVE
         num = -num
-    # if num >= 10 ** 16:
-    #     print("只适用于正负一亿亿以下的整数！")
-    #     return -1
     words = [translate(k) for k in num_to_group(num)]
     for i in range(-1, -len(words) - 1, -1):
         if -i == 1:
