@@ -30,13 +30,15 @@ class MyParser(argparse.ArgumentParser):
                           version=__version__)
 
         group = self.add_mutually_exclusive_group()
-        group.add_argument('-u', '--update-all', action='store_true',
+        group.add_argument('-u', '--update', action='store_true',
                            help='update novels in the database')
-        group.add_argument('-l', '--list-all', action='store_true',
+        group.add_argument('-l', '--list', action='store_true',
                            help='list novels in the database')
 
         self.add_argument('-v', '--verbose', action='count',
                           help='show in more detail')
+        # self.add_argument('-r', '--refresh', action='store_true',
+        #                   help='refresh novel in the database')
 
         proxy_group = self.add_mutually_exclusive_group()
         proxy_group.add_argument('-p', '--proxy', action='store',
@@ -44,10 +46,6 @@ class MyParser(argparse.ArgumentParser):
         proxy_group.add_argument('-n', '--no-proxy', action='store_true',
                                  help='do not use any proxies')
 
-        self.add_argument('-d', '--download-only', action='store_true',
-                          help='download novel into database without write it to file')
-        self.add_argument('-r', '--refresh', action='store_true',
-                          help='refresh novel in the database')
         self.add_argument('source', nargs='?',
                           help='download source')
         self.add_argument('tid', nargs='*',
@@ -58,42 +56,44 @@ def main():
     parser = MyParser()
     args = parser.parse_args()
 
-    if args.update_all:
-        cli.update_novels()
-    elif args.list_all:
-        if not args.verbose:
-            cli.list_novels()
-        elif args.verbose == 1:
-            cli.list_novels(show_intro=True)
-        else:
-            cli.list_novels(show_intro=True, show_finish=True)
-    elif args.source:
+    if args.source:
         need_fix = re.match(r'(\d+)(.+)', args.source)
         if need_fix:
             source = '{g[1]}{g[0]}'.format(g=need_fix.groups())
         else:
             source = args.source
+    else:
+        source = None
 
-        print('{}: {}'.format(source, args.tid))
-        if len(args.tid) == 0:
-            print('No specific tid!')
-            sys.exit(1)
+    if args.no_proxy:
+        proxies = '---'
+    else:
+        proxies = args.proxy
 
-        config.check_first()
+    config.check_first()
 
-        if args.no_proxy:
-            proxies = '---'
+    if args.list:
+        if not source:
+            cli.list_novels(verbose=args.verbose)
         else:
-            proxies = args.proxy
-
+            cli.list_novels(source, verbose=args.verbose)
+    elif args.update:
+        if not source:
+            cli.update_novels(http_proxy=proxies)
+        elif not args.tid:
+            print(source)
+            cli.update_novels(source, http_proxy=proxies)
+        else:
+            print('{}: {}'.format(source, args.tid))
+            for tid in args.tid:
+                cli.update_novels(source, tid, proxies)
+    elif args.source:
+        print('{}: {}'.format(source, args.tid))
+        if not args.tid:
+            print('No specific tid to download!')
+            sys.exit(1)
         for tid in args.tid:
-            if args.download_only:
-                if args.refresh:
-                    cli.refresh_novel(source, tid, proxies)
-                else:
-                    cli.update_novels(source, tid, proxies)
-            else:
-                cli.dump_novel(source, tid, proxies)
+            cli.dump_novel(source, tid, proxies)
     else:
         parser.print_help()
 

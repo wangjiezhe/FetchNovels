@@ -11,7 +11,8 @@ from .db import create_session, update_novel
 from .models import Serial
 
 
-def list_novels(source=None, tid=None, show_intro=False, show_finish=False):
+def list_novels(source=None, tid=None, verbose=None):
+    verbose = verbose or 0
     with create_session() as session:
         if source:
             if tid:
@@ -26,31 +27,34 @@ def list_novels(source=None, tid=None, show_intro=False, show_finish=False):
         pt = prettytable.PrettyTable()
         pt.field_names = ['id', 'title', 'author', 'source']
         pt.valign = 'm'
-        for nov in novel_list:
-            pt.add_row((nov.id, nov.title, nov.author, nov.source))
-        if show_intro:
+        for novel in novel_list:
+            pt.add_row((novel.id, novel.title, novel.author, novel.source))
+        if verbose > 0:
             pt.hrules = prettytable.ALL
             intro_list = [textwrap.fill(nov.intro, width=50)
                           for nov in novel_list]
             pt.add_column('intro', intro_list, align='l')
-        if show_finish:
-            pt.add_column('finish', [nov.finish for nov in novel_list], valign='m')
+        if verbose > 1:
+            pt.add_column('finish', [novel.finish for novel in novel_list], valign='m')
 
     print(pt.get_string())
 
 
-def delete_novels(source, tid=None):
+def delete_novels(source=None, tid=None):
     with create_session() as session:
-        if tid:
-            novel_list = session.query(Serial).filter_by(
-                source=source, id=str(tid)
-            ).all()
+        if source:
+            if tid:
+                novel_list = session.query(Serial).filter_by(
+                    source=source, id=str(tid)
+                ).all()
+            else:
+                novel_list = session.query(Serial).filter_by(source=source).all()
         else:
-            novel_list = session.query(Serial).filter_by(source=source).all()
-        for nov in novel_list:
-            for ch in nov.chapters:
+            novel_list = session.query(Serial).all()
+        for novel in novel_list:
+            for ch in novel.chapters:
                 session.delete(ch)
-            session.delete(nov)
+            session.delete(novel)
 
 
 def update_novels(source=None, tid=None, http_proxy=None):
@@ -87,14 +91,34 @@ def dump_novel(source, tid, http_proxy=None):
     nov.dump(overwrite=overwrite)
 
 
-def refresh_novel(source, tid, http_proxy=None):
-    delete_novels(source, tid)
-    add_novel(source, tid, http_proxy)
+def refresh_novel(source=None, tid=None, http_proxy=None):
+    if source:
+        if tid:
+            delete_novels(source, tid)
+            add_novel(source, tid, http_proxy)
+        else:
+            with create_session() as session:
+                novel_list = session.query(Serial).filter_by(source=source).all()
+                tids = [novel.id for novel in novel_list]
+            delete_novels(source)
+            for t in tids:
+                add_novel(source, t, http_proxy)
+    else:
+        with create_session() as session:
+            novel_list = session.query(Serial).all()
+            nl = [(novel.source, novel.tid) for novel in novel_list]
+        delete_novels()
+        for s, t in nl:
+            add_novel(s, t, http_proxy)
 
 
-def mark_finish(source, tid):
+def mark_finish(source, tid=None):
     with create_session() as session:
-        nov = session.query(Serial).filter_by(
-            source=source, id=str(tid)
-        ).one()
-        nov.finish = True
+        if tid:
+            novel_list = session.query(Serial).filter_by(
+                source=source, id=str(tid)
+            ).all()
+        else:
+            novel_list = session.query(Serial).filter_by(source=source).all()
+        for novel in novel_list:
+            novel.finish = True
