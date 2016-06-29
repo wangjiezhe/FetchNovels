@@ -37,10 +37,13 @@ def sync_list_to_db():
             update_novel(s, tid)
 
 
-def update_novel(source, tid):
+def update_novel(source, tid, http_proxy=None):
     novel_class = getattr(sources, source.capitalize())
     nov = novel_class(tid)
-    if source in sources.DEFAULT_USE_PROXIES:
+    if http_proxy:
+        if http_proxy != '---':
+            nov.proxies = {'http': http_proxy}
+    elif source in sources.DEFAULT_USE_PROXIES:
         nov.proxies = GOAGENT
     nov.run()
     nov.close()

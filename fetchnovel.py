@@ -28,12 +28,22 @@ class MyParser(argparse.ArgumentParser):
         )
         self.add_argument('-V', '--version', action='version',
                           version=__version__)
-        self.add_argument('-u', '--update-all', action='store_true',
-                          help='update novels in the database')
-        self.add_argument('-l', '--list-all', action='store_true',
-                          help='list novels in the database')
+
+        group = self.add_mutually_exclusive_group()
+        group.add_argument('-u', '--update-all', action='store_true',
+                           help='update novels in the database')
+        group.add_argument('-l', '--list-all', action='store_true',
+                           help='list novels in the database')
+
         self.add_argument('-v', '--verbose', action='count',
                           help='show in more detail')
+
+        proxy_group = self.add_mutually_exclusive_group()
+        proxy_group.add_argument('-p', '--proxy', action='store',
+                                 help='use specific proxy')
+        proxy_group.add_argument('-n', '--no-proxy', action='store_true',
+                                 help='do not use any proxies')
+
         self.add_argument('-d', '--download-only', action='store_true',
                           help='download novel into database without write it to file')
         self.add_argument('source', nargs='?',
@@ -69,12 +79,17 @@ def main():
 
         config.check_first()
 
+        if args.no_proxy:
+            proxies = '---'
+        else:
+            proxies = args.proxy
+
         if args.download_only:
             for tid in args.tid:
-                cli.update_novels(source, tid)
+                cli.update_novels(source, tid, proxies)
         else:
             for tid in args.tid:
-                cli.dump_novel(source, tid)
+                cli.dump_novel(source, tid, proxies)
     else:
         parser.print_help()
 

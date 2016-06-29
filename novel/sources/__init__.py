@@ -31,6 +31,7 @@ from .yfzww import Yfzww
 from .yq33 import Yq33
 from .zhaishu8 import Zhaishu8
 
+# Configuration for free ip in CERNET
 DEFAULT_USE_PROXIES = (
     'cool18',
     'dzxsw',
