@@ -4,6 +4,7 @@
 import argparse
 import re
 import sys
+import textwrap
 
 from novel import __version__
 from novel import cli, config
@@ -12,8 +13,18 @@ from novel import cli, config
 class MyParser(argparse.ArgumentParser):
 
     def __init__(self):
+        description = textwrap.dedent("""\
+            Fetch novels from Internet, and write into file.
+
+            Available sources:
+              bgif2, biquge, dzxsw, feizw, haxtxt, klxsw, lwxs, lwxs520, lwxsw,
+              piaotian, piaotiancc, ranwen, shu69, shushu8, sto, ttshuba,
+              ttzw, ttzw5, uks5, wodexiaoshuo, xs365, yfzww, yq33, zhaishu8,
+              cool18, sdragon, sis, doubangroup, ...
+        """)
         super().__init__(
-            description='Fetch novels from Internet.'
+            description=description,
+            formatter_class=argparse.RawTextHelpFormatter
         )
         self.add_argument('-V', '--version', action='version',
                           version=__version__)
@@ -21,11 +32,14 @@ class MyParser(argparse.ArgumentParser):
                           help='update novels in the database')
         self.add_argument('-l', '--list-all', action='store_true',
                           help='list novels in the database')
-        self.add_argument('-v', '--verbose', action='count')
+        self.add_argument('-v', '--verbose', action='count',
+                          help='show in more detail')
         self.add_argument('-d', '--download-only', action='store_true',
                           help='download novel into database without write it to file')
-        self.add_argument('source', nargs='?')
-        self.add_argument('tid', nargs='*')
+        self.add_argument('source', nargs='?',
+                          help='download source')
+        self.add_argument('tid', nargs='*',
+                          help='id for novels to download')
 
 
 def main():
