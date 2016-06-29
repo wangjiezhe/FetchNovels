@@ -46,6 +46,8 @@ class MyParser(argparse.ArgumentParser):
 
         self.add_argument('-d', '--download-only', action='store_true',
                           help='download novel into database without write it to file')
+        self.add_argument('-r', '--refresh', action='store_true',
+                          help='refresh novel in the database')
         self.add_argument('source', nargs='?',
                           help='download source')
         self.add_argument('tid', nargs='*',
@@ -84,11 +86,13 @@ def main():
         else:
             proxies = args.proxy
 
-        if args.download_only:
-            for tid in args.tid:
-                cli.update_novels(source, tid, proxies)
-        else:
-            for tid in args.tid:
+        for tid in args.tid:
+            if args.download_only:
+                if args.refresh:
+                    cli.refresh_novel(source, tid, proxies)
+                else:
+                    cli.update_novels(source, tid, proxies)
+            else:
                 cli.dump_novel(source, tid, proxies)
     else:
         parser.print_help()
