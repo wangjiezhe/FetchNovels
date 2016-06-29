@@ -9,7 +9,6 @@ A renewed version.
 Usage
 -----
 
-::
     usage: fetchnovel.py [-h] [-V] [-u | -l] [-v] [-p PROXY | -n] [-d]
                          [source] [tid [tid ...]]
 
