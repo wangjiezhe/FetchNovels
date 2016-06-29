@@ -45,7 +45,8 @@ class Website(Base):
     name = Column(String, primary_key=True)
     url = Column(String)
 
-    novels = relationship('General', backref='website')
+    novels = relationship('General', backref='website',
+                          order_by='General.id')
 
 
 class General(Base):
@@ -67,7 +68,8 @@ class Serial(General):
     source = Column(String, primary_key=True)
     finish = Column(Boolean, default=False)
 
-    chapters = relationship('Chapter', backref='novel')
+    chapters = relationship('Chapter', backref='novel',
+                            order_by='Chapter.id')
 
     ForeignKeyConstraint(
         [id, source, title],
