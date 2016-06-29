@@ -47,7 +47,7 @@ class Doubangroup(base.BaseNovel):
         self.num_comments = self.req['comments_count']
         print(self.title)
         if self.cache:
-            self.session = db.create_session()
+            self.session = db.new_session()
             self._add_website()
             self._add_article()
             self.session.commit()

@@ -12,7 +12,7 @@ from pyquery import PyQuery
 from .models import Serial, Chapter, Website
 from .base import BaseNovel, SinglePage
 from .utils import get_base_url, get_filename
-from .db import create_session
+from .db import new_session
 
 
 class Page(SinglePage):
@@ -82,7 +82,7 @@ class SerialNovel(BaseNovel):
         print(self.title, self.author)
 
         if self.cache:
-            self.session = create_session()
+            self.session = new_session()
             self._add_website()
             self._add_novel()
             self._update_chapters()

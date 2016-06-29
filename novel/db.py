@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from contextlib import contextmanager
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import SingletonThreadPool
 
 from . import sources
@@ -10,23 +12,36 @@ from .config import CACHE_DB, GOAGENT, load_novel_list, save_novel_list
 from .models import Base, Website
 
 
+@contextmanager
 def create_session(db=CACHE_DB, pool_size=100):
+    session = new_session(db, pool_size)
+    try:
+        yield session
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    else:
+        session.close()
+
+
+def new_session(db=CACHE_DB, pool_size=100):
     engine = create_engine(
         'sqlite:///' + db,
         poolclass=SingletonThreadPool,
         pool_size=pool_size
     )
-    db_session = sessionmaker(bind=engine)
+    db_session = scoped_session(sessionmaker(bind=engine))
     session = db_session()
     Base.metadata.create_all(engine)
     return session
 
 
 def sync_db_to_list():
-    session = create_session()
-    nl = {}
-    for w in session.query(Website).all():
-        nl[w.name] = [s.id for s in w.novels]
+    with create_session() as session:
+        nl = {}
+        for w in session.query(Website).all():
+            nl[w.name] = [s.id for s in w.novels]
     save_novel_list(nl)
 
 

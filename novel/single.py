@@ -6,7 +6,7 @@ from enum import Enum
 from pyquery import PyQuery
 
 from .base import SinglePage
-from .db import create_session
+from .db import new_session
 from .models import Article, Website
 from .utils import get_filename, get_base_url
 
@@ -32,7 +32,7 @@ class SingleNovel(SinglePage):
         super().run(refresh=refresh)
         print(self.title)
         if self.cache:
-            self.session = create_session()
+            self.session = new_session()
             self._add_website()
             self._add_article()
             self.session.commit()
