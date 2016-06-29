@@ -49,12 +49,13 @@ def sync_list_to_db():
     nl = load_novel_list()
     for s, tids in nl.items():
         for tid in tids:
-            update_novel(s, tid)
+            add_novel(s, tid)
 
 
-def update_novel(source, tid, http_proxy=None):
+def add_novel(source, tid, http_proxy=None, session=None):
     novel_class = getattr(sources, source.capitalize())
     nov = novel_class(tid)
+    nov.use_session(session)
     if http_proxy:
         if http_proxy != '---':
             nov.proxies = {'http': http_proxy}
@@ -62,3 +63,15 @@ def update_novel(source, tid, http_proxy=None):
         nov.proxies = GOAGENT
     nov.run()
     nov.close()
+
+
+def dump_novel(source, tid, http_proxy=None):
+    novel_class = getattr(sources, source.capitalize())
+    nov = novel_class(tid)
+    if http_proxy:
+        if http_proxy != '---':
+            nov.proxies = {'http': http_proxy}
+    elif source in sources.DEFAULT_USE_PROXIES:
+        nov.proxies = GOAGENT
+    overwrite = source not in sources.DEFAULT_NOT_OVERWRITE
+    nov.dump(overwrite=overwrite)

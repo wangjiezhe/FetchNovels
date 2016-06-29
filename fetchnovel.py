@@ -37,8 +37,8 @@ class MyParser(argparse.ArgumentParser):
 
         self.add_argument('-v', '--verbose', action='count',
                           help='show in more detail')
-        # self.add_argument('-r', '--refresh', action='store_true',
-        #                   help='refresh novel in the database')
+        self.add_argument('-r', '--refresh', action='store_true',
+                          help='refresh novel in the database')
 
         proxy_group = self.add_mutually_exclusive_group()
         proxy_group.add_argument('-p', '--proxy', action='store',
@@ -72,30 +72,26 @@ def main():
 
     config.check_first()
 
-    if args.list:
-        if not source:
-            cli.list_novels(verbose=args.verbose)
-        else:
-            cli.list_novels(source, verbose=args.verbose)
-    elif args.update:
-        if not source:
-            cli.update_novels(http_proxy=proxies)
-        elif not args.tid:
-            print(source)
-            cli.update_novels(source, http_proxy=proxies)
-        else:
+    with cli.NovelFactory(source, args.tid, proxies, args.verbose) as fac:
+        if args.list:
+            fac.list()
+        elif args.update:
+            if args.refresh:
+                fac.refresh()
+            else:
+                fac.update()
+        elif source:
             print('{}: {}'.format(source, args.tid))
-            for tid in args.tid:
-                cli.update_novels(source, tid, proxies)
-    elif args.source:
-        print('{}: {}'.format(source, args.tid))
-        if not args.tid:
-            print('No specific tid to download!')
-            sys.exit(1)
-        for tid in args.tid:
-            cli.dump_novel(source, tid, proxies)
-    else:
-        parser.print_help()
+            if not args.tid:
+                print('No specific tid to download!')
+                sys.exit(1)
+            if args.refresh:
+                fac.refresh()
+            else:
+                fac.update()
+            fac.dump()
+        else:
+            parser.print_help()
 
 
 if __name__ == '__main__':
