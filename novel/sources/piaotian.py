@@ -75,7 +75,8 @@ class PiaotianTool(utils.Tool):
             re.compile(r'www\.piaotian\.com', re.I),
             re.compile(r'&lt;tr&gt;&lt;td&gt;'),
             re.compile(r'&lt;div id="content"&gt;\xa0\xa0\xa0\xa0'),
-            re.compile(r'&amp;nbsp')
+            re.compile(r'&amp;nbsp'),
+            re.compile(r'手机用户请访问http://m\.piaotian\.net'),
         ))
 
 
