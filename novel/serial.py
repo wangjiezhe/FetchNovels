@@ -237,10 +237,10 @@ class SerialNovel(BaseNovel):
             fp.write('\n')
 
         if self.cache:
-            chapters = self.session.query(Chapter).filter_by(
-                novel_id=self.tid, novel_source=self.source
-            ).all()
-            for ch in chapters:
+            novel = self.session.query(Serial).filter_by(
+                id=self.tid, source=self.source
+            ).one()
+            for ch in novel.chapters:
                 filename = '「{:d}」{}.txt'.format(ch.id + 1, ch.title)
                 path = os.path.join(download_dir, filename)
                 with open(path, 'w') as fp:
@@ -275,24 +275,18 @@ class SerialNovel(BaseNovel):
 
             fp.write('\n\n\n')
             if self.cache:
-                intro = self.session.query(Serial).filter_by(
+                novel = self.session.query(Serial).filter_by(
                     id=self.tid, source=self.source
-                ).one().intro
-            else:
-                intro = self.get_intro()
-            fp.write(intro)
-
-            if self.cache:
-                chapters = self.session.query(Chapter).filter_by(
-                    novel_id=self.tid, novel_source=self.source
-                ).order_by(Chapter.id).all()
-                for ch in chapters:
+                ).one()
+                fp.write(novel.intro)
+                for ch in novel.chapters:
                     fp.write('\n\n\n\n')
                     fp.write(ch.title)
                     fp.write('\n\n\n')
                     fp.write(ch.text)
                     fp.write('\n')
             else:
+                fp.write(self.get_intro())
                 for _, url, title in self.chapter_list:
                     fp.write('\n\n\n\n')
                     fp.write(title)
