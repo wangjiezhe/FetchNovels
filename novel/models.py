@@ -58,6 +58,7 @@ class General(Base):
     )
 
 
+# serial.SerialNovel
 class Serial(General):
     id = Column(String, primary_key=True)
     title = Column(String)
@@ -74,6 +75,7 @@ class Serial(General):
     )
 
 
+# serial.Page
 class Chapter(Base):
     id = Column(Integer, primary_key=True)
     url = Column(String)
@@ -89,6 +91,7 @@ class Chapter(Base):
     )
 
 
+# single.SingleNovel
 class Article(General):
     id = Column(String, primary_key=True)
     title = Column(String)

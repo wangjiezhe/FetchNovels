@@ -75,6 +75,12 @@ class SerialNovel(BaseNovel):
         self.chap_type = chap_type
 
         self.session = None
+        self.use_exist_session = False
+
+    def use_session(self, s):
+        if s:
+            self.session = s
+            self.use_exist_session = True
 
     def run(self, refresh=False, parallel=True):
         super().run(refresh=refresh)
@@ -82,7 +88,8 @@ class SerialNovel(BaseNovel):
         print(self.title, self.author)
 
         if self.cache:
-            self.session = new_session()
+            if not self.use_exist_session:
+                self.session = new_session()
             self._add_website()
             self._add_novel()
             self._update_chapters()
@@ -150,7 +157,7 @@ class SerialNovel(BaseNovel):
         ch.text = page.content
 
     def close(self):
-        if self.cache:
+        if self.cache and not self.use_exist_session:
             self.session.close()
         self.running = False
 
