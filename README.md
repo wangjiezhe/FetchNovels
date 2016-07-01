@@ -34,3 +34,11 @@ Usage
       -p PROXY, --proxy PROXY
                             use specific proxy
       -n, --no-proxy        do not use any proxies
+
+
+TODO
+----
+
+* [ ] Fix cli for SingleNovel
+* [ ] Use cache in SingleNovel
+* [ ] use peewee or sqlalchemy
