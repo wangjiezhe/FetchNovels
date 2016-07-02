@@ -9,7 +9,8 @@ A renewed version.
 Usage
 -----
 
-    usage: fetchnovel.py [-h] [-V] [-u | -l] [-v] [-r] [-p PROXY | -n]
+    usage: fetchnovel.py [-h] [-V] [-u | -l | -ls | -la | -d] [-v] [-r]
+                         [-p PROXY | -n]
                          [source] [tid [tid ...]]
 
     Fetch novels from Internet, and write into file.
@@ -29,6 +30,9 @@ Usage
       -V, --version         show program's version number and exit
       -u, --update          update novels in the database
       -l, --list            list novels in the database
+      -ls, --list-serial    list serials in the database
+      -la, --list-article   list articles in the database
+      -d, --delete          delete novels in the database
       -v, --verbose         show in more detail
       -r, --refresh         refresh novel in the database
       -p PROXY, --proxy PROXY
@@ -39,6 +43,6 @@ Usage
 TODO
 ----
 
-* [ ] Fix cli for SingleNovel
+* [x] Fix cli for SingleNovel
 * [x] Use cache in SingleNovel
 * [ ] use peewee or sqlalchemy

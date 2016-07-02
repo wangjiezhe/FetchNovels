@@ -103,7 +103,7 @@ def main():
                 fac.update()
             fac.dump()
         else:
-            parser.print_help()
+            parser.print_usage()
 
 
 if __name__ == '__main__':
