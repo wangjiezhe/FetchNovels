@@ -28,7 +28,7 @@ class Doubangroup(base.BaseNovel):
 
     def __init__(self, topic_id):
         super().__init__(utils.base_to_url(BASE_URL, topic_id),
-                         tid=topic_id, cache=True)
+                         tid=topic_id)
         self.comments_url = utils.base_to_url(COMMENTS_URL, topic_id)
 
         self.req = self.session = None

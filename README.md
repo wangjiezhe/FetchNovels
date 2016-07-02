@@ -40,5 +40,5 @@ TODO
 ----
 
 * [ ] Fix cli for SingleNovel
-* [ ] Use cache in SingleNovel
+* [x] Use cache in SingleNovel
 * [ ] use peewee or sqlalchemy

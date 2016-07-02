@@ -20,19 +20,26 @@ class SingleNovel(SinglePage):
 
     def __init__(self, url, selector,
                  title_sel=None, title_type=None,
-                 tid=None, cache=False):
+                 tid=None, cache=True):
         super().__init__(url, selector,
                          tid=tid, cache=cache)
         self.title_sel = title_sel
         self.title_type = title_type
 
         self.session = None
+        self.use_exist_session = False
+
+    def use_session(self, s):
+        if s:
+            self.session = s
+            self.use_exist_session = True
 
     def run(self, refresh=False):
         super().run(refresh=refresh)
         print(self.title)
         if self.cache:
-            self.session = new_session()
+            if not self.use_exist_session:
+                self.session = new_session()
             self._add_website()
             self._add_article()
             self.session.commit()
