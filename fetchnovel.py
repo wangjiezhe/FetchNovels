@@ -34,6 +34,12 @@ class MyParser(argparse.ArgumentParser):
                            help='update novels in the database')
         group.add_argument('-l', '--list', action='store_true',
                            help='list novels in the database')
+        group.add_argument('-ls', '--list-serial', action='store_true',
+                           help='list serials in the database')
+        group.add_argument('-la', '--list-article', action='store_true',
+                           help='list articles in the database')
+        group.add_argument('-d', '--delete', action='store_true',
+                           help='delete novels in the database')
 
         self.add_argument('-v', '--verbose', action='count',
                           help='show in more detail')
@@ -75,6 +81,12 @@ def main():
     with cli.NovelFactory(source, args.tid, proxies, args.verbose) as fac:
         if args.list:
             fac.list()
+        elif args.list_serial:
+            fac.list_serial()
+        elif args.list_article:
+            fac.list_article()
+        elif args.delete:
+            fac.delete()
         elif args.update:
             if args.refresh:
                 fac.refresh()
