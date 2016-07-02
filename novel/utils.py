@@ -12,6 +12,7 @@ import string
 from urllib.parse import urlparse, urlunparse
 
 from . import sources
+from .config import GOAGENT
 from .models import Serial, Article
 
 
@@ -197,3 +198,10 @@ def get_schema(s):
 
 def get_class(s):
     return getattr(sources, s.capitalize())
+
+
+def get_proxies(s):
+    if s in sources.DEFAULT_USE_PROXIES:
+        return GOAGENT
+    else:
+        return None
