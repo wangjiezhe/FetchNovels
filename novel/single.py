@@ -42,10 +42,10 @@ class SingleNovel(SinglePage):
                 self.session = new_session()
             self._add_website()
             self._add_article()
-            self.session.commit()
+            self.session.flush()
 
     def close(self):
-        if self.cache:
+        if self.cache and not self.use_exist_session:
             self.session.close()
         self.running = False
 
@@ -110,6 +110,7 @@ class SingleNovel(SinglePage):
             fp.write(self.title)
             fp.write('\n\n\n\n')
             fp.write(content)
+            fp.write('\n')
 
     def dump(self, overwrite=True):
         self.run()

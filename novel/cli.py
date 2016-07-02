@@ -5,8 +5,10 @@ import textwrap
 
 import prettytable
 
+from . import sources
+from .config import save_novel_list
 from .db import add_novel, new_session
-from .models import Serial, Website
+from .models import Serial, Website, Article, General
 from .utils import get_filename
 
 
@@ -24,10 +26,59 @@ class NovelFactory(object):
 
     # noinspection PyUnusedLocal
     def __exit__(self, *args):
-        self.session.commit()
+        self.session.flush()
         self.session.close()
+        self.save()
+
+    def save(self):
+        nl = {w.name: [s.id for s in w.novels]
+              for w in self.session.query(Website).all()}
+        save_novel_list(nl)
 
     def list(self, source=None):
+        source = source or self.source
+
+        if source:
+            if source in sources.SERIAL_TYPE:
+                self.list_serial(source)
+            elif source in sources.ARTICLE_TYPE:
+                self.list_article(source)
+            else:
+                print('The specific source `{}` does not exists!'.format(source))
+        else:
+            novel_list = self.session.query(General).all()
+
+            pt = prettytable.PrettyTable()
+            pt.field_names = ['id', 'title', 'source']
+            pt.valign = 'm'
+            for novel in novel_list:
+                pt.add_row((novel.id, novel.title, novel.source))
+
+            print(pt.get_string())
+
+    def list_article(self, source=None):
+        source = source or self.source
+
+        if source:
+            novel_list = self.session.query(Article).filter_by(
+                source=source
+            ).all()
+        else:
+            novel_list = self.session.query(Article).all()
+
+        pt = prettytable.PrettyTable()
+        pt.field_names = ['id', 'title', 'source']
+        pt.valign = 'm'
+        for novel in novel_list:
+            pt.add_row((novel.id, novel.title, novel.source))
+
+        if self.verbose > 0:
+            length_list = [len(novel.text) for novel in novel_list]
+            pt.add_column('length', length_list)
+
+        print(pt.get_string())
+
+    def list_serial(self, source=None):
         source = source or self.source
 
         if source:
@@ -44,13 +95,27 @@ class NovelFactory(object):
             pt.add_row((novel.id, novel.title, novel.author, novel.source))
         if self.verbose > 0:
             pt.hrules = prettytable.ALL
-            intro_list = [textwrap.fill(nov.intro, width=50)
-                          for nov in novel_list]
+            intro_list = [textwrap.fill(novel.intro, width=50)
+                          for novel in novel_list]
             pt.add_column('intro', intro_list, align='l')
         if self.verbose > 1:
             pt.add_column('finish', [novel.finish for novel in novel_list], valign='m')
 
         print(pt.get_string())
+
+    def delete_serial(self, source, tid):
+        novel = self.session.query(Serial).filter_by(
+            source=source, id=tid
+        ).one()
+        for ch in novel.chapters:
+            self.session.delete(ch)
+        self.session.delete(novel)
+
+    def delete_article(self, source, tid):
+        article = self.session.query(Article).filter_by(
+            source=source, id=tid
+        ).one()
+        self.session.delete(article)
 
     def delete(self, source=None, tids=None):
         source = source or self.source
@@ -58,23 +123,27 @@ class NovelFactory(object):
 
         if source:
             if tids:
-                novel_list = self.session.query(Serial).filter(
-                    Serial.source == source, Serial.id.in_(tids)
+                novel_list = self.session.query(General).filter(
+                    General.source == source, General.id.in_(tids)
                 )
             else:
-                novel_list = self.session.query(Serial).filter_by(source=source).all()
+                novel_list = self.session.query(General).filter_by(source=source).all()
         else:
-            novel_list = self.session.query(Serial).all()
+            novel_list = self.session.query(General).all()
 
         deleted = {}
 
         for novel in novel_list:
-            deleted[novel.source] = deleted.get(novel.source, []).append(novel.id)
-            for ch in novel.chapters:
-                self.session.delete(ch)
-            self.session.delete(novel)
+            deleted[novel.source] = deleted.get(novel.source, []) + [novel.id]
+            if novel.source in sources.SERIAL_TYPE:
+                self.delete_serial(novel.source, novel.id)
+            elif novel.source in sources.ARTICLE_TYPE:
+                self.delete_article(novel.source, novel.id)
+            else:
+                print('Something strange may happens here.')
 
-        self.session.commit()
+        for s, t in deleted.items():
+            print('{}: {}'.format(s, t))
 
         return deleted
 
@@ -103,9 +172,15 @@ class NovelFactory(object):
                           http_proxy=self.http_proxy,
                           session=self.session)
 
-        self.session.commit()
-
     def dump_novel(self, source, tid):
+        if source in sources.SERIAL_TYPE:
+            self.dump_serial(source, tid)
+        elif source in sources.ARTICLE_TYPE:
+            self.dump_article(source, tid)
+        else:
+            print('The specific source `{}` does not exists!'.format(source))
+
+    def dump_serial(self, source, tid):
         novel = self.session.query(Serial).filter_by(
             source=source, id=tid
         ).one()
@@ -125,6 +200,19 @@ class NovelFactory(object):
                 fp.write(ch.text)
                 fp.write('\n')
 
+    def dump_article(self, source, tid):
+        novel = self.session.query(Article).filter_by(
+            source=source, id=tid
+        ).one()
+        filename = get_filename(novel.title)
+        print(filename)
+
+        with open(filename, 'w') as fp:
+            fp.write(novel.title)
+            fp.write('\n\n\n\n')
+            fp.write(novel.text)
+            fp.write('\n')
+
     def dump(self, source=None, tids=None):
         source = source or self.source
         tids = tids or self.tids
@@ -138,7 +226,7 @@ class NovelFactory(object):
                 for novel in site.novels:
                     self.dump_novel(source, novel.id)
         else:
-            novel_list = self.session.query(Serial).all()
+            novel_list = self.session.query(General).all()
             for novel in novel_list:
                 self.dump_novel(novel.source, novel.id)
 
@@ -158,8 +246,6 @@ class NovelFactory(object):
 
         for novel in novel_list:
             novel.finish = True
-
-        self.session.commit()
 
     def refresh(self, source=None, tids=None):
         source = source or self.source

@@ -28,12 +28,18 @@ class Doubangroup(base.BaseNovel):
 
     def __init__(self, topic_id):
         super().__init__(utils.base_to_url(BASE_URL, topic_id),
-                         tid=topic_id)
+                         tid=topic_id, cache=True)
         self.comments_url = utils.base_to_url(COMMENTS_URL, topic_id)
 
         self.req = self.session = None
+        self.use_exist_session = False
         self.author_id = self.content = ''
         self.num_comments = 0
+
+    def use_session(self, s):
+        if s:
+            self.session = s
+            self.use_exist_session = True
 
     def run(self, refresh=True):
         if self.running and not refresh:
@@ -47,16 +53,17 @@ class Doubangroup(base.BaseNovel):
         self.num_comments = self.req['comments_count']
         print(self.title)
         if self.cache:
-            self.session = db.new_session()
+            if not self.use_exist_session:
+                self.session = db.new_session()
             self._add_website()
             self._add_article()
-            self.session.commit()
+            self.session.flush()
         else:
             self.content = self.get_content()
         self.running = True
 
     def close(self):
-        if self.cache:
+        if self.cache and not self.use_exist_session:
             self.session.close()
         self.running = False
 

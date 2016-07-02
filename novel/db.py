@@ -17,7 +17,7 @@ def create_session(db=CACHE_DB, pool_size=100):
     session = new_session(db, pool_size)
     try:
         yield session
-        session.commit()
+        session.flush()
     except:
         session.rollback()
         raise
@@ -31,7 +31,11 @@ def new_session(db=CACHE_DB, pool_size=100):
         poolclass=SingletonThreadPool,
         pool_size=pool_size
     )
-    db_session = scoped_session(sessionmaker(bind=engine))
+    db_session = scoped_session(sessionmaker(
+        bind=engine,
+        autoflush=True,
+        autocommit=True
+    ))
     session = db_session()
     Base.metadata.create_all(engine)
     return session

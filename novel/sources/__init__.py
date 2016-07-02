@@ -31,6 +31,41 @@ from .yfzww import Yfzww
 from .yq33 import Yq33
 from .zhaishu8 import Zhaishu8
 
+SERIAL_TYPE = (
+    'bgif2',
+    'biquge',
+    'dzxsw',
+    'feizw',
+    'haxtxt',
+    'icnsp',
+    'klxsw',
+    'lwxs',
+    'lwxs520',
+    'lwxsw',
+    'piaotian',
+    'piaotiancc',
+    'ranwen',
+    'shu69',
+    'shushu8',
+    'sto',
+    'ttshuba',
+    'ttzw',
+    'ttzw5',
+    'uks5',
+    'wodexiaoshuo',
+    'xs365',
+    'yfzww',
+    'yq33',
+    'zhaishu8',
+)
+
+ARTICLE_TYPE = (
+    'cool18',
+    'doubangroup',
+    'sdragon',
+    'sis',
+)
+
 # Configuration for free ip in CERNET
 DEFAULT_USE_PROXIES = (
     'cool18',

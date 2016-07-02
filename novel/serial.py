@@ -93,7 +93,7 @@ class SerialNovel(BaseNovel):
             self._add_website()
             self._add_novel()
             self._update_chapters()
-            self.session.commit()
+            self.session.flush()
 
     # noinspection PyArgumentList
     def _add_website(self):
@@ -158,7 +158,7 @@ class SerialNovel(BaseNovel):
 
     def close(self):
         if self.cache and not self.use_exist_session:
-            self.session.close()
+                self.session.close()
         self.running = False
 
     def get_title_and_author(self):
