@@ -11,6 +11,9 @@ import re
 import string
 from urllib.parse import urlparse, urlunparse
 
+from . import sources
+from .models import Serial, Article
+
 
 class Tool(object):
     """
@@ -181,3 +184,16 @@ def get_filename(title, author=None, overwrite=True):
                 if not os.path.exists(filename):
                     break
     return filename
+
+
+def get_schema(s):
+    if s in sources.SERIAL_TYPE:
+        return Serial
+    elif s in sources.ARTICLE_TYPE:
+        return Article
+    else:
+        raise NotImplementedError(s)
+
+
+def get_class(s):
+    return getattr(sources, s.capitalize())
