@@ -4,6 +4,8 @@
 import textwrap
 
 import prettytable
+from colorama import init, Fore
+from readchar import readchar
 
 from . import sources
 from .config import save_novel_list
@@ -99,9 +101,11 @@ class NovelFactory(object):
                           for novel in novel_list]
             pt.add_column('intro', intro_list, align='l')
         if self.verbose > 1:
-            pt.add_column('finish', [novel.finish for novel in novel_list], valign='m')
+            pt.add_column(
+                'finish', [novel.finish for novel in novel_list], valign='m')
         if self.verbose > 2:
-            pt.add_column('chapters', [len(novel.chapters) for novel in novel_list], valign='m')
+            pt.add_column(
+                'chapters', [len(novel.chapters) for novel in novel_list], valign='m')
 
         print(pt.get_string())
 
@@ -127,9 +131,11 @@ class NovelFactory(object):
             if tids:
                 novel_list = self.session.query(General).filter(
                     General.source == source, General.id.in_(tids)
-                )
+                ).all()
             else:
-                novel_list = self.session.query(General).filter_by(source=source).all()
+                novel_list = self.session.query(General).filter_by(
+                    source=source
+                ).all()
         else:
             novel_list = self.session.query(General).all()
 
@@ -159,20 +165,20 @@ class NovelFactory(object):
                     add_novel(source, tid,
                               http_proxy=self.http_proxy,
                               session=self.session)
+                return
             else:
                 novel_list = self.session.query(Serial).filter_by(
                     source=source, finish=False
                 ).all()
-                for novel in novel_list:
-                    add_novel(source, novel.id,
-                              http_proxy=self.http_proxy,
-                              session=self.session)
         else:
-            novel_list = self.session.query(Serial).filter_by(finish=False).all()
-            for novel in novel_list:
-                add_novel(novel.source, novel.id,
-                          http_proxy=self.http_proxy,
-                          session=self.session)
+            novel_list = self.session.query(Serial).filter_by(
+                finish=False
+            ).all()
+
+        for novel in novel_list:
+            add_novel(novel.source, novel.id,
+                      http_proxy=self.http_proxy,
+                      session=self.session)
 
     def dump_novel(self, source, tid):
         if source in sources.SERIAL_TYPE:
@@ -242,12 +248,61 @@ class NovelFactory(object):
                     Serial.source == source, Serial.id.in_(tids)
                 ).all()
             else:
-                novel_list = self.session.query(Serial).filter_by(source=source).all()
+                novel_list = self.session.query(Serial).filter_by(
+                    source=source
+                ).all()
         else:
             novel_list = self.session.query(Serial).all()
 
         for novel in novel_list:
             novel.finish = True
+
+    def try_mark_finish(self, source=None, tids=None):
+        source = source or self.source
+        tids = tids or self.tids
+
+        if source:
+            if tids:
+                novel_list = self.session.query(Serial).filter(
+                    Serial.source == source, Serial.id.in_(tids)
+                ).all()
+            else:
+                novel_list = self.session.query(Serial).filter_by(
+                    source=source, finish=False
+                ).all()
+        else:
+            novel_list = self.session.query(Serial).filter_by(
+                finish=False
+            ).all()
+
+        def try_mark_novel(n):
+            print('{x.id} {0}{x.title}{1} {x.author} {x.source}'.format(
+                Fore.LIGHTGREEN_EX, Fore.RESET, x=n))
+            print(Fore.LIGHTBLUE_EX +
+                  'Mark ths novel as finished? [y/N/q/u/?] ', end='')
+            yes = readchar().lower()
+            if yes == 'y':
+                n.finish = True
+            elif yes == 'q':
+                return -1
+            elif yes == 'u':
+                n.finish = False
+            elif yes == '?':
+                print()
+                print(Fore.LIGHTRED_EX + 'y - mark this novel as finished')
+                print(Fore.LIGHTRED_EX + 'n - do not change finish status')
+                print(Fore.LIGHTRED_EX +
+                      'q - quit; do not change finish status of this and any other novels')
+                print(Fore.LIGHTRED_EX + 'u - mark this novel as unfinished')
+                print(Fore.LIGHTRED_EX + '? - print help')
+                return try_mark_novel(n)
+
+        init(autoreset=True)
+        for novel in novel_list:
+            res = try_mark_novel(novel)
+            print()
+            if res == -1:
+                break
 
     def refresh(self, source=None, tids=None):
         source = source or self.source

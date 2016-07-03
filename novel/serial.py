@@ -158,7 +158,7 @@ class SerialNovel(BaseNovel):
 
     def close(self):
         if self.cache and not self.use_exist_session:
-                self.session.close()
+            self.session.close()
         self.running = False
 
     def get_title_and_author(self):
