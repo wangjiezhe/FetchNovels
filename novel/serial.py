@@ -8,6 +8,7 @@ from multiprocessing.dummy import Pool
 from urllib.parse import urljoin
 
 from pyquery import PyQuery
+from termcolor import colored
 
 from .models import Serial, Chapter, Website
 from .base import BaseNovel, SinglePage
@@ -85,7 +86,7 @@ class SerialNovel(BaseNovel):
     def run(self, refresh=False, parallel=True):
         super().run(refresh=refresh)
         self.title, self.author = self.get_title_and_author()
-        print(self.title, self.author)
+        print(colored(self.title, 'green'), self.author)
 
         if self.cache:
             if not self.use_exist_session:

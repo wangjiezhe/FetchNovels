@@ -4,8 +4,8 @@
 import textwrap
 
 import prettytable
-from colorama import init, Fore
 from readchar import readchar
+from termcolor import colored, cprint
 
 from . import sources
 from .config import save_novel_list
@@ -54,7 +54,7 @@ class NovelFactory(object):
             pt.field_names = ['id', 'title', 'source']
             pt.valign = 'm'
             for novel in novel_list:
-                pt.add_row((novel.id, novel.title, novel.source))
+                pt.add_row((novel.id, colored(novel.title, 'green'), novel.source))
 
             print(pt.get_string())
 
@@ -72,7 +72,7 @@ class NovelFactory(object):
         pt.field_names = ['id', 'title', 'source']
         pt.valign = 'm'
         for novel in novel_list:
-            pt.add_row((novel.id, novel.title, novel.source))
+            pt.add_row((novel.id, colored(novel.title, 'green'), novel.source))
 
         if self.verbose > 0:
             length_list = [len(novel.text) for novel in novel_list]
@@ -94,7 +94,7 @@ class NovelFactory(object):
         pt.field_names = ['id', 'title', 'author', 'source']
         pt.valign = 'm'
         for novel in novel_list:
-            pt.add_row((novel.id, novel.title, novel.author, novel.source))
+            pt.add_row((novel.id, colored(novel.title, 'green'), novel.author, novel.source))
         if self.verbose > 0:
             pt.hrules = prettytable.ALL
             intro_list = [textwrap.fill(novel.intro, width=50)
@@ -276,10 +276,8 @@ class NovelFactory(object):
             ).all()
 
         def try_mark_novel(n):
-            print('{x.id} {0}{x.title}{1} {x.author} {x.source}'.format(
-                Fore.LIGHTGREEN_EX, Fore.RESET, x=n))
-            print(Fore.LIGHTBLUE_EX +
-                  'Mark ths novel as finished? [y/N/q/u/?] ', end='')
+            print(n.id, colored(n.title, 'green'), n.author, n.source)
+            cprint('Mark ths novel as finished? [y/N/q/u/?]', 'cyan')
             yes = readchar().lower()
             if yes == 'y':
                 n.finish = True
@@ -287,17 +285,17 @@ class NovelFactory(object):
                 return -1
             elif yes == 'u':
                 n.finish = False
-            elif yes == '?':
+            elif yes == 'n' or yes == '\r':
+                return
+            else:
                 print()
-                print(Fore.LIGHTRED_EX + 'y - mark this novel as finished')
-                print(Fore.LIGHTRED_EX + 'n - do not change finish status')
-                print(Fore.LIGHTRED_EX +
-                      'q - quit; do not change finish status of this and any other novels')
-                print(Fore.LIGHTRED_EX + 'u - mark this novel as unfinished')
-                print(Fore.LIGHTRED_EX + '? - print help')
+                cprint('y - mark this novel as finished', 'red')
+                cprint('n - do not change finish status', 'red')
+                cprint('q - quit; do not change finish status of this and any other novels', 'red')
+                cprint('u - mark this novel as unfinished', 'red')
+                cprint('? - print help', 'red')
                 return try_mark_novel(n)
 
-        init(autoreset=True)
         for novel in novel_list:
             res = try_mark_novel(novel)
             print()

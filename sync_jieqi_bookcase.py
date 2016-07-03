@@ -14,7 +14,7 @@ from novel import config, cli, utils
 
 ENCODING = config.GB
 
-URL_DICT = {
+BOOKCASE_URL = {
     'yq33': 'http://www.33yq.com/wodeshujia.aspx',
     'piaotian': 'http://www.piaotian.net/modules/article/bookcase.php',
     'biquge': 'http://www.biquge.la/modules/article/bookcase.php',
@@ -32,7 +32,7 @@ def get_token(source):
 def get_tids(source):
     cookies = {'jieqiUserInfo': quote(get_token(source), encoding=ENCODING)}
     try:
-        url = URL_DICT[source]
+        url = BOOKCASE_URL[source]
     except KeyError:
         raise NotImplementedError(source)
     doc = PyQuery(url, headers=config.get_headers(), encoding=ENCODING,
