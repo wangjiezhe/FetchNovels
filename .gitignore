@@ -2,8 +2,8 @@
 \#*\#
 .\#*
 __pycache__/
-.ropeproject
-.idea
+.ropeproject/
+.idea/
 *.txt
 *.swp
 *.log
