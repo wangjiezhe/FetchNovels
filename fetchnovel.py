@@ -41,7 +41,7 @@ class MyParser(argparse.ArgumentParser):
         group.add_argument('-d', '--delete', action='store_true',
                            help='delete novels in the database')
         group.add_argument('-m', '--mark-finish', action='store_true',
-                           help='mark novels as finish')
+                           help='mark novels as finished')
 
         self.add_argument('-v', '--verbose', action='count',
                           help='show in more detail')
