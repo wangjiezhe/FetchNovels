@@ -100,6 +100,8 @@ class NovelFactory(object):
             pt.add_column('intro', intro_list, align='l')
         if self.verbose > 1:
             pt.add_column('finish', [novel.finish for novel in novel_list], valign='m')
+        if self.verbose > 2:
+            pt.add_column('chapters', [len(novel.chapters) for novel in novel_list], valign='m')
 
         print(pt.get_string())
 
