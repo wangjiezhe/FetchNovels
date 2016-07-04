@@ -39,3 +39,10 @@ Usage
       -p PROXY, --proxy PROXY
                             use specific proxy
       -n, --no-proxy        do not use any proxies
+
+
+Todo
+----
+
+* [ ] Get novel in forum
+* [ ] Login to get token
