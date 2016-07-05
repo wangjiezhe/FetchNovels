@@ -97,7 +97,7 @@ class NovelFactory(object):
             pt.add_row((novel.id, colored(novel.title, 'green'), novel.author, novel.source))
         if self.verbose > 0:
             pt.hrules = prettytable.ALL
-            intro_list = [textwrap.fill(novel.intro, width=50)
+            intro_list = [textwrap.fill(novel.intro, width=40)
                           for novel in novel_list]
             pt.add_column('intro', intro_list, align='l')
         if self.verbose > 1:

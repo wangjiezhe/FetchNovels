@@ -4,6 +4,7 @@
 from .bgif2 import Bgif2
 from .biquge import Biquge
 from .cool18 import Cool18
+from .danmei123 import Danmei123
 from .doubangroup import Doubangroup
 from .dzxsw import Dzxsw
 from .feizw import Feizw
@@ -34,6 +35,7 @@ from .zhaishu8 import Zhaishu8
 SERIAL_TYPE = (
     'bgif2',
     'biquge',
+    'danmei123',
     'dzxsw',
     'feizw',
     'haxtxt',
@@ -69,6 +71,7 @@ ARTICLE_TYPE = (
 # Configuration for free ip in CERNET
 DEFAULT_USE_PROXIES = (
     'cool18',
+    'danmei123',
     'dzxsw',
     'haxtxt',
     'klxsw',
