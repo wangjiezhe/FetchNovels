@@ -1,0 +1,10 @@
+requests
+pyquery
+sqlalchemy
+pysocks
+selenium
+pypinyin
+prettytable
+readchar
+termcolor
+tqdm
