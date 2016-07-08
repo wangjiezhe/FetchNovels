@@ -9,7 +9,7 @@ A renewed version.
 Usage
 -----
 
-    usage: fetchnovel.py [-h] [-V] [-u | -l | -ls | -la | -d | -m] [-v] [-r]
+    usage: fetchnovel.py [-h] [-V] [-u | -d | -l | -ls | -la | -D | -m] [-v] [-r]
                          [-p PROXY | -n]
                          [source] [tid [tid ...]]
 
@@ -29,10 +29,11 @@ Usage
       -h, --help            show this help message and exit
       -V, --version         show program's version number and exit
       -u, --update          update novels in the database
+      -d, --dump-only       dump only without update
       -l, --list            list novels in the database
       -ls, --list-serial    list serials in the database
       -la, --list-article   list articles in the database
-      -d, --delete          delete novels in the database
+      -D, --delete          delete novels in the database
       -m, --mark-finish     mark novels as finished
       -v, --verbose         show in more detail
       -r, --refresh         refresh novel in the database
@@ -46,5 +47,5 @@ Todo
 
 * [ ] Get novel in forum
 * [ ] Login to get token
-* [ ] Add option to dump directly from database (for no network connection case)
+* [x] Add option to dump directly from database (for no network connection case)
 * [ ] Fix text width for id and intro
