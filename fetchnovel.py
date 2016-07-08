@@ -32,13 +32,15 @@ class MyParser(argparse.ArgumentParser):
         group = self.add_mutually_exclusive_group()
         group.add_argument('-u', '--update', action='store_true',
                            help='update novels in the database')
+        group.add_argument('-d', '--dump-only', action='store_true',
+                           help='dump only without update')
         group.add_argument('-l', '--list', action='store_true',
                            help='list novels in the database')
         group.add_argument('-ls', '--list-serial', action='store_true',
                            help='list serials in the database')
         group.add_argument('-la', '--list-article', action='store_true',
                            help='list articles in the database')
-        group.add_argument('-d', '--delete', action='store_true',
+        group.add_argument('-D', '--delete', action='store_true',
                            help='delete novels in the database')
         group.add_argument('-m', '--mark-finish', action='store_true',
                            help='mark novels as finished')
@@ -96,6 +98,8 @@ def main():
                 fac.refresh()
             else:
                 fac.update()
+        elif args.dump_only:
+            fac.dump()
         elif source:
             print('{}: {}'.format(source, args.tid))
             if not args.tid:
