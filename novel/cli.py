@@ -42,9 +42,9 @@ class NovelFactory(object):
 
         if source:
             if source in sources.SERIAL_TYPE:
-                self.list_serial(source)
+                return self.list_serial(source)
             elif source in sources.ARTICLE_TYPE:
-                self.list_article(source)
+                return self.list_article(source)
             else:
                 print('The specific source `{}` does not exists!'.format(source))
         else:
@@ -57,6 +57,7 @@ class NovelFactory(object):
                 pt.add_row((novel.id, colored(novel.title, 'green'), novel.source))
 
             print(pt.get_string())
+            return pt
 
     def list_article(self, source=None):
         source = source or self.source
@@ -79,6 +80,7 @@ class NovelFactory(object):
             pt.add_column('length', length_list)
 
         print(pt.get_string())
+        return pt
 
     def list_serial(self, source=None):
         source = source or self.source
@@ -108,6 +110,7 @@ class NovelFactory(object):
                 'chapters', [len(novel.chapters) for novel in novel_list], valign='m')
 
         print(pt.get_string())
+        return pt
 
     def delete_serial(self, source, tid):
         novel = self.session.query(Serial).filter_by(
