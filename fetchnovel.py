@@ -20,7 +20,7 @@ class MyParser(argparse.ArgumentParser):
               bgif2, biquge, dzxsw, feizw, haxtxt, klxsw, lwxs, lwxs520, lwxsw,
               piaotian, piaotiancc, ranwen, shu69, shushu8, sto, ttshuba,
               ttzw, ttzw5, uks5, wodexiaoshuo, xs365, yfzww, yq33, zhaishu8,
-              cool18, sdragon, sis, doubangroup, ...
+              doubangroup, ...
         """)
         super().__init__(
             description=description,
