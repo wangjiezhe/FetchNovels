@@ -26,7 +26,7 @@ from .ttshuba import Ttshuba
 from .ttzw import Ttzw
 from .ttzw5 import Ttzw5
 from .uks5 import Uks5
-from .wodexiaoshuo import Wdxs
+from .wdxs import Wdxs
 from .xs365 import Xs365
 from .yfzww import Yfzww
 from .yq33 import Yq33
@@ -54,7 +54,7 @@ SERIAL_TYPE = (
     'ttzw',
     'ttzw5',
     'uks5',
-    'wodexiaoshuo',
+    'wdxs',
     'xs365',
     'yfzww',
     'yq33',
@@ -89,7 +89,7 @@ DEFAULT_USE_PROXIES = (
     'ttshuba',
     'ttzw',
     'uks5',
-    'wodexiaoshuo',
+    'wdxs',
     'xs365',
     'yq33',
     'zhaishu8',
