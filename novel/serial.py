@@ -10,10 +10,10 @@ from urllib.parse import urljoin
 from pyquery import PyQuery
 from termcolor import colored
 
-from .models import Serial, Chapter, Website
 from .base import BaseNovel, SinglePage
-from .utils import get_base_url, get_filename
 from .db import new_session
+from .models import Serial, Chapter, Website
+from .utils import get_base_url, get_filename
 
 
 class Page(SinglePage):
@@ -83,7 +83,7 @@ class SerialNovel(BaseNovel):
             self.session = s
             self.use_exist_session = True
 
-    def run(self, refresh=False, parallel=True):
+    def run(self, refresh=False):
         super().run(refresh=refresh)
         self.title, self.author = self.get_title_and_author()
         print(colored(self.title, 'green'), self.author)
@@ -133,19 +133,15 @@ class SerialNovel(BaseNovel):
                  for cid, url, title in self.chapter_list
                  if cid not in old_chapters_ids])
 
-    def _update_chapters(self, parallel=True):
+    def _update_chapters(self):
         empty_chapters = self.session.query(Chapter).filter_by(
             novel_id=self.tid, novel_source=self.source
         ).filter(Chapter.text.is_(None))
 
-        if parallel:
-            # with ThreadPoolExecutor(100) as e:
-            #     e.map(self._update_chapter, empty_chapters)
-            with Pool(100) as p:
-                p.map(self._update_chapter, empty_chapters, 10)
-        else:
-            for ch in empty_chapters:
-                self._update_chapter(ch)
+        # with ThreadPoolExecutor(100) as e:
+        #     e.map(self._update_chapter, empty_chapters)
+        with Pool(100) as p:
+            p.map(self._update_chapter, empty_chapters, 10)
 
     def _update_chapter(self, ch):
         print(ch.title)
