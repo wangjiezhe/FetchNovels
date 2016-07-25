@@ -42,4 +42,5 @@ class Yq33(serial.SerialNovel):
         ).filter(
             lambda i, e: e[1]
         )
+        clist.sort()
         return clist
