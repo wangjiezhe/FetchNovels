@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-# from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from multiprocessing.dummy import Pool
 from urllib.parse import urljoin
@@ -138,8 +137,6 @@ class SerialNovel(BaseNovel):
             novel_id=self.tid, novel_source=self.source
         ).filter(Chapter.text.is_(None))
 
-        # with ThreadPoolExecutor(100) as e:
-        #     e.map(self._update_chapter, empty_chapters)
         with Pool(100) as p:
             p.map(self._update_chapter, empty_chapters, 10)
 
