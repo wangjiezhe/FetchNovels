@@ -5,8 +5,8 @@ from pyquery import PyQuery
 
 from .. import serial, utils, config
 
-BASE_URL = 'http://www.piaotian.cc/read/{}/index.html'
-INTRO_URL = 'http://www.piaotian.cc/book/{}.html'
+BASE_URL = 'http://tw.piaotian.cc/read/{}/index.html'
+INTRO_URL = 'http://tw.piaotian.cc/book/{}.html'
 
 
 class Piaotiancc(serial.SerialNovel):
@@ -17,7 +17,7 @@ class Piaotiancc(serial.SerialNovel):
                          chap_sel='.novel li',
                          chap_type=serial.ChapterType.path,
                          tid=tid)
-        self.encoding = config.GB
+        self.encoding = config.BIG
 
     def get_title_and_author(self):
         title = self.doc('h1').text()

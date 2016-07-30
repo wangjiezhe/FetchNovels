@@ -10,6 +10,7 @@ from random import randrange
 
 GOAGENT = {'http': '127.0.0.1:8087'}
 GB = 'GB18030'
+BIG = 'Big5'
 
 UAS = (
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) \
