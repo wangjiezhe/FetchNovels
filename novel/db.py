@@ -60,11 +60,16 @@ def add_novel(source, tid, http_proxy=None, session=None):
     novel_class = getattr(sources, source.capitalize())
     nov = novel_class(tid)
     nov.use_session(session)
+
     if http_proxy:
         if http_proxy != '---':
             nov.proxies = {'http': http_proxy}
     elif source in sources.DEFAULT_USE_PROXIES:
         nov.proxies = GOAGENT
+
+    if source in sources.AUTO_MARK_FINISH:
+        nov.finish = True
+
     nov.run()
     nov.close()
 
@@ -72,10 +77,16 @@ def add_novel(source, tid, http_proxy=None, session=None):
 def dump_novel(source, tid, http_proxy=None):
     novel_class = getattr(sources, source.capitalize())
     nov = novel_class(tid)
+
     if http_proxy:
         if http_proxy != '---':
             nov.proxies = {'http': http_proxy}
     elif source in sources.DEFAULT_USE_PROXIES:
         nov.proxies = GOAGENT
+
+    if source in sources.AUTO_MARK_FINISH:
+        nov.finish = True
+
     overwrite = source not in sources.DEFAULT_NOT_OVERWRITE
+
     nov.dump(overwrite=overwrite)

@@ -74,6 +74,7 @@ class SerialNovel(BaseNovel):
         self.chap_sel = chap_sel
         self.chap_type = chap_type
 
+        self.finish = False
         self.session = None
         self.use_exist_session = False
 
@@ -131,6 +132,9 @@ class SerialNovel(BaseNovel):
                 [Chapter(id=cid, title=title, url=url)
                  for cid, url, title in self.chapter_list
                  if cid not in old_chapters_ids])
+
+        if self.finish:
+            novel.finish = True
 
     def _update_chapters(self):
         empty_chapters = self.session.query(Chapter).filter_by(

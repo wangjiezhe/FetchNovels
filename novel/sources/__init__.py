@@ -98,3 +98,7 @@ DEFAULT_USE_PROXIES = (
 DEFAULT_NOT_OVERWRITE = (
     'cool18',
 )
+
+AUTO_MARK_FINISH = (
+    'sto',
+)
