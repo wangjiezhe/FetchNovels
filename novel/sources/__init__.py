@@ -69,7 +69,7 @@ ARTICLE_TYPE = (
 )
 
 # Configuration for free ip in CERNET
-DEFAULT_USE_PROXIES = (
+CERNET_USE_PROXIES = (
     'cool18',
     'danmei123',
     'dzxsw',

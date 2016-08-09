@@ -205,7 +205,7 @@ def get_class(s):
 
 
 def get_proxies(s):
-    if s in sources.DEFAULT_USE_PROXIES:
+    if s in sources.CERNET_USE_PROXIES:
         return GOAGENT
     else:
         return None

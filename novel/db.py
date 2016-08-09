@@ -64,7 +64,7 @@ def add_novel(source, tid, http_proxy=None, session=None):
     if http_proxy:
         if http_proxy != '---':
             nov.proxies = {'http': http_proxy}
-    elif source in sources.DEFAULT_USE_PROXIES:
+    elif source in sources.CERNET_USE_PROXIES:
         nov.proxies = GOAGENT
 
     if source in sources.AUTO_MARK_FINISH:
@@ -81,7 +81,7 @@ def dump_novel(source, tid, http_proxy=None):
     if http_proxy:
         if http_proxy != '---':
             nov.proxies = {'http': http_proxy}
-    elif source in sources.DEFAULT_USE_PROXIES:
+    elif source in sources.CERNET_USE_PROXIES:
         nov.proxies = GOAGENT
 
     if source in sources.AUTO_MARK_FINISH:
