@@ -10,7 +10,7 @@ from urllib.parse import quote, urlparse, parse_qs
 
 from pyquery import PyQuery
 
-from novel import config, cli, utils
+from novel import config, cli
 
 ENCODING = config.GB
 
@@ -36,7 +36,7 @@ def get_tids(source):
     except KeyError:
         raise NotImplementedError(source)
     doc = PyQuery(url, headers=config.get_headers(), encoding=ENCODING,
-                  proxies=utils.get_proxies(source), cookies=cookies)
+                  proxies=cli.get_proxies(source), cookies=cookies)
     tid_list = doc('td.even a').filter(
         lambda i, e: PyQuery(e).attr('href').startswith('http')
     ).map(

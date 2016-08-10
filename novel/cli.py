@@ -8,7 +8,7 @@ from readchar import readchar
 from termcolor import colored, cprint
 
 from . import sources
-from .config import save_novel_list
+from .config import save_novel_list, GOAGENT
 from .db import add_novel, new_session
 from .models import Serial, Website, Article, General
 from .utils import get_filename
@@ -312,3 +312,23 @@ class NovelFactory(object):
         deleted = self.delete(source, tids)
         for s, t in deleted.items():
             self.update(s, t)
+
+
+def get_schema(s):
+    if s in sources.SERIAL_TYPE:
+        return Serial
+    elif s in sources.ARTICLE_TYPE:
+        return Article
+    else:
+        raise NotImplementedError(s)
+
+
+def get_class(s):
+    return getattr(sources, s.capitalize())
+
+
+def get_proxies(s):
+    if s in sources.CERNET_USE_PROXIES:
+        return GOAGENT
+    else:
+        return None
