@@ -1,11 +1,11 @@
 requests
 pyquery
-sqlalchemy
-pysocks
+SQLAlchemy
+PySocks
 selenium
 pypinyin
-prettytable
+PrettyTable
 readchar
 termcolor
 tqdm
-sphinx>=1.4.0
+Sphinx>=1.4.0
