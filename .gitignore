@@ -10,3 +10,5 @@ __pycache__/
 *.log
 build/
 env/
+dist/
+*.egg-info/
