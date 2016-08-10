@@ -8,3 +8,4 @@ prettytable
 readchar
 termcolor
 tqdm
+sphinx>=1.4.0
