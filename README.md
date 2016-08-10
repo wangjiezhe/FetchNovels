@@ -14,9 +14,9 @@ A renewed version.
 Usage
 -----
 
-    usage: fetchnovel.py [-h] [-V] [-u | -d | -l | -ls | -la | -D | -m] [-v] [-r]
-                         [-p PROXY | -n]
-                         [source] [tid [tid ...]]
+    usage: fetchnovels [-h] [-V] [-u | -d | -l | -ls | -la | -D | -m] [-v] [-r]
+                       [-p PROXY | -n]
+                       [source] [tid [tid ...]]
 
     Fetch novels from Internet, and write into file.
 
