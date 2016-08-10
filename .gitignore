@@ -8,3 +8,4 @@ __pycache__/
 !requirements.txt
 *.swp
 *.log
+build/
