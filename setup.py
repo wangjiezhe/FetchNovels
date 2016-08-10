@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from distutils.core import setup
-import novel
 import sys
+from setuptools import setup
+
+import novel
 
 if __name__ == '__main__':
     assert sys.version_info.major > 2, 'Only works with python3'
@@ -17,8 +18,10 @@ if __name__ == '__main__':
         author='wangjiezhe',
         author_email='wangjiezhe@gmail.com',
 
-        packages=['novel', 'novel.sources', ],
-        scripts=['fetchnovel.py', ],
+        packages=['novel', 'novel.sources'],
+        entry_points={
+            'console_scripts': ['fetchnovels=novel.main:main'],
+        },
 
         classifiers=[
             'Development Status :: 4 - Beta',
