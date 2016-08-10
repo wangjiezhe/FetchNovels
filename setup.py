@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import sys
+
 from setuptools import setup
 
-import novel
+from novel import __version__
 
 if __name__ == '__main__':
     assert sys.version_info.major > 2, 'Only works with python3'
     setup(
         name='FetchNovels',
-        version=novel.__version__,
+        version=__version__,
         description='Fetch novels from Internet',
         license='GPLv3',
         url='https://github.com/wangjiezhe/FetchNovels',
