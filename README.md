@@ -1,9 +1,15 @@
 FetchNovels
 ===========
 
-[![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/)
 [![Dependency Status](https://dependencyci.com/github/wangjiezhe/FetchNovels/badge)](https://dependencyci.com/github/wangjiezhe/FetchNovels)
 [![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=latest)](http://fetchnovels.readthedocs.io/en/latest/?badge=latest)
+[![Code Health](https://landscape.io/github/wangjiezhe/FetchNovels/master/landscape.svg?style=flat)](https://landscape.io/github/wangjiezhe/FetchNovels/master)
+
+[![PyPI](https://img.shields.io/pypi/v/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
+[![GPL Licence](https://img.shields.io/pypi/l/FetchNovels.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+![Status](https://img.shields.io/pypi/status/FetchNovels.svg)
+![Pyversions](https://img.shields.io/pypi/pyversions/FetchNovels.svg)
+![Downloads](https://img.shields.io/pypi/dd/FetchNovels.svg)
 
 Fetch novels from internet.
 
