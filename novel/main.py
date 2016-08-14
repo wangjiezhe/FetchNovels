@@ -82,7 +82,7 @@ def main():
 
     config.check_first()
 
-    with cli.NovelFactory(source, args.tid, proxies, args.verbose) as fac:
+    with cli.NovelCmdline(source, args.tid, proxies, args.verbose) as fac:
         if args.list:
             fac.list()
         elif args.list_serial:

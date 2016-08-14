@@ -97,7 +97,7 @@ class SingleNovel(SinglePage):
         )
         return content
 
-    def _dump(self):
+    def dump(self):
         filename = get_filename(self.title, overwrite=self.overwrite)
         print(filename)
         if self.cache:
@@ -112,9 +112,9 @@ class SingleNovel(SinglePage):
             fp.write(content)
             fp.write('\n')
 
-    def dump(self):
+    def dump_and_close(self):
         self.run()
         if self.cache:
             self.update_novel_list()
-        self._dump()
+        self.dump()
         self.close()

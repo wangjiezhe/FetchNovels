@@ -23,15 +23,14 @@ class Page(SinglePage):
         super().__init__(url, selector, headers, proxies, encoding, tool)
         self.title = title
 
-    def dump(self, overwrite=True, path=None, folder=None, num=None):
-        self.run()
+    def dump(self, path=None, folder=None, num=None):
         if not path:
             if num is not None:
                 pre = '「{:d}」'.format(num)
             else:
                 pre = ''
             filename = '{}{}'.format(
-                pre, get_filename(self.title, overwrite=overwrite))
+                pre, get_filename(self.title, overwrite=self.overwrite))
             if not folder:
                 path = os.path.join(os.getcwd(), filename)
             else:
@@ -42,6 +41,10 @@ class Page(SinglePage):
             fp.write('\n\n\n')
             fp.write(self.content)
             fp.write('\n')
+
+    def dump_and_close(self, path=None, folder=None, num=None):
+        self.run()
+        self.dump(path, folder, num)
 
 
 class IntroPage(SinglePage):
@@ -255,14 +258,14 @@ class SerialNovel(BaseNovel):
             url, title, self.cont_sel,
             None, self.proxies, self.encoding,
             self.tool)
-        page.dump(folder=self.download_dir, num=num)
+        page.dump_and_close(folder=self.download_dir, num=num)
 
     def dump_split(self):
         self.run()
         self._dump_split()
         self.close()
 
-    def _dump(self):
+    def dump(self):
         filename = get_filename(self.title, self.author, self.overwrite)
         print(filename)
 
@@ -302,9 +305,9 @@ class SerialNovel(BaseNovel):
         page.run()
         return page.content
 
-    def dump(self):
+    def dump_and_close(self):
         self.run()
         if self.cache:
             self.update_novel_list()
-        self._dump()
+        self.dump()
         self.close()

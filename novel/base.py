@@ -123,7 +123,6 @@ class SinglePage(BaseNovel):
             raise NotImplementedError('get_title')
 
     def dump(self):
-        self.run()
         filename = '{self.title}.txt'.format(self=self)
         print(self.title)
         with open(filename, 'w') as fp:

@@ -90,4 +90,4 @@ def dump_novel(source, tid, http_proxy=None, session=None):
 
     nov.overwrite = source not in sources.DEFAULT_NOT_OVERWRITE
 
-    nov.dump()
+    nov.dump_and_close()

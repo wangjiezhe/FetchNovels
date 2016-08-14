@@ -108,7 +108,7 @@ class Doubangroup(base.BaseNovel):
         content = '\n\n\n\n'.join(content_list)
         return content
 
-    def _dump(self):
+    def dump(self):
         filename = utils.get_filename(self.title, overwrite=self.overwrite)
         filename = filename.replace('/', '_')
         print(filename)
@@ -121,6 +121,7 @@ class Doubangroup(base.BaseNovel):
         with open(filename, 'w') as fp:
             fp.write(content)
 
-    def dump(self):
-        self._dump()
+    def dump_and_close(self):
+        self.run()
+        self.dump()
         self.close()

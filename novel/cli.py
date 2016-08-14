@@ -14,7 +14,7 @@ from .models import Serial, Website, Article, General
 from .utils import get_filename
 
 
-class NovelFactory(object):
+class NovelCmdline(object):
 
     def __init__(self, source=None, tids=None, http_proxy=None, verbose=None):
         self.source = source

@@ -8,9 +8,8 @@ import os
 import sys
 from urllib.parse import quote, urlparse, parse_qs
 
-from pyquery import PyQuery
-
 from novel import config, cli
+from pyquery import PyQuery
 
 ENCODING = config.GB
 
@@ -51,7 +50,7 @@ def sync():
     source = sys.argv[1]
     tids = get_tids(source)
     print('{}: {}'.format(source, list(tids)))
-    with cli.NovelFactory(source, tids) as fac:
+    with cli.NovelCmdline(source, tids) as fac:
         fac.update()
 
 
