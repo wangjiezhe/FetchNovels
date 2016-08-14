@@ -31,7 +31,7 @@ class NovelFactory(object):
         if self.source in sources.DEFAULT_NOT_OVERWRITE:
             self.nov.overwrite = False
 
-        return self.nov
+        return self
 
     # noinspection PyUnusedLocal
     def __exit__(self, *args):
