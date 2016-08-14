@@ -74,9 +74,10 @@ def add_novel(source, tid, http_proxy=None, session=None):
     nov.close()
 
 
-def dump_novel(source, tid, http_proxy=None):
+def dump_novel(source, tid, http_proxy=None, session=None):
     novel_class = getattr(sources, source.capitalize())
     nov = novel_class(tid)
+    nov.use_session(session)
 
     if http_proxy:
         if http_proxy != '---':
@@ -87,6 +88,6 @@ def dump_novel(source, tid, http_proxy=None):
     if source in sources.AUTO_MARK_FINISH:
         nov.finish = True
 
-    overwrite = source not in sources.DEFAULT_NOT_OVERWRITE
+    nov.overwrite = source not in sources.DEFAULT_NOT_OVERWRITE
 
-    nov.dump(overwrite=overwrite)
+    nov.dump()

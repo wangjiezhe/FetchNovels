@@ -27,8 +27,9 @@ class BaseNovel(object):
         self.tool = tool or Tool
         self._tid = tid
         self.cache = cache
-        self.running = False
 
+        self.running = False
+        self.overwrite = True
         self.refine = self.doc = None
         self.title = self.author = ''
 
@@ -86,7 +87,7 @@ class BaseNovel(object):
     def proxies(self, value):
         self._proxies = value or {}
 
-    def dump(self, overwrite=True):
+    def dump(self):
         raise NotImplementedError('dump')
 
 
@@ -121,7 +122,7 @@ class SinglePage(BaseNovel):
         else:
             raise NotImplementedError('get_title')
 
-    def dump(self, overwrite=True):
+    def dump(self):
         self.run()
         filename = '{self.title}.txt'.format(self=self)
         print(self.title)

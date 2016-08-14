@@ -97,8 +97,8 @@ class SingleNovel(SinglePage):
         )
         return content
 
-    def _dump(self, overwrite=True):
-        filename = get_filename(self.title, overwrite=overwrite)
+    def _dump(self):
+        filename = get_filename(self.title, overwrite=self.overwrite)
         print(filename)
         if self.cache:
             content = self.session.query(Article).filter_by(
@@ -112,9 +112,9 @@ class SingleNovel(SinglePage):
             fp.write(content)
             fp.write('\n')
 
-    def dump(self, overwrite=True):
+    def dump(self):
         self.run()
         if self.cache:
             self.update_novel_list()
-        self._dump(overwrite=overwrite)
+        self._dump()
         self.close()

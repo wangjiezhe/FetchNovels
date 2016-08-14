@@ -108,8 +108,8 @@ class Doubangroup(base.BaseNovel):
         content = '\n\n\n\n'.join(content_list)
         return content
 
-    def _dump(self, overwrite=True):
-        filename = utils.get_filename(self.title, overwrite=overwrite)
+    def _dump(self):
+        filename = utils.get_filename(self.title, overwrite=self.overwrite)
         filename = filename.replace('/', '_')
         print(filename)
         if self.cache:
@@ -121,7 +121,6 @@ class Doubangroup(base.BaseNovel):
         with open(filename, 'w') as fp:
             fp.write(content)
 
-    def dump(self, overwrite=True):
-        self.run()
-        self._dump(overwrite=overwrite)
+    def dump(self):
+        self._dump()
         self.close()

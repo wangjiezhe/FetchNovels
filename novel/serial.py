@@ -262,8 +262,8 @@ class SerialNovel(BaseNovel):
         self._dump_split()
         self.close()
 
-    def _dump(self, overwrite=True):
-        filename = get_filename(self.title, self.author, overwrite)
+    def _dump(self):
+        filename = get_filename(self.title, self.author, self.overwrite)
         print(filename)
 
         with open(filename, 'w') as fp:
@@ -302,9 +302,9 @@ class SerialNovel(BaseNovel):
         page.run()
         return page.content
 
-    def dump(self, overwrite=True):
+    def dump(self):
         self.run()
         if self.cache:
             self.update_novel_list()
-        self._dump(overwrite=overwrite)
+        self._dump()
         self.close()
