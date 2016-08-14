@@ -13,7 +13,7 @@ from urllib.parse import urlparse, urlunparse
 
 from .config import save_novel_list, load_novel_list
 from .db import create_session
-from .factory import NovelFactory
+from .factory import add_novel
 from .models import Website
 
 
@@ -204,5 +204,4 @@ def sync_list_to_db():
     nl = load_novel_list()
     for s, tids in nl.items():
         for tid in tids:
-            with NovelFactory(s, tid) as nov:
-                nov.add()
+            add_novel(s, tid)

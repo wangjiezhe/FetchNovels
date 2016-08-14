@@ -10,7 +10,7 @@ from termcolor import colored, cprint
 from . import sources
 from .config import save_novel_list, GOAGENT
 from .db import new_session
-from .factory import NovelFactory
+from .factory import add_novel
 from .models import Serial, Website, Article, General
 from .utils import get_filename
 
@@ -166,9 +166,8 @@ class NovelCmdline(object):
         if source:
             if tids:
                 for tid in tids:
-                    with NovelFactory(source, tid,
-                                      self.http_proxy, self.session) as nov:
-                        nov.add()
+                    add_novel(source, tid,
+                              self.http_proxy, self.session)
                 return
             else:
                 novel_list = self.session.query(Serial).filter_by(
@@ -180,9 +179,8 @@ class NovelCmdline(object):
             ).all()
 
         for novel in novel_list:
-            with NovelFactory(novel.source, novel.id,
-                              self.http_proxy, self.session) as nov:
-                nov.add()
+            add_novel(novel.source, novel.id,
+                      self.http_proxy, self.session)
 
     def dump_novel(self, source, tid):
         if source in sources.SERIAL_TYPE:
