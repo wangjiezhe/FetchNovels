@@ -53,41 +53,44 @@ def sync_list_to_db():
     nl = load_novel_list()
     for s, tids in nl.items():
         for tid in tids:
-            add_novel(s, tid)
+            with NovelFactory(s, tid) as nov:
+                nov.add()
 
 
-def add_novel(source, tid, http_proxy=None, session=None):
-    novel_class = getattr(sources, source.capitalize())
-    nov = novel_class(tid)
-    nov.use_session(session)
+class NovelFactory(object):
 
-    if http_proxy:
-        if http_proxy != '---':
-            nov.proxies = {'http': http_proxy}
-    elif source in sources.CERNET_USE_PROXIES:
-        nov.proxies = GOAGENT
+    def __init__(self, source, tid, http_proxy=None, session=None):
+        self.source = source
+        self.tid = tid
+        self.http_proxy = http_proxy
+        self.session = session
+        self.nov = None
 
-    if source in sources.AUTO_MARK_FINISH:
-        nov.finish = True
+    def __enter__(self):
+        novel_class = getattr(sources, self.source.capitalize())
+        self.nov = novel_class(self.tid)
+        self.nov.use_session(self.session)
 
-    nov.run()
-    nov.close()
+        if self.http_proxy:
+            if self.http_proxy != '---':
+                self.nov.proxies = {'http': self.http_proxy}
+        elif self.source in sources.CERNET_USE_PROXIES:
+            self.nov.proxies = GOAGENT
 
+        if self.source in sources.AUTO_MARK_FINISH:
+            self.nov.finish = True
 
-def dump_novel(source, tid, http_proxy=None, session=None):
-    novel_class = getattr(sources, source.capitalize())
-    nov = novel_class(tid)
-    nov.use_session(session)
+        if self.source in sources.DEFAULT_NOT_OVERWRITE:
+            self.nov.overwrite = False
 
-    if http_proxy:
-        if http_proxy != '---':
-            nov.proxies = {'http': http_proxy}
-    elif source in sources.CERNET_USE_PROXIES:
-        nov.proxies = GOAGENT
+        return self.nov
 
-    if source in sources.AUTO_MARK_FINISH:
-        nov.finish = True
+    # noinspection PyUnusedLocal
+    def __exit__(self, *args):
+        self.nov.close()
 
-    nov.overwrite = source not in sources.DEFAULT_NOT_OVERWRITE
+    def add(self):
+        self.nov.run()
 
-    nov.dump_and_close()
+    def dump(self):
+        self.nov.dump_and_close()

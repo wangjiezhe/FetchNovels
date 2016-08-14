@@ -63,6 +63,9 @@ class BaseNovel(object):
         self.doc = self.get_doc()
         self.running = True
 
+    def close(self):
+        return
+
     def update_novel_list(self):
         update_and_save_novel_list(self.source, self.tid)
 
@@ -89,6 +92,11 @@ class BaseNovel(object):
 
     def dump(self):
         raise NotImplementedError('dump')
+
+    def dump_and_close(self):
+        self.run()
+        self.dump()
+        self.close()
 
 
 class SinglePage(BaseNovel):
