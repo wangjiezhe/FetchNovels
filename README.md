@@ -7,9 +7,9 @@ FetchNovels
 
 [![PyPI](https://img.shields.io/pypi/v/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
 [![GPL Licence](https://img.shields.io/pypi/l/FetchNovels.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-[![Status](https://img.shields.io/pypi/status/FetchNovels.svg)]()
-[![Pyversions](https://img.shields.io/pypi/pyversions/FetchNovels.svg)]()
-[![Downloads](https://img.shields.io/pypi/dd/FetchNovels.svg)]()
+[![Status](https://img.shields.io/pypi/status/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
+[![Pyversions](https://img.shields.io/pypi/pyversions/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
+[![Downloads](https://img.shields.io/pypi/dd/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
 
 Fetch novels from internet.
 
