@@ -9,3 +9,4 @@ readchar
 termcolor
 tqdm
 Sphinx>=1.4.0
+pypandoc

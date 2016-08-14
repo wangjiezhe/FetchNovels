@@ -3,11 +3,11 @@
 
 import sys
 
+import pypandoc
 from setuptools import setup, find_packages
 
 from novel import __version__
 
-long_description = 'This project helps you to download novels from Internet, and easily write into files.'
 
 if __name__ == '__main__':
     assert sys.version_info.major > 2, 'Only works with python3'
@@ -15,7 +15,7 @@ if __name__ == '__main__':
         name='FetchNovels',
         version=__version__,
         description='Fetch novels from Internet',
-        long_description=long_description,
+        long_description=pypandoc.convert_file('README.md', 'rst'),
         license='GPLv3',
         url='https://github.com/wangjiezhe/FetchNovels',
 
