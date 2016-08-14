@@ -29,9 +29,9 @@ class NovelCmdline(object):
 
     # noinspection PyUnusedLocal
     def __exit__(self, *args):
+        self.save()
         self.session.flush()
         self.session.close()
-        self.save()
 
     def save(self):
         nl = {w.name: [s.id for s in w.novels]
