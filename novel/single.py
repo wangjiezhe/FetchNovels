@@ -4,6 +4,7 @@
 from enum import Enum
 
 from pyquery import PyQuery
+from termcolor import colored
 
 from .base import SinglePage
 from .db import new_session
@@ -36,7 +37,7 @@ class SingleNovel(SinglePage):
 
     def run(self, refresh=False):
         super().run(refresh=refresh)
-        print(self.title)
+        print(colored(self.title, 'green'))
         if self.cache:
             if not self.use_exist_session:
                 self.session = new_session()
