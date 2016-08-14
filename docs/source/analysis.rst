@@ -28,8 +28,11 @@ serial.py
 single.py
     Classes to download novel in one page.
 
-cli.py
+factory.py
     Integrated. Use introspection to get the right class to use.
 
+cli.py
+    Main class for command line.
+
 main.py
-    The command line entry.
+    The command line entry, and the argument parser.
