@@ -11,6 +11,11 @@ import re
 import string
 from urllib.parse import urlparse, urlunparse
 
+from .config import save_novel_list, load_novel_list
+from .db import create_session
+from .factory import NovelFactory
+from .models import Website
+
 
 class Tool(object):
     """
@@ -185,3 +190,19 @@ def get_filename(title, author=None, overwrite=True):
                 if not os.path.exists(filename):
                     break
     return filename
+
+
+def sync_db_to_list():
+    with create_session() as session:
+        nl = {}
+        for w in session.query(Website).all():
+            nl[w.name] = [s.id for s in w.novels]
+    save_novel_list(nl)
+
+
+def sync_list_to_db():
+    nl = load_novel_list()
+    for s, tids in nl.items():
+        for tid in tids:
+            with NovelFactory(s, tid) as nov:
+                nov.add()

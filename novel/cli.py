@@ -9,7 +9,8 @@ from termcolor import colored, cprint
 
 from . import sources
 from .config import save_novel_list, GOAGENT
-from .db import new_session, NovelFactory
+from .db import new_session
+from .factory import NovelFactory
 from .models import Serial, Website, Article, General
 from .utils import get_filename
 
