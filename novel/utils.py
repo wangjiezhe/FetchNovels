@@ -183,6 +183,7 @@ def get_filename(title, author=None, overwrite=True):
         base = title
 
     filename = '{}.txt'.format(base)
+    filename = filename.replace('/', '_')
     if not overwrite:
         if os.path.exists(filename):
             for i in itertools.count(1):
