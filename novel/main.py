@@ -23,6 +23,7 @@ class MyParser(argparse.ArgumentParser):
               doubangroup, ...
         """)
         super().__init__(
+            prog='fetchnovels',
             description=description,
             formatter_class=argparse.RawTextHelpFormatter
         )
