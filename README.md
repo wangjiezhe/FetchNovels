@@ -2,6 +2,7 @@ FetchNovels
 ===========
 
 [![Dependency Status](https://dependencyci.com/github/wangjiezhe/FetchNovels/badge)](https://dependencyci.com/github/wangjiezhe/FetchNovels)
+[![Requirements Status](https://requires.io/github/wangjiezhe/FetchNovels/requirements.svg?branch=master)](https://requires.io/github/wangjiezhe/FetchNovels/requirements/?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=latest)](http://fetchnovels.readthedocs.io/en/latest/?badge=latest)
 [![Code Health](https://landscape.io/github/wangjiezhe/FetchNovels/master/landscape.svg?style=flat)](https://landscape.io/github/wangjiezhe/FetchNovels/master)
 
@@ -11,6 +12,8 @@ FetchNovels
 [![Pyversions](https://img.shields.io/pypi/pyversions/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
 [![Downloads](https://img.shields.io/pypi/dd/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
 
+[![BADGINATOR](https://badginator.herokuapp.com/wangjiezhe/FetchNovels.svg)](https://github.com/defunctzombie/badginator)
+
 Fetch novels from internet.
 
 A renewed version.
@@ -19,6 +22,7 @@ A renewed version.
 Usage
 -----
 
+    $ fetchnovels -h
     usage: fetchnovels [-h] [-V] [-u | -d | -l | -ls | -la | -D | -m] [-v] [-r]
                        [-p PROXY | -n]
                        [source] [tid [tid ...]]
