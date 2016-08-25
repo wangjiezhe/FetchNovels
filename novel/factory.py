@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from contextlib import contextmanager
+from importlib import import_module
 
 from . import sources
 from .config import GOAGENT
@@ -9,7 +10,8 @@ from .config import GOAGENT
 
 @contextmanager
 def use_novel(source, tid, http_proxy=None, session=None):
-    novel_class = getattr(sources, source.capitalize())
+    module = import_module('.sources.' + source, 'novel')
+    novel_class = getattr(module, source.capitalize())
     nov = novel_class(tid)
     nov.use_session(session)
 
