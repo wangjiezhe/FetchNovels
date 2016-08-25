@@ -14,6 +14,7 @@ from .klxsw import Klxsw
 from .lwxs import Lwxs
 from .lwxs520 import Lwxs520
 from .lwxsw import Lwxsw
+from .park6 import Park6
 from .piaotian import Piaotian
 from .piaotiancc import Piaotiancc
 from .ranwen import Ranwen
@@ -64,6 +65,7 @@ SERIAL_TYPE = (
 ARTICLE_TYPE = (
     'cool18',
     'doubangroup',
+    'park6',
     'sdragon',
     'sis',
 )
@@ -78,6 +80,7 @@ CERNET_USE_PROXIES = (
     'lwxs520',
     'lwxs',
     'lwxsw',
+    'park6',
     'piaotian',
     'piaotiancc',
     'ranwen',
@@ -97,6 +100,7 @@ CERNET_USE_PROXIES = (
 
 DEFAULT_NOT_OVERWRITE = (
     'cool18',
+    'park6',
 )
 
 AUTO_MARK_FINISH = (

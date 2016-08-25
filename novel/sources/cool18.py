@@ -12,10 +12,10 @@ class Cool18Tool(utils.Tool):
 
     def __init__(self):
         super().__init__()
-        self.remove_extras.extend((
-            re.compile(r'www\.6park\.com'),
+        self.remove_extras.append(
             re.compile(r'<.*?bodyend.*?>.*')
-        ))
+        )
+
 
 
 class Cool18(single.SingleNovel):
