@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 SERIAL_TYPE = (
+    'aastory',
     'bgif2',
     'biquge',
     'danmei123',
