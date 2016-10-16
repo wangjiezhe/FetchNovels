@@ -19,7 +19,7 @@ class Page(SinglePage):
 
     def __init__(self, url, title, selector,
                  headers=None, proxies=None,
-                 encoding=None, tool=None):
+                 encoding='UTF-8', tool=None):
         super().__init__(url, selector, headers, proxies, encoding, tool)
         self.title = title
 
@@ -50,7 +50,7 @@ class Page(SinglePage):
 class IntroPage(SinglePage):
 
     def __init__(self, url, selector,
-                 headers=None, proxies=None, encoding=None,
+                 headers=None, proxies=None, encoding='UTF-8',
                  tool=None):
         super().__init__(url, selector, headers, proxies, encoding, tool)
         self.title = 'Introduction'

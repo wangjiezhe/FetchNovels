@@ -28,7 +28,6 @@ class Aastory(serial.SerialNovel):
                          chap_sel='li',
                          chap_type=serial.ChapterType.path,
                          tid=tid)
-        self.encoding = 'UTF-8'
         self.page = AastoryPage
 
     def get_title_and_author(self):

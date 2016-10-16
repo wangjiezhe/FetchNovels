@@ -18,7 +18,7 @@ class BaseNovel(object):
 
     def __init__(self, url,
                  headers=None, proxies=None,
-                 encoding=None, tool=None,
+                 encoding='UTF-8', tool=None,
                  tid=None, cache=False):
         self.url = url
         self._headers = headers or get_headers()
@@ -103,7 +103,7 @@ class SinglePage(BaseNovel):
 
     def __init__(self, url, selector,
                  headers=None, proxies=None,
-                 encoding=None, tool=None,
+                 encoding='UTF-8', tool=None,
                  tid=None, cache=False):
         super().__init__(url, headers, proxies, encoding, tool, tid, cache)
         self.selector = selector
