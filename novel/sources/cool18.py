@@ -3,7 +3,7 @@
 
 import re
 
-from .. import single, utils
+from .. import single, utils, config
 
 BASE_URL = 'http://www.cool18.com/bbs4/index.php?app=forum&act=threadview&tid={}'
 
@@ -27,3 +27,4 @@ class Cool18(single.SingleNovel):
                          title_type=single.TitleType.meta,
                          tid=tid)
         self.tool = Cool18Tool
+        self.encoding = config.GB

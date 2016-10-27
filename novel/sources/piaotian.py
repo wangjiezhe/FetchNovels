@@ -15,6 +15,10 @@ INTRO_URL = 'http://www.piaotian.net/bookinfo/{}/{}.html'
 
 class PiaotianPage(serial.Page):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.encoding = config.GB
+
     def get_content(self):
         content = self.doc.html()
         pat = re.compile(r'.*<!-- 标题上AD结束 -->(.*)<!-- 翻页上AD开始 -->.*',
@@ -57,6 +61,7 @@ class PiaotianIntroPage(serial.IntroPage):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tool = PiaotianIntroPageTool
+        self.encoding = config.GB
 
     def get_content(self):
         intro = self.doc('div').filter(
