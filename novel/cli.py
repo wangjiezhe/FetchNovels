@@ -262,6 +262,7 @@ class NovelCmdline(object):
     def try_mark_finish(self, source=None, tids=None):
         source = source or self.source
         tids = tids or self.tids
+        mark_all = False
 
         if source:
             if tids:
@@ -278,25 +279,32 @@ class NovelCmdline(object):
             ).all()
 
         def try_mark_novel(n):
+            nonlocal mark_all
             print(n.id, colored(n.title, 'green'), n.author, n.source)
-            cprint('Mark ths novel as finished? [y/N/q/u/?]', 'cyan')
-            yes = readchar().lower()
-            if yes == 'y':
+            if mark_all:
                 n.finish = True
-            elif yes == 'q':
-                return -1
-            elif yes == 'u':
-                n.finish = False
-            elif yes == 'n' or yes == '\r':
-                return
             else:
-                print()
-                cprint('y - mark this novel as finished', 'red')
-                cprint('n - do not change finish status', 'red')
-                cprint('q - quit; do not change finish status of this and any other novels', 'red')
-                cprint('u - mark this novel as unfinished', 'red')
-                cprint('? - print help', 'red')
-                return try_mark_novel(n)
+                cprint('Mark ths novel as finished? [!/y/N/q/u/?]', 'cyan')
+                yes = readchar().lower()
+                if yes == "!":
+                    mark_all = True
+                    n.finish = True
+                elif yes == 'y':
+                    n.finish = True
+                elif yes == 'q':
+                    return -1
+                elif yes == 'u':
+                    n.finish = False
+                elif yes == 'n' or yes == '\r':
+                    return
+                else:
+                    cprint('! - mark this and the following novels as finished', 'red')
+                    cprint('y - mark this novel as finished', 'red')
+                    cprint('n - do not change finish status', 'red')
+                    cprint('q - quit; do not change finish status of this and any other novels', 'red')
+                    cprint('u - mark this novel as unfinished', 'red')
+                    cprint('? - print help', 'red')
+                    return try_mark_novel(n)
 
         for novel in novel_list:
             res = try_mark_novel(novel)
