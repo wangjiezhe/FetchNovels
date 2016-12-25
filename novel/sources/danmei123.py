@@ -7,7 +7,7 @@ from pyquery import PyQuery
 
 from .. import serial, utils, config
 
-BASE_URL = 'http://www.danmei123.com/{}/'
+BASE_URL = 'http://www.danmei123.cc/{}/'
 
 
 class Danmei123(serial.SerialNovel):

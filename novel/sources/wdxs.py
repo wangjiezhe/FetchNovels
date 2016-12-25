@@ -7,8 +7,8 @@ from pyquery import PyQuery
 
 from .. import serial, utils, config
 
-BASE_URL = 'http://www.wodexiaoshuo.com/{}/chapter.html'
-INTRO_URL = 'http://www.wodexiaoshuo.com/{}/'
+BASE_URL = 'http://www.wodexiaoshuo123.com/{}/chapter.html'
+INTRO_URL = 'http://www.wodexiaoshuo123.com/{}/'
 
 
 class WdxsTool(utils.Tool):
