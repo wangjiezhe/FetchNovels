@@ -9,6 +9,7 @@ import os
 from random import randrange
 
 GOAGENT = {'http': '127.0.0.1:8087'}
+GOPROXY = {'http': '127.0.0.1:8088'}
 GB = 'GB18030'
 BIG = 'Big5'
 

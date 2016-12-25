@@ -8,7 +8,7 @@ from readchar import readchar
 from termcolor import colored, cprint
 
 from . import sources
-from .config import save_novel_list, GOAGENT
+from .config import save_novel_list, GOPROXY
 from .db import new_session
 from .factory import add_novel
 from .models import Serial, Website, Article, General
@@ -335,7 +335,7 @@ def get_class(s):
 
 
 def get_proxies(s):
-    if s in sources.CERNET_USE_PROXIES:
-        return GOAGENT
+    if s in sources.USE_PROXIES:
+        return GOPROXY
     else:
         return None

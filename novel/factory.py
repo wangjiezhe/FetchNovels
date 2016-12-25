@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from importlib import import_module
 
 from . import sources
-from .config import GOAGENT
+from .config import GOPROXY
 
 
 @contextmanager
@@ -18,8 +18,8 @@ def use_novel(source, tid, http_proxy=None, session=None):
     if http_proxy:
         if http_proxy != '---':
             nov.proxies = {'http': http_proxy}
-    elif source in sources.CERNET_USE_PROXIES:
-        nov.proxies = GOAGENT
+    elif source in sources.USE_PROXIES:
+        nov.proxies = GOPROXY
 
     if source in sources.AUTO_MARK_FINISH:
         nov.finish = True

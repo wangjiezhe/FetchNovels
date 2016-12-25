@@ -39,7 +39,7 @@ ARTICLE_TYPE = (
     'sis',
 )
 
-# Configuration for free ip in CERNET
+# Configuration for free ip in CERNET, obsolete now
 CERNET_USE_PROXIES = (
     'cool18',
     'danmei123',
@@ -65,6 +65,13 @@ CERNET_USE_PROXIES = (
     'xs365',
     'yq33',
     'zhaishu8',
+)
+
+USE_PROXIES = (
+    'cool18',
+    'park6',
+    'sdragon',
+    'sis',
 )
 
 DEFAULT_NOT_OVERWRITE = (
