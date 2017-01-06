@@ -72,6 +72,7 @@ USE_PROXIES = (
     'park6',
     'sdragon',
     'sis',
+    'wdxs',
 )
 
 DEFAULT_NOT_OVERWRITE = (
