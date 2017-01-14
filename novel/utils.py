@@ -117,15 +117,14 @@ def count(iterable):
 
     ::
 
-      >>> import cardinality
-      >>> cardinality.count([1, 2, 3])
+      >>> count([1, 2, 3])
       3
-      >>> cardinality.count(i for i in range(500))
+      >>> count(i for i in range(500))
       500
       >>> def gen():
       ...     yield 'hello'
       ...     yield 'world'
-      >>> cardinality.count(gen())
+      >>> count(gen())
       2
 
     Get from https://github.com/wbolster/cardinality

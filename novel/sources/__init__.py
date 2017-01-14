@@ -73,6 +73,8 @@ USE_PROXIES = (
     'sdragon',
     'sis',
     'wdxs',
+    'piaotian',
+    'klxsw',
 )
 
 DEFAULT_NOT_OVERWRITE = (

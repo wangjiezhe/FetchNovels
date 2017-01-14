@@ -17,7 +17,6 @@ class Cool18Tool(utils.Tool):
         )
 
 
-
 class Cool18(single.SingleNovel):
 
     def __init__(self, tid):
