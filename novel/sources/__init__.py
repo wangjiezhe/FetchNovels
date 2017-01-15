@@ -22,6 +22,7 @@ SERIAL_TYPE = (
     'ranwen',
     'shu69',
     'shushu8',
+    'shushuwu',
     'sto',
     'ttshuba',
     'ttzw',

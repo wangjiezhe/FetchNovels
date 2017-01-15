@@ -120,7 +120,7 @@ class SinglePage(BaseNovel):
     def get_content(self):
         if not self.selector:
             return ''
-        content = self.doc(self.selector).html()
+        content = self.doc(self.selector).html() or ''
         content = self.refine(content)
         return content
 
