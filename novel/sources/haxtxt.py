@@ -10,9 +10,9 @@ class Haxtxt(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#BookText',
-                         None, '.intro',
-                         chap_sel='.chapterlist dd',
+                         intro_sel='.intro',
                          chap_type=serial.ChapterType.last,
+                         chap_sel='.chapterlist dd',
                          tid=tid)
         self.encoding = config.GB
 

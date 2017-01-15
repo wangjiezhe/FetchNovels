@@ -14,8 +14,8 @@ class Piaotiancc(serial.SerialNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.novel_content',
                          utils.base_to_url(INTRO_URL, tid), '#description1',
-                         chap_sel='.novel li',
                          chap_type=serial.ChapterType.path,
+                         chap_sel='.novel li',
                          tid=tid)
         self.encoding = config.BIG
 

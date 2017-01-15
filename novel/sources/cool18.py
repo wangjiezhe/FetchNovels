@@ -22,8 +22,8 @@ class Cool18(single.SingleNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid),
                          'pre',
-                         title_sel=('name', 'Description'),
                          title_type=single.TitleType.meta,
+                         title_sel=('name', 'Description'),
                          tid=tid)
         self.tool = Cool18Tool
         self.encoding = config.GB

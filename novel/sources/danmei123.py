@@ -14,9 +14,9 @@ class Danmei123(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.box_box',
-                         None, '.j_box .words p',
-                         chap_sel='.list_box li',
+                         intro_sel='.j_box .words p',
                          chap_type=serial.ChapterType.path,
+                         chap_sel='.list_box li',
                          tid=tid)
         self.encoding = config.GB
 

@@ -16,8 +16,8 @@ class Lwxsw(serial.SerialNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         chap_sel='.bookinfo_td td',
                          chap_type=serial.ChapterType.last,
+                         chap_sel='.bookinfo_td td',
                          tid=tid)
         self.encoding = config.GB
 

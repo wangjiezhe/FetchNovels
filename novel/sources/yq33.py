@@ -23,7 +23,7 @@ class Yq33(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#TXT',
-                         None, '.introtxt',
+                         intro_sel='.introtxt',
                          tid=tid)
         self.encoding = config.GB
         self.tool = Yq33Tool

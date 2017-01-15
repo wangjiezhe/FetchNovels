@@ -14,7 +14,7 @@ class Jjwxc(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.noveltext',
-                         None, '#novelintro',
+                         intro_sel='#novelintro',
                          tid=tid)
         self.encoding = config.GB
 

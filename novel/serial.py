@@ -64,9 +64,9 @@ class ChapterType(Enum):
 
 class SerialNovel(BaseNovel):
 
-    def __init__(self, url, cont_sel,
+    def __init__(self, url, cont_sel=None,
                  intro_url=None, intro_sel=None,
-                 chap_sel=None, chap_type=None,
+                 chap_type=None, chap_sel=None,
                  tid=None, cache=True):
         super().__init__(url, tid=tid, cache=cache)
         self.cont_sel = cont_sel
@@ -74,8 +74,8 @@ class SerialNovel(BaseNovel):
         self.intro_sel = intro_sel
         self.page = Page
         self.intro_page = IntroPage
-        self.chap_sel = chap_sel
         self.chap_type = chap_type
+        self.chap_sel = chap_sel
 
         self.finish = False
         self.session = None

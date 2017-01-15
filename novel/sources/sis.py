@@ -11,7 +11,7 @@ class Sis(single.SingleNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid),
                          '.archiver_postbody',
-                         title_sel='h2',
                          title_type=single.TitleType.selector,
+                         title_sel='h2',
                          tid=tid)
         self.encoding = config.GB

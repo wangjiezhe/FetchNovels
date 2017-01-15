@@ -12,8 +12,8 @@ class Biquge(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
-                         chap_sel='dd',
                          chap_type=serial.ChapterType.last,
+                         chap_sel='dd',
                          tid=tid)
         self.encoding = config.GB
 

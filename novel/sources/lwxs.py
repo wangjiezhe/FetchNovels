@@ -16,8 +16,8 @@ class Lwxs(serial.SerialNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.zhangjieTXT',
                          utils.base_to_url(INTRO_URL, tid), '.intro',
-                         chap_sel='dd',
                          chap_type=serial.ChapterType.last,
+                         chap_sel='dd',
                          tid=tid)
         self.encoding = config.GB
 

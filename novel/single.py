@@ -19,13 +19,13 @@ class TitleType(Enum):
 
 class SingleNovel(SinglePage):
 
-    def __init__(self, url, selector,
-                 title_sel=None, title_type=None,
+    def __init__(self, url, selector=None,
+                 title_type=None, title_sel=None,
                  tid=None, cache=True):
         super().__init__(url, selector,
                          tid=tid, cache=cache)
-        self.title_sel = title_sel
         self.title_type = title_type
+        self.title_sel = title_sel
 
         self.session = None
         self.use_exist_session = False

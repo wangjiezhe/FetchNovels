@@ -26,8 +26,8 @@ class Zhaishu8(serial.SerialNovel):
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#texts',
                          utils.base_to_url(INTRO_URL, tid), '#b_info',
-                         chap_sel='#BookText li',
                          chap_type=serial.ChapterType.last,
+                         chap_sel='#BookText li',
                          tid=tid)
         self.encoding = config.GB
         self.tool = Zhaishu8Tool

@@ -12,9 +12,9 @@ class Shushu8(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
-                         None, '.bookintro',
-                         chap_sel='li',
+                         intro_sel='.bookintro',
                          chap_type=serial.ChapterType.last,
+                         chap_sel='li',
                          tid=tid)
         self.encoding = config.GB
 

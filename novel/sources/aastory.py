@@ -24,9 +24,9 @@ class AastoryPage(serial.Page):
 class Aastory(serial.SerialNovel):
 
     def __init__(self, tid):
-        super().__init__(utils.base_to_url(BASE_URL, tid), None,
-                         chap_sel='li',
+        super().__init__(utils.base_to_url(BASE_URL, tid),
                          chap_type=serial.ChapterType.path,
+                         chap_sel='li',
                          tid=tid)
         self.page = AastoryPage
 

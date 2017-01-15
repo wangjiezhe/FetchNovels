@@ -12,9 +12,8 @@ class Cmshy(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
-                         None, None,
-                         chap_sel='.index li',
                          chap_type=serial.ChapterType.whole,
+                         chap_sel='.index li',
                          tid=tid)
         self.encoding = config.GB
 

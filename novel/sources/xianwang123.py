@@ -12,9 +12,9 @@ class Xianwang123(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#ccontent',
-                         None, 'div .gray',
-                         chap_sel='.acss td',
+                         intro_sel='div.gray',
                          chap_type=serial.ChapterType.last,
+                         chap_sel='td.ccss',
                          tid=tid)
         self.encoding = config.GB
 

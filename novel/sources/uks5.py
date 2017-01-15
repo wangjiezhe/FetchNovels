@@ -20,8 +20,8 @@ class Uks5(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.box_box',
-                         chap_sel='.list_box li',
                          chap_type=serial.ChapterType.path,
+                         chap_sel='.list_box li',
                          tid=tid)
         self.page = Uks5Page
 
