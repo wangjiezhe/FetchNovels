@@ -4,12 +4,13 @@
 Some help functions
 """
 
-import collections
 import itertools
 import os
 import re
 import string
 from urllib.parse import urlparse, urlunparse
+
+import cardinality
 
 from .config import save_novel_list, load_novel_list
 from .db import create_session
@@ -104,41 +105,9 @@ def fix_order(i):
         return i
 
 
-def count(iterable):
-    """
-    Count the number of items that `iterable` yields
-
-    Equivalent to the expression
-
-    ::
-      len(iterable),
-
-    ... but it also works for iterables that do not support ``len()``.
-
-    ::
-
-      >>> count([1, 2, 3])
-      3
-      >>> count(i for i in range(500))
-      500
-      >>> def gen():
-      ...     yield 'hello'
-      ...     yield 'world'
-      >>> count(gen())
-      2
-
-    Get from https://github.com/wbolster/cardinality
-    """
-    if hasattr(iterable, '__len__'):
-        return len(iterable)
-
-    d = collections.deque(enumerate(iterable, 1), maxlen=1)
-    return d[0][0] if d else 0
-
-
 def get_field_count(format_string):
     fmt = string.Formatter()
-    return count(t for t in fmt.parse(format_string) if t[1] is not None)
+    return cardinality.count(t for t in fmt.parse(format_string) if t[1] is not None)
 
 
 def base_to_url(base_url, tid):
