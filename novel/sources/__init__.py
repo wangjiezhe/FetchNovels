@@ -27,6 +27,7 @@ SERIAL_TYPE = (
     'ttzw5',
     'uks5',
     'wdxs',
+    'xianwang123',
     'xs365',
     'yfzww',
     'yq33',
