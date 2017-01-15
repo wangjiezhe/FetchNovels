@@ -3,6 +3,7 @@
 
 SERIAL_TYPE = (
     'aastory',
+    'baishulou',
     'bgif2',
     'biquge',
     'cmshy',
