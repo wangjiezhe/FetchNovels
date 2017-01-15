@@ -13,6 +13,7 @@ SERIAL_TYPE = (
     'icnsp',
     'jjwxc',
     'klxsw',
+    'lou19',
     'lwxs',
     'lwxs520',
     'lwxsw',
