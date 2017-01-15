@@ -32,6 +32,7 @@ SERIAL_TYPE = (
     'xianwang123',
     'xs365',
     'yfzww',
+    'ymwen',
     'yq33',
     'zhaishu8',
 )
