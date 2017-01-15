@@ -163,7 +163,7 @@ class SerialNovel(BaseNovel):
         self.running = False
 
     def get_title_and_author(self):
-        return NotImplementedError('get_title_and_author')
+        raise NotImplementedError('get_title_and_author')
 
     @property
     def chapter_list(self):
