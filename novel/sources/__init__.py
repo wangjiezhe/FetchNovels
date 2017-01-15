@@ -11,6 +11,7 @@ SERIAL_TYPE = (
     'feizw',
     'haxtxt',
     'icnsp',
+    'jjwxc',
     'klxsw',
     'lwxs',
     'lwxs520',
