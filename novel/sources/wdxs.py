@@ -18,6 +18,7 @@ class WdxsTool(utils.Tool):
         self.remove_extras.extend(
             (re.compile(pat, re.I) for pat in
              (r'www\.(wodexiaoshuo|01bz)\.(com|net|wang)',
+              r'(www|m)\.91danmei\.com',
               r'wodexiaoshuo\.com',
               r'www\.'))
         )
