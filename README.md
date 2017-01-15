@@ -10,7 +10,7 @@ FetchNovels
 [![GPL Licence](https://img.shields.io/pypi/l/FetchNovels.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![Status](https://img.shields.io/pypi/status/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
 [![Pyversions](https://img.shields.io/pypi/pyversions/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
-[![Downloads](https://img.shields.io/pypi/dd/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
+[![Downloads](https://img.shields.io/pypi/dm/FetchNovels.svg)](https://pypi.python.org/pypi/FetchNovels)
 
 [![BADGINATOR](https://badginator.herokuapp.com/wangjiezhe/FetchNovels.svg)](https://github.com/defunctzombie/badginator)
 
@@ -30,10 +30,10 @@ Usage
     Fetch novels from Internet, and write into file.
 
     Available sources:
-      bgif2, biquge, dzxsw, feizw, haxtxt, klxsw, lwxs, lwxs520, lwxsw,
-      piaotian, piaotiancc, ranwen, shu69, shushu8, sto, ttshuba,
-      ttzw, ttzw5, uks5, wdxs, xs365, yfzww, yq33, zhaishu8,
-      doubangroup, ...
+      bgif2, biquge, dzxsw, feizw, haxtxt, jjwxc, klxsw, lou19,
+      lwxs, lwxs520, lwxsw, piaotian, piaotiancc, ranwen, shu69,
+      shushu8, sto, ttshuba, ttzw, ttzw5, uks5, wdxs, xs365, yfzww,
+      yq33, zhaishu8, doubangroup, ...
 
     positional arguments:
       source                download source
@@ -68,5 +68,5 @@ Todo
 Disclaimer
 ----------
 
-This software does not produce any actural content.
-All the data are grabbed from the internet.
+This software does not produce any actual content.
+All data are grabbed from the internet.

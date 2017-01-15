@@ -17,10 +17,10 @@ class MyParser(argparse.ArgumentParser):
             Fetch novels from Internet, and write into file.
 
             Available sources:
-              bgif2, biquge, dzxsw, feizw, haxtxt, klxsw, lwxs, lwxs520, lwxsw,
-              piaotian, piaotiancc, ranwen, shu69, shushu8, sto, ttshuba,
-              ttzw, ttzw5, uks5, wdxs, xs365, yfzww, yq33, zhaishu8,
-              doubangroup, ...
+              bgif2, biquge, dzxsw, feizw, haxtxt, jjwxc, klxsw, lou19,
+              lwxs, lwxs520, lwxsw, piaotian, piaotiancc, ranwen, shu69,
+              shushu8, sto, ttshuba, ttzw, ttzw5, uks5, wdxs, xs365, yfzww,
+              yq33, zhaishu8, doubangroup, ...
         """)
         super().__init__(
             prog='fetchnovels',
