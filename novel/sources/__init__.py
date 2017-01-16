@@ -22,6 +22,7 @@ SERIAL_TYPE = (
     'piaotian',
     'piaotiancc',
     'ranwen',
+    'sanhao3',
     'shu69',
     'shushu8',
     'shushuwu',
