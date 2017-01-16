@@ -62,7 +62,7 @@ Todo
 * [ ] Get novel in forum
 * [ ] Login to get token
 * [x] Add option to dump directly from database (for no network connection case)
-* [ ] Fix text width for id and intro
+* [x] Fix text width for id and intro
 
 
 Disclaimer

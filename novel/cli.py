@@ -47,7 +47,8 @@ class NovelCmdline(object):
             elif source in sources.ARTICLE_TYPE:
                 return self.list_article(source)
             else:
-                print('The specific source `{}` does not exists!'.format(source))
+                print('The specific source `{}` does not exists!'.format(
+                    source))
         else:
             novel_list = self.session.query(General).all()
 
@@ -55,7 +56,9 @@ class NovelCmdline(object):
             pt.field_names = ['id', 'title', 'source']
             pt.valign = 'm'
             for novel in novel_list:
-                pt.add_row((novel.id, colored(novel.title, 'green'), novel.source))
+                pt.add_row((novel.id,
+                            colored(novel.title, 'green'),
+                            novel.source))
 
             print(pt.get_string())
             return pt
@@ -97,7 +100,9 @@ class NovelCmdline(object):
         pt.field_names = ['id', 'title', 'author', 'source']
         pt.valign = 'm'
         for novel in novel_list:
-            pt.add_row((novel.id, colored(novel.title, 'green'), novel.author, novel.source))
+            pt.add_row((textwrap.fill(novel.id, width=12),
+                        colored(novel.title, 'green'),
+                        novel.author, novel.source))
         if self.verbose > 0:
             pt.hrules = prettytable.ALL
             intro_list = [textwrap.fill(novel.intro, width=40)
@@ -105,10 +110,12 @@ class NovelCmdline(object):
             pt.add_column('intro', intro_list, align='l')
         if self.verbose > 1:
             pt.add_column(
-                'finish', [novel.finish for novel in novel_list], valign='m')
+                'finish', [novel.finish for novel in novel_list],
+                valign='m')
         if self.verbose > 2:
             pt.add_column(
-                'chapters', [len(novel.chapters) for novel in novel_list], valign='m')
+                'chapters', [len(novel.chapters) for novel in novel_list],
+                valign='m')
 
         print(pt.get_string())
         return pt
