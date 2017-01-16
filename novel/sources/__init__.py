@@ -15,6 +15,7 @@ SERIAL_TYPE = (
     'jjwxc',
     'klxsw',
     'lou19',
+    'lurenshu',
     'lwxs',
     'lwxs520',
     'lwxsw',
