@@ -4,6 +4,7 @@
 SERIAL_TYPE = (
     'aastory',
     'baishulou',
+    'bbs1766',
     'bgif2',
     'biquge',
     'cmshy',
