@@ -49,6 +49,7 @@ ARTICLE_TYPE = (
     'park6',
     'sdragon',
     'sis',
+    'xsg915',
 )
 
 # Configuration for free ip in CERNET, obsolete now
