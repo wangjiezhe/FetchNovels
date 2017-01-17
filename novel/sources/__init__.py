@@ -48,6 +48,7 @@ ARTICLE_TYPE = (
     'gigacircle',
     'park6',
     'sdragon',
+    'sexinsex',
     'sis',
     'xsg915',
 )
@@ -90,6 +91,7 @@ USE_PROXIES = (
     'klxsw',
     'gigacircle',
     'avcool',
+    'sexinsex',
 )
 
 DEFAULT_NOT_OVERWRITE = (
