@@ -42,6 +42,7 @@ SERIAL_TYPE = (
 )
 
 ARTICLE_TYPE = (
+    'avcool',
     'cool18',
     'doubangroup',
     'gigacircle',
@@ -87,6 +88,7 @@ USE_PROXIES = (
     'piaotian',
     'klxsw',
     'gigacircle',
+    'avcool',
 )
 
 DEFAULT_NOT_OVERWRITE = (
