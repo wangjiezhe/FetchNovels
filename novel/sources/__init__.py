@@ -44,6 +44,7 @@ SERIAL_TYPE = (
 ARTICLE_TYPE = (
     'cool18',
     'doubangroup',
+    'gigacircle',
     'park6',
     'sdragon',
     'sis',
@@ -85,6 +86,7 @@ USE_PROXIES = (
     'wdxs',
     'piaotian',
     'klxsw',
+    'gigacircle',
 )
 
 DEFAULT_NOT_OVERWRITE = (
