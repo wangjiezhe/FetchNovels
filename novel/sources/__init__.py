@@ -83,17 +83,22 @@ CERNET_USE_PROXIES = (
 )
 
 USE_PROXIES = (
+    'avcool',
+    'baishulou',
+    'bbs1766',
+    'cmshy',
     'cool18',
+    'gigacircle',
+    'hhss91',
+    'klxsw',
     'park6',
+    'piaotian',
+    'sanhao3',
     'sdragon',
+    'sexinsex',
+    'shushuwu',
     'sis',
     'wdxs',
-    'piaotian',
-    'klxsw',
-    'gigacircle',
-    'avcool',
-    'sexinsex',
-    'hhss91',
 )
 
 DEFAULT_NOT_OVERWRITE = (
