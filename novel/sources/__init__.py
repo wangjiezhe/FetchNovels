@@ -51,6 +51,7 @@ ARTICLE_TYPE = (
     'sexinsex',
     'sis',
     'xsg915',
+    'hhss91',
 )
 
 # Configuration for free ip in CERNET, obsolete now
@@ -92,6 +93,7 @@ USE_PROXIES = (
     'gigacircle',
     'avcool',
     'sexinsex',
+    'hhss91',
 )
 
 DEFAULT_NOT_OVERWRITE = (
