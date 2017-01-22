@@ -91,6 +91,8 @@ USE_PROXIES = (
     'gigacircle',
     'hhss91',
     'klxsw',
+    'lwxs',
+    'lwxs520',
     'park6',
     'piaotian',
     'sanhao3',
