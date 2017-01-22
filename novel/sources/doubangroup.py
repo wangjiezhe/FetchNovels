@@ -3,7 +3,7 @@
 
 import requests
 
-from .. import base, utils, models, db
+from novel import base, utils, models, db
 
 BASE_URL = 'https://api.douban.com/v2/group/topic/{}/'  # id
 COMMENTS_URL = BASE_URL + 'comments'

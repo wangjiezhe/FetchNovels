@@ -3,7 +3,7 @@
 
 import re
 
-from .. import serial, utils, config
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.shushuwu.cc/novel/{}/'
 INTRO_URL = 'http://www.shushuwu.cc/book/{}/'

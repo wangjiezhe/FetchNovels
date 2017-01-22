@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .. import serial, utils, config
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.haxtxt.com/files/article/html/{}/{}/'
 

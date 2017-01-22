@@ -6,7 +6,7 @@ import re
 from pyquery import PyQuery
 from selenium import webdriver
 
-from .. import serial, utils
+from novel import serial, utils
 
 BASE_URL = 'http://www.aastory.xyz/archive.php?id={}'
 

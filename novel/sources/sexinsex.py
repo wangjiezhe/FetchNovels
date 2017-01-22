@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .. import single, utils, config
+from novel import single, utils, config
 
 BASE_URL = 'http://www.sexinsex.net/bbs/archiver/?tid-{}.html'
 

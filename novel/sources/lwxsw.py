@@ -3,7 +3,7 @@
 
 from pyquery import PyQuery
 
-from .. import serial, utils, config
+from novel import serial, utils, config
 
 # The domain has been changed into `www.lwxs.la`,
 # but it can be redirected correctly, so there is no need to change.

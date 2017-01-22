@@ -3,7 +3,7 @@
 
 import re
 
-from .. import single, utils
+from novel import single, utils
 
 BASE_URL = 'http://91hhss.com/article-show-id-{}.html'
 

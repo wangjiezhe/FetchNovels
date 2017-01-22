@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 from pyquery import PyQuery
 
-from .. import serial, utils, config
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.klxsw.com/files/article/html/{}/{}/'
 

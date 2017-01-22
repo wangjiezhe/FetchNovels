@@ -3,7 +3,7 @@
 
 import re
 
-from .. import single, utils, config
+from novel import single, utils, config
 
 BASE_URL = 'http://bbs.6park.com/bbs4/messages/{}.html'
 

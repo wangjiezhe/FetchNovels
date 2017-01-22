@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 
 from pyquery import PyQuery
 
-from .. import serial, utils
+from novel import serial, utils
 
 BASE_URL = 'http://www.dzxsw.la/book/{}/index.html'
 INTRO_URL = 'http://www.dzxsw.la/book/{}/'

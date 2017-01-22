@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery
 
-from .. import serial, utils, config
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.lwxs.com/shu/{}/{}/'
 INTRO_URL = 'http://www.lwxs.com/info-{}.html'
