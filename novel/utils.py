@@ -23,8 +23,11 @@ class Tool(object):
     A class to remove needless tags and strings
     """
 
-    def __init__(self, remove_font=True):
+    def __init__(self,
+                 remove_font=True, remove_span=True, remove_div=True):
         self.remove_font = remove_font
+        self.remove_span = remove_span
+        self.remove_div = remove_div
         self._remove_a = re.compile(r'<a.*?>.*?</a>', re.I)
         self._remove_div = re.compile(r'<div.*?>.*?</div>',
                                       re.I | re.S)
@@ -55,8 +58,10 @@ class Tool(object):
         You can add custom options to replace_extras or remove_extras.
         """
         text = re.sub(self._remove_a, '', text)
-        text = re.sub(self._remove_div, '', text)
-        text = re.sub(self._remove_span, '', text)
+        if self.remove_div:
+            text = re.sub(self._remove_div, '', text)
+        if self.remove_span:
+            text = re.sub(self._remove_span, '', text)
         if self.remove_font:
             text = re.sub(self._remove_font, '', text)
         text = re.sub(self._remove_script, '', text)

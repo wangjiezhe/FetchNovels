@@ -14,7 +14,7 @@ INTRO_URL = 'http://www.wodexiaoshuo123.com/{}/'
 class WdxsTool(utils.Tool):
 
     def __init__(self):
-        super().__init__()
+        super().__init__(remove_div=False)
         self.remove_extras.extend(
             (re.compile(pat, re.I) for pat in
              (r'www\.(wodexiaoshuo|01bz)\.(com|net|wang)',
