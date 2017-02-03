@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 SERIAL_TYPE = (
+    'amxs520',
     'aastory',
     'baishulou',
     'bbs1766',
@@ -84,6 +85,7 @@ CERNET_USE_PROXIES = (
 )
 
 USE_PROXIES = (
+    'amxs520',
     'avcool',
     'baishulou',
     'bbs1766',
