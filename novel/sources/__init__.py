@@ -12,6 +12,7 @@ SERIAL_TYPE = (
     'danmei123',
     'dzxsw',
     'feizw',
+    'hshubao',
     'haxsc',
     'haxtxt',
     'icnsp',
