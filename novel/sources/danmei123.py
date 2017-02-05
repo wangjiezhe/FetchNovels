@@ -10,6 +10,19 @@ from novel import serial, utils, config
 BASE_URL = 'http://www.danmei123.cc/{}/'
 
 
+class Danmei123Tool(utils.Tool):
+
+    def __init__(self):
+        super().__init__()
+
+        self.remove_extras.extend(
+            (re.compile(pat) for pat in
+             (r'本文是龙马\nVIP文 特意购买希望大家喜欢,看龙马vip小说来91耽美网',
+              r'本文是龙马\nVIP文 特意购买希望大家喜欢',
+              ))
+        )
+
+
 class Danmei123(serial.SerialNovel):
 
     def __init__(self, tid):
@@ -19,6 +32,7 @@ class Danmei123(serial.SerialNovel):
                          chap_sel='.list_box li',
                          tid=tid)
         self.encoding = config.GB
+        self.tool = Danmei123Tool
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
