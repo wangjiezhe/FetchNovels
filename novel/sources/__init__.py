@@ -41,6 +41,7 @@ SERIAL_TYPE = (
     'ymwen',
     'yq33',
     'zhaishu8',
+    'zhanzhekan',
 )
 
 ARTICLE_TYPE = (
@@ -104,6 +105,7 @@ USE_PROXIES = (
     'shushuwu',
     'sis',
     'wdxs',
+    'zhanzhekan',
 )
 
 DEFAULT_NOT_OVERWRITE = (
