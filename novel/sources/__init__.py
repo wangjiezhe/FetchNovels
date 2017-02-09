@@ -35,6 +35,7 @@ SERIAL_TYPE = (
     'ttzw',
     'ttzw5',
     'uks5',
+    'windmoonland',
     'wdxs',
     'xianwang123',
     'xiaoqiangxs',
