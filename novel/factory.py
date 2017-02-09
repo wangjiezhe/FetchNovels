@@ -18,7 +18,7 @@ def use_novel(source, tid, http_proxy=None, session=None):
     if http_proxy:
         if http_proxy != '---':
             nov.proxies = {'http': http_proxy}
-    elif source in sources.USE_PROXIES:
+    elif source in sources.CERNET_USE_PROXIES:
         nov.proxies = GOPROXY
 
     if source in sources.AUTO_MARK_FINISH:

@@ -60,31 +60,21 @@ ARTICLE_TYPE = (
     'hhss91',
 )
 
-# Configuration for free ip in CERNET, obsolete now
 CERNET_USE_PROXIES = (
+    'avcool',
     'cool18',
     'danmei123',
-    'dzxsw',
-    'haxtxt',
+    'gigacircle',
+    'hhss91',
     'klxsw',
-    'lwxs520',
-    'lwxs',
     'lwxsw',
     'park6',
     'piaotian',
-    'piaotiancc',
-    'ranwen',
     'sdragon',
-    'shu69',
-    'shushu8',
+    'sexinsex',
     'sis',
     'sto',
-    'ttshuba',
-    'ttzw',
-    'uks5',
     'wdxs',
-    'xs365',
-    'yq33',
     'zhaishu8',
 )
 
