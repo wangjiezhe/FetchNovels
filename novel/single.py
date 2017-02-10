@@ -6,10 +6,10 @@ from enum import Enum
 from pyquery import PyQuery
 from termcolor import colored
 
-from .base import SinglePage
-from .db import new_session
-from .models import Article, Website
-from .utils import get_filename, get_base_url
+from novel.base import SinglePage
+from novel.db import new_session
+from novel.models import Article, Website
+from novel.utils import get_filename, get_base_url
 
 
 class TitleType(Enum):

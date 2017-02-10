@@ -9,10 +9,10 @@ from urllib.parse import urljoin
 from pyquery import PyQuery
 from termcolor import colored
 
-from .base import BaseNovel, SinglePage
-from .db import new_session
-from .models import Serial, Chapter, Website
-from .utils import get_base_url, get_filename
+from novel.base import BaseNovel, SinglePage
+from novel.db import new_session
+from novel.models import Serial, Chapter, Website
+from novel.utils import get_base_url, get_filename
 
 
 class Page(SinglePage):

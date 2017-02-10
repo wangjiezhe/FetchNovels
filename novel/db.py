@@ -7,8 +7,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import SingletonThreadPool
 
-from .config import CACHE_DB
-from .models import Base
+from novel.config import CACHE_DB
+from novel.models import Base
 
 
 @contextmanager

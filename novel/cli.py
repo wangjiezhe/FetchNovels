@@ -7,12 +7,12 @@ import prettytable
 from readchar import readchar
 from termcolor import colored, cprint
 
-from . import sources
-from .config import save_novel_list, GOPROXY
-from .db import new_session
-from .factory import add_novel
-from .models import Serial, Website, Article, General
-from .utils import get_filename
+from novel import sources
+from novel.config import save_novel_list, GOPROXY
+from novel.db import new_session
+from novel.factory import add_novel
+from novel.models import Serial, Website, Article, General
+from novel.utils import get_filename
 
 
 class NovelCmdline(object):

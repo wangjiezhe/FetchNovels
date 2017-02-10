@@ -9,9 +9,9 @@ from lxml.etree import XMLSyntaxError
 from pyquery import PyQuery
 from requests import ConnectionError
 
-from .config import get_headers, update_and_save_novel_list
-from .decorators import retry
-from .utils import Tool
+from novel.config import get_headers, update_and_save_novel_list
+from novel.decorators import retry
+from novel.utils import Tool
 
 
 class BaseNovel(object):

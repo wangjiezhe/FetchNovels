@@ -4,8 +4,8 @@
 from contextlib import contextmanager
 from importlib import import_module
 
-from . import sources
-from .config import GOPROXY
+from novel import sources
+from novel.config import GOPROXY
 
 
 @contextmanager

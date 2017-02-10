@@ -12,10 +12,10 @@ from urllib.parse import urlparse, urlunparse
 
 import cardinality
 
-from .config import save_novel_list, load_novel_list
-from .db import create_session
-from .factory import add_novel
-from .models import Website
+from novel.config import save_novel_list, load_novel_list
+from novel.db import create_session
+from novel.factory import add_novel
+from novel.models import Website
 
 
 class Tool(object):
