@@ -201,7 +201,10 @@ class NovelCmdline(object):
         novel = self.session.query(Serial).filter_by(
             source=source, id=tid
         ).one()
-        filename = get_filename(novel.title, novel.author)
+        if source in sources.DEFAULT_NOT_OVERWRITE:
+            overwrite = False
+        filename = get_filename(novel.title, novel.author,
+                                overwrite=overwrite)
         print(filename)
 
         with open(filename, 'w') as fp:
@@ -221,7 +224,10 @@ class NovelCmdline(object):
         novel = self.session.query(Article).filter_by(
             source=source, id=tid
         ).one()
-        filename = get_filename(novel.title)
+        if source in sources.DEFAULT_NOT_OVERWRITE:
+            overwrite = False
+        filename = get_filename(novel.title,
+                                overwrite=overwrite)
         print(filename)
 
         with open(filename, 'w') as fp:

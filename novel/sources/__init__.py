@@ -104,6 +104,7 @@ USE_PROXIES = (
 DEFAULT_NOT_OVERWRITE = (
     'cool18',
     'park6',
+    'windmoonland',
 )
 
 AUTO_MARK_FINISH = (
