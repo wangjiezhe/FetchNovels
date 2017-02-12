@@ -8,7 +8,7 @@ from novel import serial, config, utils
 BASE_URL = 'http://www.qu.la/book/{}/'
 
 
-class Biquge(serial.SerialNovel):
+class Qu(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#content',
