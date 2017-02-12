@@ -49,6 +49,7 @@ SERIAL_TYPE = (
 
 ARTICLE_TYPE = (
     'avcool',
+    'book3k',
     'cool18',
     'doubangroup',
     'gigacircle',
