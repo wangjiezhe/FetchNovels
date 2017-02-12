@@ -8,6 +8,7 @@ SERIAL_TYPE = (
     'bbs1766',
     'bgif2',
     'biquge',
+    'bz11',
     'cmshy',
     'danmei123',
     'dzxsw',
