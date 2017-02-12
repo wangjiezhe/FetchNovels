@@ -203,6 +203,8 @@ class NovelCmdline(object):
         ).one()
         if source in sources.DEFAULT_NOT_OVERWRITE:
             overwrite = False
+        else:
+            overwrite = True
         filename = get_filename(novel.title, novel.author,
                                 overwrite=overwrite)
         print(filename)
@@ -226,6 +228,8 @@ class NovelCmdline(object):
         ).one()
         if source in sources.DEFAULT_NOT_OVERWRITE:
             overwrite = False
+        else:
+            overwrite = True
         filename = get_filename(novel.title,
                                 overwrite=overwrite)
         print(filename)
