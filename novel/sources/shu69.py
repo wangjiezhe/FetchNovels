@@ -25,12 +25,12 @@ class Shu69(serial.SerialNovel):
             lambda i, e: PyQuery(e).attr('name') == 'keywords'
         ).attr('content')
         name = re.match(r'(.*?),.*', st).group(1)
-        author = self.doc('.mu_beizhu').eq(0)('a').eq(1).text()
+        author = self.doc('.mu_beizhu:eq(0)')('a:eq(1)').text()
         return name, author
 
     @property
     def chapter_list(self):
-        clist = self.doc('.mu_contain').eq(1)('li').filter(
+        clist = self.doc('.mu_contain:eq(1)')('.mulu_list:last').prev_all('.mulu_list')('li').filter(
             lambda i, e: PyQuery(e)('a').attr('href')
         ).map(
             lambda i, e: (i,
