@@ -31,7 +31,7 @@ class Bz11(serial.SerialNovel):
 
     @property
     def chapter_list(self):
-        clist = self.doc('#list')('dt').eq(1).next_all('dd').filter(
+        clist = self.doc('#list')('dt:eq(1)').next_all('dd').filter(
             lambda i, e: PyQuery(e)('a').attr('href')
         ).map(
             lambda i, e: (i,
