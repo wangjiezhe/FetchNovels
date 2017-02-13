@@ -19,6 +19,7 @@ SERIAL_TYPE = (
     'icnsp',
     'jjwxc',
     'klxsw',
+    'lewenxiaoshuo',
     'lou19',
     'lurenshu',
     'lwxs',
