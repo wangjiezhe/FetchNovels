@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 SERIAL_TYPE = (
+    'akxs6',
     'amxs520',
     'aastory',
     'baishulou',
