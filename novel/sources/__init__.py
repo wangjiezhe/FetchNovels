@@ -44,6 +44,7 @@ SERIAL_TYPE = (
     'xianwang123',
     'xiaoqiangxs',
     'xs365',
+    'yixia',
     'yfzww',
     'ymwen',
     'yq33',
