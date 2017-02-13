@@ -50,6 +50,7 @@ SERIAL_TYPE = (
     'yfzww',
     'ymwen',
     'yq33',
+    'yqhhy',
     'zhaishu8',
     'zhanzhekan',
 )
