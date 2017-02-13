@@ -5,7 +5,7 @@ import re
 
 from pyquery import PyQuery
 
-from novel import serial, utils
+from novel import serial, utils, config
 
 BASE_URL = 'http://www.feizw.com/Html/{}/Index.html'
 INTRO_URL = 'http://www.feizw.com/Book/{}/Index.aspx'
@@ -31,6 +31,7 @@ class Feizw(serial.SerialNovel):
                          chap_type=serial.ChapterType.last,
                          chap_sel='.chapterlist li',
                          tid=tid)
+        self.encoding = config.GB
         self.tool = FeizwTool
 
     def get_title_and_author(self):
