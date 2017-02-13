@@ -43,6 +43,7 @@ SERIAL_TYPE = (
     'uks5',
     'windmoonland',
     'wdxs',
+    'wutuxs',
     'xianwang123',
     'xiaoqiangxs',
     'xs365',
