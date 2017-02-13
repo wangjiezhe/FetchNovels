@@ -39,8 +39,8 @@ class Windmoonland(serial.SerialNovel):
     def chapter_list(self):
         clist = self.doc('td a').map(
             lambda i, e: (i,
-                     urljoin(utils.get_base_url(self.url),
-                             PyQuery(e).attr('href')),
-                     PyQuery(e).text())
+                          urljoin(utils.get_base_url(self.url),
+                                  PyQuery(e).attr('href')),
+                          PyQuery(e).text())
         )
         return clist
