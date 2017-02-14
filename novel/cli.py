@@ -301,7 +301,7 @@ class NovelCmdline(object):
             if mark_all:
                 n.finish = True
             else:
-                cprint('Mark ths novel as finished? [!/y/N/q/u/?]', 'cyan')
+                cprint('Mark ths novel as finished? [!/y/N/q/u]', 'cyan')
                 yes = readchar().lower()
                 if yes == "!":
                     mark_all = True
@@ -320,7 +320,6 @@ class NovelCmdline(object):
                     cprint('n - do not change finish status', 'red')
                     cprint('q - quit; do not change finish status of this and any other novels', 'red')
                     cprint('u - mark this novel as unfinished', 'red')
-                    cprint('? - print help', 'red')
                     return try_mark_novel(n)
 
         for novel in novel_list:
