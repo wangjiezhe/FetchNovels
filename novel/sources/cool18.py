@@ -11,7 +11,7 @@ BASE_URL = 'http://www.cool18.com/bbs4/index.php?app=forum&act=threadview&tid={}
 class Cool18Tool(utils.Tool):
 
     def __init__(self):
-        super().__init__()
+        super().__init__(remove_span=False)
         self.remove_extras.append(
             re.compile(r'<.*?bodyend.*?>.*')
         )
