@@ -3,7 +3,6 @@
 
 import sys
 
-import pypandoc
 from setuptools import setup, find_packages
 
 from novel import __version__
@@ -15,7 +14,6 @@ if __name__ == '__main__':
         name='FetchNovels',
         version=__version__,
         description='Fetch novels from Internet',
-        long_description=pypandoc.convert_file('README.md', 'rst'),
         license='GPLv3',
         url='https://github.com/wangjiezhe/FetchNovels',
 
