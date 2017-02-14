@@ -123,4 +123,5 @@ DEFAULT_NOT_OVERWRITE = (
 
 AUTO_MARK_FINISH = (
     'sto',
+    'windmoonland',
 )
