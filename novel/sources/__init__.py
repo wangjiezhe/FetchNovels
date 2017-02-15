@@ -28,6 +28,7 @@ SERIAL_TYPE = (
     'lwxsw',
     'piaotian',
     'piaotiancc',
+    'ppxhh',
     'qbxs8',
     'qu',
     'ranwen',
