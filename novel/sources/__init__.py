@@ -70,12 +70,13 @@ ARTICLE_TYPE = (
     'doubangroupall',
     'gigacircle',
     'h528',
+    'hhss91',
     'park6',
     'sdragon',
     'sexinsex',
     'sis',
     'xsg915',
-    'hhss91',
+    'yazhouse8',
 )
 
 CERNET_USE_PROXIES = (
@@ -95,6 +96,7 @@ CERNET_USE_PROXIES = (
     'sis',
     'sto',
     'wdxs',
+    'yazhouse8',
     'zhaishu8',
 )
 
