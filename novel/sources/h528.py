@@ -1,20 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
-
 from novel import single, utils
 
 BASE_URL = 'http://www.h528.com/post/{}.html'
-
-
-class H528Tool(utils.Tool):
-
-    def __init__(self):
-        super().__init__()
-        self.remove_extras.append(
-            re.compile(r'<!--.*?-->', re.S)
-        )
 
 
 class H528(single.SingleNovel):
@@ -25,4 +14,3 @@ class H528(single.SingleNovel):
                          title_type=single.TitleType.selector,
                          title_sel='.post h2',
                          tid=tid)
-        self.tool = H528Tool
