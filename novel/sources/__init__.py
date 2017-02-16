@@ -7,6 +7,7 @@ SERIAL_TYPE = (
     'aastory',
     'baishulou',
     'biquge',
+    'biqugex',
     'bbs1766',
     'bgif2',
     'bz11',
