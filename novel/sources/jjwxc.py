@@ -10,6 +10,15 @@ from novel import serial, utils, config
 BASE_URL = 'http://www.jjwxc.net/onebook.php?novelid={}'
 
 
+class JjwxcPage(serial.Page):
+
+    def get_content(self):
+        content = self.doc(self.selector).html() or ''
+        readsmall = self.doc('.readsmall').html() or ''
+        content = self.refine(content + readsmall)
+        return content
+
+
 class Jjwxc(serial.SerialNovel):
 
     def __init__(self, tid):
@@ -17,6 +26,7 @@ class Jjwxc(serial.SerialNovel):
                          intro_sel='#novelintro',
                          tid=tid)
         self.encoding = config.GB
+        self.page = JjwxcPage
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
