@@ -26,9 +26,10 @@ def refine(text):
 
 class Doubangroup(base.BaseNovel):
 
-    def __init__(self, topic_id):
+    def __init__(self, topic_id, author_only=True):
         super().__init__(utils.base_to_url(BASE_URL, topic_id),
                          tid=topic_id, cache=True)
+        self.author_only = author_only
         self.comments_url = utils.base_to_url(COMMENTS_URL, topic_id)
 
         self.req = self.session = None
@@ -101,8 +102,9 @@ class Doubangroup(base.BaseNovel):
                 proxies=self.proxies, params=params
             ).json()
             for c in req['comments']:
-                if c['author']['id'] != self.author_id:
-                    continue
+                if self.author_only:
+                    if c['author']['id'] != self.author_id:
+                        continue
                 content_list.append(self.refine(c['text']))
 
         content = '\n\n\n\n'.join(content_list)

@@ -65,6 +65,7 @@ ARTICLE_TYPE = (
     'book3k',
     'cool18',
     'doubangroup',
+    'doubangroupall',
     'gigacircle',
     'park6',
     'sdragon',
