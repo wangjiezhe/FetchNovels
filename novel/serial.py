@@ -144,7 +144,7 @@ class SerialNovel(BaseNovel):
             novel_id=self.tid, novel_source=self.source
         ).filter(Chapter.text.is_(None))
 
-        with Pool(100) as p:
+        with Pool(10) as p:
             p.map(self._update_chapter, empty_chapters, 10)
 
     def _update_chapter(self, ch):
