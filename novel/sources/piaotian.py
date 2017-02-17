@@ -9,8 +9,8 @@ from selenium import webdriver
 
 from novel import serial, utils, config
 
-BASE_URL = 'http://www.piaotian.net/html/{}/{}/'
-INTRO_URL = 'http://www.piaotian.net/bookinfo/{}/{}.html'
+BASE_URL = 'http://www.piaotian.com/html/{}/{}/'
+INTRO_URL = 'http://www.piaotian.com/bookinfo/{}/{}.html'
 
 
 class PiaotianPage(serial.Page):
