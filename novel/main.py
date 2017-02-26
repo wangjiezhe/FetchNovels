@@ -50,16 +50,17 @@ class MyParser(argparse.ArgumentParser):
                           help='show in more detail')
         self.add_argument('-r', '--refresh', action='store_true',
                           help='refresh novel in the database')
+        self.add_argument('-t', '--sleep', default=0, type=int, metavar='SECONDS')
 
         proxy_group = self.add_mutually_exclusive_group()
-        proxy_group.add_argument('-p', '--proxy', action='store',
+        proxy_group.add_argument('-p', '--proxy', metavar='HOST:PORT',
                                  help='use specific proxy')
         proxy_group.add_argument('-n', '--no-proxy', action='store_true',
                                  help='do not use any proxies')
 
         self.add_argument('source', nargs='?',
                           help='download source')
-        self.add_argument('tid', nargs='*',
+        self.add_argument('tids', nargs='*', metavar='tid',
                           help='id for novels to download')
 
 
@@ -83,7 +84,7 @@ def main():
 
     config.check_first()
 
-    with cli.NovelCmdline(source, args.tid, proxies, args.verbose) as fac:
+    with cli.NovelCmdline(source, args.tids, proxies, args.verbose, args.sleep) as fac:
         if args.list:
             fac.list()
         elif args.list_serial:
@@ -102,8 +103,8 @@ def main():
         elif args.dump_only:
             fac.dump()
         elif source:
-            print('{}: {}'.format(source, args.tid))
-            if not args.tid:
+            print('{}: {}'.format(source, args.tids))
+            if not args.tids:
                 print('No specific tid to download!')
                 sys.exit(1)
             if args.refresh:

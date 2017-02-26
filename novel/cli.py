@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import textwrap
+from time import sleep
 
 import prettytable
 from readchar import readchar
@@ -17,11 +18,13 @@ from novel.utils import get_filename
 
 class NovelCmdline(object):
 
-    def __init__(self, source=None, tids=None, http_proxy=None, verbose=None):
+    def __init__(self, source=None, tids=None,
+                 http_proxy=None, verbose=None, force_sleep=None):
         self.source = source
         self.tids = tids or []
         self.http_proxy = http_proxy
         self.verbose = verbose or 0
+        self.force_sleep = force_sleep or 0
 
     def __enter__(self):
         self.session = new_session()
@@ -175,6 +178,7 @@ class NovelCmdline(object):
                 for tid in tids:
                     add_novel(source, tid,
                               self.http_proxy, self.session)
+                    sleep(self.force_sleep)
                 return
             else:
                 novel_list = self.session.query(Serial).filter_by(
@@ -188,6 +192,7 @@ class NovelCmdline(object):
         for novel in novel_list:
             add_novel(novel.source, novel.id,
                       self.http_proxy, self.session)
+            sleep(self.force_sleep)
 
     def dump_novel(self, source, tid):
         if source in sources.SERIAL_TYPE:
