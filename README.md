@@ -24,7 +24,7 @@ Usage
 
     $ fetchnovels -h
     usage: fetchnovels [-h] [-V] [-u | -d | -l | -ls | -la | -D | -m] [-v] [-r]
-                       [-p PROXY | -n]
+                       [-t SECONDS] [-p HOST:PORT | -n]
                        [source] [tid [tid ...]]
 
     Fetch novels from Internet, and write into file.
@@ -51,7 +51,9 @@ Usage
       -m, --mark-finish     mark novels as finished
       -v, --verbose         show in more detail
       -r, --refresh         refresh novel in the database
-      -p PROXY, --proxy PROXY
+      -t SECONDS, --sleep SECONDS
+                            sleep several seconds after updating a novel
+      -p HOST:PORT, --proxy HOST:PORT
                             use specific proxy
       -n, --no-proxy        do not use any proxies
 

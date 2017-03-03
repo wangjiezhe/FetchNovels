@@ -50,7 +50,8 @@ class MyParser(argparse.ArgumentParser):
                           help='show in more detail')
         self.add_argument('-r', '--refresh', action='store_true',
                           help='refresh novel in the database')
-        self.add_argument('-t', '--sleep', default=0, type=int, metavar='SECONDS')
+        self.add_argument('-t', '--sleep', default=0, type=int, metavar='SECONDS',
+                          help='sleep several seconds after updating a novel')
 
         proxy_group = self.add_mutually_exclusive_group()
         proxy_group.add_argument('-p', '--proxy', metavar='HOST:PORT',
