@@ -24,7 +24,8 @@ if __name__ == '__main__':
 
         packages=find_packages(exclude=['docs', 'tools', 'tests*']),
         entry_points={
-            'console_scripts': ['fetchnovels=novel.main:main'],
+            'console_scripts': ['fetchnovels=novel.main:main',
+                                'fns=novel.main:main'],
         },
 
         classifiers=[
