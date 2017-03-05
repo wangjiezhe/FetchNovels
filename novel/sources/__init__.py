@@ -64,6 +64,7 @@ SERIAL_TYPE = (
     'zhaishu8',
     'zhanzhekan',
     'ziyouge',
+    'zuozhekan',
 )
 
 ARTICLE_TYPE = (
