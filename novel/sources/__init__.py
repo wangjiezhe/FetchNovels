@@ -42,6 +42,7 @@ SERIAL_TYPE = (
     'shushu8',
     'shushuwu',
     'sto',
+    'tangzhekan2',
     'ttshuba',
     'ttzw',
     'ttzw5',
