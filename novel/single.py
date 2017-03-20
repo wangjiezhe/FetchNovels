@@ -84,7 +84,7 @@ class SingleNovel(SinglePage):
             return self.doc('meta').filter(
                 lambda i, e:
                 PyQuery(e).attr(self.title_sel[0]) == self.title_sel[1]
-            ).attr('content')
+            ).attr('content').strip()
         else:
             raise NameError('title_type')
 
