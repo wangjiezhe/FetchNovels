@@ -102,6 +102,7 @@ CERNET_USE_PROXIES = (
     'sis',
     'sto',
     'wdxs',
+    'xiaoqiangxs',
     'yazhouse8',
     'zhaishu8',
 )
