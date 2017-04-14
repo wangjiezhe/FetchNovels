@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import re
 from urllib.parse import urljoin
 
@@ -33,7 +34,8 @@ class PiaotianPage(serial.Page):
                 ]
             else:
                 service_args = None
-            driver = webdriver.PhantomJS(service_args=service_args)
+            driver = webdriver.PhantomJS(service_args=service_args,
+                                         service_log_path=os.path.devnull)
             driver.get(self.url)
             driver.execute_script('''
                 var element = document.querySelector(".toplink");
