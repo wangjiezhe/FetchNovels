@@ -96,7 +96,6 @@ CERNET_USE_PROXIES = (
     'lt92',
     'lwxsw',
     'park6',
-    'piaotian',
     'sdragon',
     'sexinsex',
     'sis',
