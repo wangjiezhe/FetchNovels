@@ -151,8 +151,8 @@ class SerialNovel(BaseNovel):
         print(ch.title)
         page = self.page(
             ch.url, ch.title, self.cont_sel,
-            None, self.proxies, self.encoding,
-            self.tool
+            proxies=self.proxies, encoding=self.encoding,
+            tool=self.tool
         )
         page.run()
         ch.text = page.content
@@ -208,8 +208,8 @@ class SerialNovel(BaseNovel):
         else:
             intro_page = self.intro_page(
                 self.intro_url, self.intro_sel,
-                None, self.proxies, self.encoding,
-                self.tool)
+                proxies=self.proxies, encoding=self.encoding,
+                tool=self.tool)
             intro_page.run()
             return intro_page.content
 
@@ -256,8 +256,8 @@ class SerialNovel(BaseNovel):
     def _dump_chapter(self, url, title, num):
         page = self.page(
             url, title, self.cont_sel,
-            None, self.proxies, self.encoding,
-            self.tool)
+            proxies=self.proxies, encoding=self.encoding,
+            tool=self.tool)
         page.dump_and_close(folder=self.download_dir, num=num)
 
     def dump_split(self):
@@ -299,8 +299,8 @@ class SerialNovel(BaseNovel):
         print(title)
         page = self.page(
             url, title, self.cont_sel,
-            None, self.proxies, self.encoding,
-            self.tool
+            proxies=self.proxies, encoding=self.encoding,
+            tool=self.tool
         )
         page.run()
         return page.content
