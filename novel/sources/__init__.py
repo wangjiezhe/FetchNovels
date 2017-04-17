@@ -13,6 +13,7 @@ SERIAL_TYPE = (
     'bgif2',
     'brwrw',
     'bz11',
+    'cc065433',
     'cmshy',
     'danmei123',
     'dzxsw',
