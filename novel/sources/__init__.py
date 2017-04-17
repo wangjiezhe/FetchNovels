@@ -25,6 +25,7 @@ SERIAL_TYPE = (
     'icnsp',
     'jjwxc',
     'klxsw',
+    'lewen88',
     'lewenxiaoshuo',
     'lou19',
     'lt92',
