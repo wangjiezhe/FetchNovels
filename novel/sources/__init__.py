@@ -11,6 +11,7 @@ SERIAL_TYPE = (
     'biqugex',
     'bbs1766',
     'bgif2',
+    'brwrw',
     'bz11',
     'cmshy',
     'danmei123',
