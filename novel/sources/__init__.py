@@ -6,6 +6,7 @@ SERIAL_TYPE = (
     'amxs520',
     'aastory',
     'baishulou',
+    'banzhu11',
     'benbenwx',
     'biquge',
     'biqugex',
