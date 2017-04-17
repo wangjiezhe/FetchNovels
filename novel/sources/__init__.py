@@ -63,6 +63,7 @@ SERIAL_TYPE = (
     'ymwen',
     'yq33',
     'yqhhy',
+    'yqw33',
     'zhaishu8',
     'zhanzhekan',
     'ziyouge',
