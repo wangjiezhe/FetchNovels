@@ -16,6 +16,7 @@ SERIAL_TYPE = (
     'cc065433',
     'cmshy',
     'danmei123',
+    'dztxt',
     'dzxsw',
     'feizw',
     'ggdown',
