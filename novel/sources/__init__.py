@@ -37,6 +37,7 @@ SERIAL_TYPE = (
     'lwxs520',
     'lwxsw',
     'mianfeixiaoshuoyueduwang',
+    'miaoshuzhai',
     'myshuge',
     'piaotian',
     'piaotiancc',
