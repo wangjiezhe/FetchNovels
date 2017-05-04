@@ -55,6 +55,7 @@ SERIAL_TYPE = (
     'ttshuba',
     'ttzw',
     'ttzw5',
+    'txtuu',
     'ucxsw',
     'uks5',
     'windmoonland',
