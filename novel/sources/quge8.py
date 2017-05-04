@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import re
+
+from pyquery import PyQuery
+
+from novel import serial, utils, config
+
+BASE_URL = 'http://www.8quge.com/{}_{}/'
+
+
+class Quge8Tool(utils.Tool):
+
+    def __init__(self):
+        super().__init__()
+        self.remove_extras.extend((
+            re.compile(r'一秒记住，精彩小说随时阅读，手机用户请访问。'),
+            re.compile(r'高速首发江湖掌门人最新章节，本章节是.*?，地址为.*?，如果你觉的本章节还不错的话请不要忘记向您QQ群和微博里的朋友推荐哦！', re.S),
+        ))
+
+
+class Quge8(serial.SerialNovel):
+
+    def __init__(self, tid):
+        super().__init__(utils.base_to_url(BASE_URL, tid), '#TXT',
+                         chap_type=serial.ChapterType.path,
+                         chap_sel='dd',
+                         intro_sel='.introtxt',
+                         tid=tid)
+        self.encoding = config.GB
+        self.tool = Quge8Tool
+
+    def get_title_and_author(self):
+        name = self.doc('meta').filter(
+            lambda i, e: PyQuery(e).attr('property') == 'og:novel:book_name'
+        ).attr('content')
+
+        author = self.doc('meta').filter(
+            lambda i, e: PyQuery(e).attr('property') == 'og:novel:author'
+        ).attr('content')
+
+        return name, author

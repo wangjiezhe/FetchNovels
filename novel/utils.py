@@ -29,6 +29,7 @@ class Tool(object):
         self.remove_span = remove_span
         self.remove_div = remove_div
         self._remove_a = re.compile(r'<a.*?>.*?</a>', re.I)
+        self._remove_div1 = re.compile(r'<div.*?/>', re.I | re.S)
         self._remove_div = re.compile(r'<div.*?>.*?</div>',
                                       re.I | re.S)
         self._remove_span = re.compile(r'<span.*?>.*?</span>',
@@ -37,7 +38,7 @@ class Tool(object):
                                        re.I | re.S)
         self._remove_script = re.compile(r'<script.*?>.*?</script>',
                                          re.I | re.S)
-        self._replace_br = re.compile(r'<br\s*/\s*>|</\s*br>', re.I)
+        self._replace_br = re.compile(r'<br\s*?/\s*?>|</\s*?br>', re.I)
         self._replace_p = re.compile(r'</?p>', re.I)
         self._replace_h = re.compile(r'</h\d*?>')
         self._replace_xa0 = re.compile(r'\xa0')
@@ -60,6 +61,7 @@ class Tool(object):
         """
         text = re.sub(self._remove_a, '', text)
         if self.remove_div:
+            text = re.sub(self._remove_div1, '', text)
             text = re.sub(self._remove_div, '', text)
         if self.remove_span:
             text = re.sub(self._remove_span, '', text)
