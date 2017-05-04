@@ -8,7 +8,7 @@ import itertools
 import os
 import re
 import string
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, ParseResult
 
 import cardinality
 
@@ -153,6 +153,15 @@ def get_base_url(url):
     result = urlparse(url)
     base_url = urlunparse((result.scheme, result.netloc, '', '', '', ''))
     return base_url
+
+
+def get_url_scheme(url):
+    result = urlparse(url)
+    return result.scheme
+
+
+def change_url_scheme(url, scheme):
+    return urlunparse(ParseResult(scheme, *(urlparse(url))[1:]))
 
 
 def get_filename(title, author=None, overwrite=True):

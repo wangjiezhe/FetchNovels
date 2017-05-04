@@ -12,7 +12,7 @@ from termcolor import colored
 from novel.base import BaseNovel, SinglePage
 from novel.db import new_session
 from novel.models import Serial, Chapter, Website
-from novel.utils import get_base_url, get_filename
+from novel.utils import get_base_url, get_filename, get_url_scheme, change_url_scheme
 
 
 class Page(SinglePage):
@@ -60,6 +60,7 @@ class ChapterType(Enum):
     whole = 1
     path = 2
     last = 3
+    noscheme = 4
 
 
 class SerialNovel(BaseNovel):
@@ -192,6 +193,13 @@ class SerialNovel(BaseNovel):
             clist = clist.map(
                 lambda i, e: (i,
                               urljoin(self.url, PyQuery(e)('a').attr('href')),
+                              PyQuery(e).text())
+            )
+        elif chap_type == ChapterType.noscheme:
+            clist = clist.map(
+                lambda i, e: (i,
+                              change_url_scheme(PyQuery(e)('a').attr('href'),
+                                                get_url_scheme(self.url)),
                               PyQuery(e).text())
             )
         else:
