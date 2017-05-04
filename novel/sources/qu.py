@@ -15,7 +15,6 @@ class Qu(serial.SerialNovel):
                          chap_type=serial.ChapterType.last,
                          chap_sel='dd',
                          tid=tid)
-        self.encoding = config.GB
 
     def get_title_and_author(self):
         name = self.doc('meta').filter(
