@@ -67,6 +67,7 @@ SERIAL_TYPE = (
     'wdxs',
     'wutuxs',
     'wuqingshui',
+    'wxguan',
     'xianwang123',
     'xiaoqiangxs',
     'xs365',
