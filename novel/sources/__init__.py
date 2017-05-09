@@ -92,6 +92,7 @@ SERIAL_TYPE = (
 ARTICLE_TYPE = (
     'avcool',
     'book3k',
+    'classbk',
     'cool18',
     'doubangroup',
     'doubangroupall',
@@ -108,6 +109,7 @@ ARTICLE_TYPE = (
 
 CERNET_USE_PROXIES = (
     'avcool',
+    'classbk',
     'cool18',
     'danmei123',
     'gigacircle',
@@ -132,6 +134,7 @@ USE_PROXIES = (
     'avcool',
     'baishulou',
     'bbs1766',
+    'classbk',
     'cmshy',
     'cool18',
     'gigacircle',
@@ -151,6 +154,7 @@ USE_PROXIES = (
 )
 
 DEFAULT_NOT_OVERWRITE = (
+    'classbk',
     'cool18',
     'park6',
     'windmoonland',
