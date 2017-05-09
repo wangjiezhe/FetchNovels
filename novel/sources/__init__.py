@@ -70,6 +70,7 @@ SERIAL_TYPE = (
     'wxguan',
     'xianwang123',
     'xiaoqiangxs',
+    'xs335',
     'xs365',
     'xueyinglingzhu5200',
     'xyq123',
