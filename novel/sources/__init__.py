@@ -76,6 +76,7 @@ SERIAL_TYPE = (
     'xxbook',
     'xyq123',
     'yawenb',
+    'yibanzhu',
     'yixia',
     'yfzww',
     'ymwen',
