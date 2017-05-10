@@ -8,6 +8,7 @@ SERIAL_TYPE = (
     'baishulou',
     'banzhu01',
     'banzhu11',
+    'banzhu2',
     'benbenwx',
     'biqudu',
     'biquge',
