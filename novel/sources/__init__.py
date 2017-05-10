@@ -42,6 +42,7 @@ SERIAL_TYPE = (
     'miaoshuzhai',
     'myshuge',
     'mytxt',
+    'ncwxw',
     'piaotian',
     'piaotiancc',
     'ppxhh',
