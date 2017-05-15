@@ -76,6 +76,7 @@ SERIAL_TYPE = (
     'xs335',
     'xs365',
     'xueyinglingzhu5200',
+    'xxbiquge',
     'xxbook',
     'xyq123',
     'yawenb',
