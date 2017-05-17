@@ -12,6 +12,7 @@ SERIAL_TYPE = (
     'benbenwx',
     'biqudu',
     'biquge',
+    'biqugeu',
     'biqugex',
     'bbs1766',
     'bgif2',
