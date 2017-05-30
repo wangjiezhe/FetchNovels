@@ -7,25 +7,25 @@ from pyquery import PyQuery
 
 from novel import serial, utils, config
 
-BASE_URL = 'http://www.tangzhekan2.com/{}/'
+BASE_URL = 'http://www.tangzhekan3.com/{}/{}/'
 
 
-class Tangzhekan2Tool(utils.Tool):
+class Tangzhekan3Tool(utils.Tool):
 
     def __init__(self):
         super().__init__(remove_div=False, remove_font=False)
 
 
-class Tangzhekan2(serial.SerialNovel):
+class Tangzhekan3(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '.box_box',
                          intro_sel='.j_box .words p',
-                         chap_type=serial.ChapterType.path,
+                         chap_type=serial.ChapterType.last,
                          chap_sel='.list_box li',
                          tid=tid)
         self.encoding = config.GB
-        self.tool = Tangzhekan2Tool
+        self.tool = Tangzhekan3Tool
 
     def get_title_and_author(self):
         st = self.doc('meta').filter(
