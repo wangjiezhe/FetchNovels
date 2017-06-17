@@ -14,6 +14,13 @@ class ZuozhekanTool(utils.Tool):
 
     def __init__(self):
         super().__init__(remove_div=False, remove_font=False)
+        self.remove_extras.extend(
+            (re.compile(pat, re.I) for pat in
+             (r'本文是龙马\nVIP文 特意购买希望大家喜欢,看龙马vip小说来91耽美网',
+              r'本文是龙马\nVIP文 特意购买希望大家喜欢',
+              r'www.91danmei.(com|net)',
+              ))
+        )
 
 
 class Zuozhekan(serial.SerialNovel):
