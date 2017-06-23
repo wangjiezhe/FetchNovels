@@ -3,10 +3,10 @@
 
 from novel import serial, utils, config
 
-BASE_URL = 'http://www.haxtxt.com/files/article/html/{}/{}/'
+BASE_URL = 'http://www.haxwx.com/files/article/html/{}/{}/'
 
 
-class Haxtxt(serial.SerialNovel):
+class Haxwx(serial.SerialNovel):
 
     def __init__(self, tid):
         super().__init__(utils.base_to_url(BASE_URL, tid), '#BookText',
