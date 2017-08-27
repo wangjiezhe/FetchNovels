@@ -156,6 +156,7 @@ USE_PROXIES = (
     'sexinsex',
     'shushuwu',
     'sis',
+    'sto',
     'wdxs',
     'zhanzhekan',
 )
