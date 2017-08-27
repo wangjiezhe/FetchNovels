@@ -341,6 +341,13 @@ class NovelCmdline(object):
         for s, t in deleted.items():
             self.update(s, t)
 
+    @staticmethod
+    def show_sources():
+        cprint('Available serial sources:', 'cyan')
+        print(textwrap.fill(' '.join(sources.SERIAL_TYPE), width=120))
+        cprint('Available article sources:', 'cyan')
+        print(textwrap.fill(' '.join(sources.ARTICLE_TYPE), width=120))
+
 
 def get_schema(s):
     if s in sources.SERIAL_TYPE:

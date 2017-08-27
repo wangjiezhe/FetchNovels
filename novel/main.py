@@ -45,6 +45,8 @@ class MyParser(argparse.ArgumentParser):
                            help='delete novels in the database')
         group.add_argument('-m', '--mark-finish', action='store_true',
                            help='mark novels as finished')
+        group.add_argument('-s', '--show-sources', action='store_true',
+                           help='show available sources')
 
         self.add_argument('-v', '--verbose', action='count',
                           help='show in more detail')
@@ -96,6 +98,8 @@ def main():
             fac.delete()
         elif args.mark_finish:
             fac.try_mark_finish()
+        elif args.show_sources:
+            fac.show_sources()
         elif args.update:
             if args.refresh:
                 fac.refresh()
