@@ -140,6 +140,7 @@ USE_PROXIES = (
     'amxs520',
     'avcool',
     'baishulou',
+    'banzhu01',
     'bbs1766',
     'classbk',
     'cmshy',
