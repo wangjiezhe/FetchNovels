@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from urllib.parse import urljoin
-
 from pyquery import PyQuery
 
 from novel import serial, utils, config
