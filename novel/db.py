@@ -17,10 +17,7 @@ def create_session(db=CACHE_DB, pool_size=100):
     try:
         yield session
         session.flush()
-    except:
-        session.rollback()
-        raise
-    else:
+    finally:
         session.close()
 
 
@@ -32,7 +29,7 @@ def new_session(db=CACHE_DB, pool_size=100):
     )
     db_session = scoped_session(sessionmaker(
         bind=engine,
-        autoflush=True,
+        # autoflush=True,
         autocommit=True
     ))
     session = db_session()

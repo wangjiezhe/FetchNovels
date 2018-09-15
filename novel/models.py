@@ -55,7 +55,7 @@ class General(Base):
     source = Column(String, primary_key=True)
 
     ForeignKeyConstraint(
-        [source], [Website.name]
+        (source,), [Website.name]
     )
 
 
@@ -72,7 +72,7 @@ class Serial(General):
                             order_by='Chapter.id')
 
     ForeignKeyConstraint(
-        [id, source, title],
+        (id, source, title),
         [General.id, General.source, General.title]
     )
 
@@ -88,7 +88,7 @@ class Chapter(Base):
     novel_source = Column(String, primary_key=True)
 
     ForeignKeyConstraint(
-        [novel_id, novel_source],
+        (novel_id, novel_source),
         [Serial.id, Serial.source]
     )
 
@@ -101,6 +101,6 @@ class Article(General):
     source = Column(String, primary_key=True)
 
     ForeignKeyConstraint(
-        [id, title, source],
+        (id, title, source),
         [General.id, General.title, General.source]
     )
