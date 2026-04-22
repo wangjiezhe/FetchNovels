@@ -9,6 +9,6 @@ PrettyTable
 readchar
 termcolor
 tqdm
-Sphinx>=1.4.0
+Sphinx>=9.1.0
 pypandoc
 lxml
